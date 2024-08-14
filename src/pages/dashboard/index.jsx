@@ -5,8 +5,8 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
+import placeholderImg from "../../assets/react.svg";
 import { AppRoutes, USER_DATA } from "../../constants";
-import placeholderImg from "../../assets/profileDefault.jpg";
 import { LocalStorageHelper } from "../../utils/HttpUtils";
 
 const IconButton = ({ label, img, icon, onClick }) => (
