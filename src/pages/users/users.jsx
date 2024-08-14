@@ -29,7 +29,7 @@ const Users = () => {
   };
 
   return (
-    <div className="bg-white h-screen flex flex-col">
+    <div className="bg-white">
       {/* Top Bar */}
       <div className="p-4 flex items-center justify-between shadow-lg">
         <button onClick={handleBackClick} className="text-xl">
@@ -40,10 +40,11 @@ const Users = () => {
       </div>
 
       {/* Team Members List */}
-
-      {usersList?.map((user) => (
-        <UserCard userData={user} />
-      ))}
+      <div className="my-14 grid grid-cols-1 md:grid-cols-2">
+        {usersList?.map((user) => (
+          <UserCard userData={user} />
+        ))}
+      </div>
     </div>
   );
 };
