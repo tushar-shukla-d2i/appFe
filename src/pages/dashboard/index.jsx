@@ -14,7 +14,7 @@ const userData = JSON.parse(LocalStorageHelper.get(USER_DATA));
 const IconButton = ({ label, img, icon, onClick }) => (
   <div className="flex flex-col items-center">
     <div
-      className="w-12 h-12 bg-gray-100 flex items-center justify-center rounded-xl"
+      className="w-12 h-12 bg-gray-100 flex items-center justify-center rounded-xl hover:cursor-pointer"
       onClick={onClick}
     >
       {!!img && <img src={img} alt={label} className="w-6 h-6" />}
@@ -51,7 +51,7 @@ const Dashboard = () => {
             icon="👥"
             onClick={() => navigate(AppRoutes.USERS)}
           />
-          <IconButton label="Matrics" icon="🎁" />
+          <IconButton label="Metrics" icon="🎁" />
         </div>
       </div>
     </div>

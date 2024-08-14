@@ -1,5 +1,5 @@
 /**
- * Matrics Screens
+ * Metrics Module Screens
  */
 
 export { Subordinates } from "./subordinates";

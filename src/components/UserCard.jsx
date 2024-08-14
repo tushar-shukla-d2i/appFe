@@ -32,7 +32,7 @@ const UserCard = ({ userData }) => {
   return (
     <div
       key={_id}
-      className="mx-8 my-4 bg-gray-50 shadow-lg rounded-lg overflow-hidden"
+      className="mx-8 my-4 bg-gray-50 shadow-lg rounded-lg"
     >
       <div className="flex justify-center items-center p-2">
         <img
