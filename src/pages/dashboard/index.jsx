@@ -9,8 +9,6 @@ import { AppRoutes, USER_DATA } from "../../constants";
 import placeholderImg from "../../assets/profileDefault.jpg";
 import { LocalStorageHelper } from "../../utils/HttpUtils";
 
-const userData = JSON.parse(LocalStorageHelper.get(USER_DATA));
-
 const IconButton = ({ label, img, icon, onClick }) => (
   <div className="flex flex-col items-center">
     <div
@@ -26,6 +24,7 @@ const IconButton = ({ label, img, icon, onClick }) => (
 
 const Dashboard = () => {
   const navigate = useNavigate();
+  const userData = JSON.parse(LocalStorageHelper.get(USER_DATA));
   const { firstName, lastName, officialEmail } = userData ?? {};
   return (
     <div>

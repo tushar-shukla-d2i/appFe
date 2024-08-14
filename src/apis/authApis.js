@@ -11,8 +11,8 @@ export const authApis = {
     try {
       const resp = await httpClient.post(endpoints.SIGNUP, payload);
       if (resp?.success) {
-        LocalStorageHelper.store(TOKEN, resp?.data?.token);
-        LocalStorageHelper.store(USER_DATA, JSON.stringify(resp?.data));
+        LocalStorageHelper.store(TOKEN, resp?.data?.data?.token);
+        LocalStorageHelper.store(USER_DATA, JSON.stringify(resp?.data?.data));
       }
       return resp;
     } catch (error) {
@@ -24,8 +24,8 @@ export const authApis = {
     try {
       const resp = await httpClient.post(endpoints.lOGIN, payload);
       if (resp?.success) {
-        LocalStorageHelper.store(TOKEN, resp?.data?.token);
-        LocalStorageHelper.store(USER_DATA, JSON.stringify(resp?.data));
+        LocalStorageHelper.store(TOKEN, resp?.data?.data?.token);
+        LocalStorageHelper.store(USER_DATA, JSON.stringify(resp?.data?.data));
       }
       return resp;
     } catch (error) {
