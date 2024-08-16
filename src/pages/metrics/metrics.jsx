@@ -8,21 +8,8 @@ import { metricsApis } from "../../apis";
 import { AppRoutes } from "../../constants";
 import { MetricCard, ScreenHeader } from "../../components";
 
-const metrics = [
-  {
-    id: 1,
-    name: "Code Quality",
-    subMetrics: ["Clean code", "UI designing", "Logical Handling"],
-  },
-  {
-    id: 2,
-    name: "Performance",
-    subMetrics: ["Attendance", "Prompt Answering"],
-  },
-];
-
 const Metrics = () => {
-  const [metricsList, setMetricsList] = useState(metrics);
+  const [metricsList, setMetricsList] = useState([]);
 
   useEffect(() => {
     getMetricsList();
