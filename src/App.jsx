@@ -2,31 +2,41 @@ import React from "react";
 import { Route, Routes } from "react-router-dom";
 
 import "./App.css";
-import { Header } from "./components";
+import { AppHeader } from "./components";
 import { AppRoutes } from "./constants";
 import {
   Dashboard,
   Signup,
   Login,
-  Subordinates,
+  Metrics,
   Users,
+  Subordinates,
+  SubMetrics,
 } from "./pages";
 
-function App() {
+const App = () => {
   return (
     <div className="App">
-      <Header />
+      <AppHeader />
       <main>
         <Routes>
           <Route path={AppRoutes.LOGIN} element={<Login />} />
           <Route path={AppRoutes.SIGNUP} element={<Signup />} />
           <Route path={AppRoutes.DASHBOARD} element={<Dashboard />} />
           <Route path={AppRoutes.USERS} element={<Users />} />
-          <Route path={AppRoutes.SUBORDINATES} element={<Subordinates />} />
+          <Route path={AppRoutes.METRICS} element={<Metrics />} />
+          <Route
+            path={`${AppRoutes.METRICS}/:metric_id`}
+            element={<SubMetrics />}
+          />
+          <Route
+            path={`${AppRoutes.SUBORDINATES}/:metric_id`}
+            element={<Subordinates />}
+          />
         </Routes>
       </main>
     </div>
   );
-}
+};
 
 export default App;

@@ -7,6 +7,7 @@ const AppRoutes = {
   SIGNUP: "/signup",
   DASHBOARD: "/dashboard",
   USERS: "/users",
+  METRICS: "/metrics",
   SUBORDINATES: "/subordinates",
 };
 

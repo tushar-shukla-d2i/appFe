@@ -2,5 +2,7 @@
  * All common components
  */
 
-export { Header } from "./Header";
+export { AppHeader } from "./AppHeader";
+export { MetricCard } from "./MetricCard";
+export { ScreenHeader } from "./ScreenHeader";
 export { UserCard } from "./UserCard";

@@ -50,7 +50,11 @@ const Dashboard = () => {
             icon="👥"
             onClick={() => navigate(AppRoutes.USERS)}
           />
-          <IconButton label="Metrics" icon="🎁" />
+          <IconButton
+            label="Metrics"
+            icon="🎁"
+            onClick={() => navigate(AppRoutes.METRICS)}
+          />
         </div>
       </div>
     </div>

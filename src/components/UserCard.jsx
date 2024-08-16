@@ -30,16 +30,9 @@ const UserCard = ({ userData }) => {
   };
 
   return (
-    <div
-      key={_id}
-      className="mx-8 my-4 bg-gray-50 shadow-lg rounded-lg"
-    >
+    <div key={_id} className="mx-8 my-4 bg-gray-50 shadow-lg rounded-lg">
       <div className="flex justify-center items-center p-2">
-        <img
-          src={d2iLogo}
-          alt="logo"
-          className="rounded-full h-16 w-16 mr-4"
-        />
+        <img src={d2iLogo} alt="logo" className="rounded-full h-16 w-16 mr-4" />
         <div>
           <h2 className="text-xl font-semibold text-gray-800">{`${
             firstName || ""

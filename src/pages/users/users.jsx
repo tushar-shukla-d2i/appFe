@@ -3,14 +3,11 @@
  */
 
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { FaArrowLeft } from "react-icons/fa";
 
 import { userApis } from "../../apis";
-import { UserCard } from "../../components";
+import { ScreenHeader, UserCard } from "../../components";
 
 const Users = () => {
-  const navigate = useNavigate();
   const [usersList, setUsersList] = useState([]);
 
   useEffect(() => {
@@ -24,20 +21,10 @@ const Users = () => {
     }
   };
 
-  const handleBackClick = () => {
-    navigate(-1); // Navigate back to the previous page
-  };
-
   return (
     <div className="bg-white">
       {/* Top Bar */}
-      <div className="p-4 flex items-center justify-between shadow-lg">
-        <button onClick={handleBackClick} className="text-xl">
-          <FaArrowLeft />
-        </button>
-        <h1 className="text-lg font-semibold">Our Team</h1>
-        <div></div> {/* Empty div for spacing */}
-      </div>
+      <ScreenHeader title="Our Team" />
 
       {/* Team Members List */}
       <div className="my-14 grid grid-cols-1 md:grid-cols-2">
