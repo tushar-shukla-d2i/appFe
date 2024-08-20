@@ -40,6 +40,7 @@ const Subordinates = () => {
 
     if (response.success) {
       alert("Reward assigned successfully!");
+      navigate(-1);
     }
   };
 
