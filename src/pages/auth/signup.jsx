@@ -72,7 +72,7 @@ const Signup = () => {
       <div className="w-full max-w-md bg-white rounded-lg shadow dark:border dark:bg-gray-800 dark:border-gray-700">
         <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
           <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
-            Create an account
+            Create Account
           </h1>
 
           <Formik
@@ -317,6 +317,18 @@ const Signup = () => {
               </Form>
             )}
           </Formik>
+
+          <div className="mt-4 text-center">
+            <p className="text-sm font-light text-gray-500 dark:text-gray-400">
+              Already have an account?{" "}
+              <a
+                href={AppRoutes.LOGIN}
+                className="font-medium text-primary-600 hover:underline dark:text-primary-500"
+              >
+                Sign in
+              </a>
+            </p>
+          </div>
         </div>
       </div>
     </section>
