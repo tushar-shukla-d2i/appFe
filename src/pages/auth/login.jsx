@@ -1,24 +1,40 @@
-import React, { useState } from "react";
+/*
+ * Login page
+ */
+
+import React from "react";
 import { useNavigate } from "react-router-dom";
+import { useFormik } from "formik";
+import * as Yup from "yup";
 
 import { authApis } from "../../apis";
 import { AppRoutes } from "../../constants";
+import { emailRegex } from "../../utils/CommonUtils";
+import { ErrorComponent } from "../../components";
+
+const validationSchema = {
+  officialEmail: Yup.string()
+    .matches(emailRegex, "Invalid email")
+    .required("Official Email is required"),
+  password: Yup.string()
+    .min(8, "Password must have at least 8 characters")
+    .required("Password is required"),
+};
 
 const Login = () => {
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({ officialEmail: "", password: "" });
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const response = await authApis.login(formData);
-    if (response.success) {
-      navigate(AppRoutes.DASHBOARD);
-    }
-  };
+  // Formik initialization
+  const formik = useFormik({
+    initialValues: { officialEmail: "", password: "" },
+    validationSchema: Yup.object(validationSchema),
+    onSubmit: async (values) => {
+      const response = await authApis.login(values);
+      if (response.success) {
+        navigate(AppRoutes.DASHBOARD);
+      }
+    },
+  });
 
   return (
     <>
@@ -28,7 +44,14 @@ const Login = () => {
             <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
               Sign in to your account
             </h1>
-            <form className="space-y-4 md:space-y-6" onSubmit={handleSubmit}>
+
+            {/* <ErrorComponent error="Invalid email or password" /> */}
+
+            <form
+              className="space-y-4 md:space-y-6"
+              onSubmit={formik.handleSubmit}
+              noValidate
+            >
               {/* Official Email */}
               <div>
                 <label
@@ -41,12 +64,17 @@ const Login = () => {
                   type="email"
                   name="officialEmail"
                   id="officialEmail"
-                  value={formData.officialEmail}
-                  onChange={handleChange}
+                  value={formik.values.officialEmail}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
                   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
                   placeholder="Enter your official email"
-                  required
                 />
+                {formik.touched.officialEmail && formik.errors.officialEmail ? (
+                  <div className="text-red-500 text-sm mt-2">
+                    {formik.errors.officialEmail}
+                  </div>
+                ) : null}
               </div>
 
               {/* Password */}
@@ -61,12 +89,17 @@ const Login = () => {
                   type="password"
                   name="password"
                   id="password"
-                  value={formData.password}
-                  onChange={handleChange}
+                  value={formik.values.password}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
                   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
                   placeholder="Enter your password"
-                  required
                 />
+                {formik.touched.password && formik.errors.password ? (
+                  <div className="text-red-500 text-sm mt-2">
+                    {formik.errors.password}
+                  </div>
+                ) : null}
               </div>
 
               <button

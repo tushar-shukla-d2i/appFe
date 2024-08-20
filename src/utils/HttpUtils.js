@@ -133,7 +133,7 @@ httpClient.interceptors.response.use(
         //     message: "Permission Denied",
         //     isError: true
         // })
-        window.history.go(-1);
+        // window.history.go(-1);
         return Promise.resolve({
           success: false,
           code: 403,

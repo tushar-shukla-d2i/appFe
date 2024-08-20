@@ -1,13 +1,17 @@
 /**
- * Subordinates and review listing screen
+ * Subordinates and reward assigning screen
  */
 
 import React, { useEffect, useState } from "react";
+import { useParams } from "react-router";
+import { useNavigate } from "react-router-dom";
 
-import { userApis } from "../../apis";
+import { rewardsApis, userApis } from "../../apis";
 import { ScreenHeader } from "../../components";
 
 const Subordinates = () => {
+  const navigate = useNavigate();
+  const { metric_id } = useParams();
   const [comment, setComment] = useState("");
   const [usersList, setUsersList] = useState([]);
   const [sliderValue, setSliderValue] = useState(10);
@@ -24,8 +28,19 @@ const Subordinates = () => {
     }
   };
 
-  const onSubmitFeedback = () => {
-    console.log(sliderValue, comment);
+  const onSubmitFeedback = async () => {
+    const payload = {
+      metric_id,
+      user_id: selectedUser,
+      points: sliderValue,
+      comment,
+    };
+    const response = await rewardsApis.assignReward(payload);
+    console.log(response, "response");
+
+    if (response.success) {
+      // alert("OK");
+    }
   };
 
   return (
@@ -57,7 +72,9 @@ const Subordinates = () => {
             <div className="w-full">
               <div className="flex justify-between text-xs text-gray-500 mb-1">
                 {Array.from({ length: 21 }, (_, i) => -10 + i).map((value) => (
-                  <span key={value}>{value}</span>
+                  <span key={value} className="text-center flex-1">
+                    {value}
+                  </span>
                 ))}
               </div>
               <input
