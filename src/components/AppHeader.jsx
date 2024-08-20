@@ -5,11 +5,13 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
-import { AppRoutes } from "../constants";
 import d2iLogo from "../assets/d2i_logo.jpg";
+import { AppRoutes, USER_DATA } from "../constants";
+import { LocalStorageHelper } from "../utils/HttpUtils";
 
 const AppHeader = () => {
   const navigate = useNavigate();
+  const userData = JSON.parse(LocalStorageHelper.get(USER_DATA)) || {};
 
   return (
     <header className="bg-[#0375a7] text-white py-4">
@@ -18,7 +20,7 @@ const AppHeader = () => {
           src={d2iLogo}
           alt="logo"
           className="rounded-full h-16 w-16 mr-4 hover:cursor-pointer"
-          onClick={() => navigate(AppRoutes.DASHBOARD)}
+          onClick={() => userData?.userId && navigate(AppRoutes.DASHBOARD)}
         />
         <h1 className="text-lg font-bold tracking-wider	">
           Innovating Tomorrow, Today

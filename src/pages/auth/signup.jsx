@@ -68,10 +68,10 @@ const Signup = () => {
   };
 
   return (
-    <section className="bg-gray-50 dark:bg-gray-900 flex justify-center items-center">
-      <div className="w-full max-w-md bg-white rounded-lg shadow dark:border dark:bg-gray-800 dark:border-gray-700">
+    <section className="bg-gray-100 flex justify-center items-center">
+      <div className="w-full max-w-md bg-white rounded-lg shadow-lg border border-gray-300">
         <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
-          <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
+          <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl">
             Create Account
           </h1>
 
@@ -96,7 +96,7 @@ const Signup = () => {
                 <div>
                   <label
                     htmlFor="firstName"
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    className="block mb-2 text-sm font-medium text-gray-700"
                   >
                     First Name
                   </label>
@@ -104,7 +104,7 @@ const Signup = () => {
                     type="text"
                     name="firstName"
                     id="firstName"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                     placeholder="Enter your first name"
                   />
                   <ErrorMessage
@@ -118,7 +118,7 @@ const Signup = () => {
                 <div>
                   <label
                     htmlFor="lastName"
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    className="block mb-2 text-sm font-medium text-gray-700"
                   >
                     Last Name
                   </label>
@@ -126,7 +126,7 @@ const Signup = () => {
                     type="text"
                     name="lastName"
                     id="lastName"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                     placeholder="Enter your last name"
                   />
                   <ErrorMessage
@@ -140,7 +140,7 @@ const Signup = () => {
                 <div>
                   <label
                     htmlFor="bloodGroup"
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    className="block mb-2 text-sm font-medium text-gray-700"
                   >
                     Blood Group
                   </label>
@@ -148,7 +148,7 @@ const Signup = () => {
                     as="select"
                     name="bloodGroup"
                     id="bloodGroup"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                   >
                     {bloodGroupOptions.map((option) => (
                       <option key={option.value} value={option.value}>
@@ -167,7 +167,7 @@ const Signup = () => {
                 <div>
                   <label
                     htmlFor="birthday"
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    className="block mb-2 text-sm font-medium text-gray-700"
                   >
                     Birthday
                   </label>
@@ -175,7 +175,7 @@ const Signup = () => {
                     type="date"
                     name="birthday"
                     id="birthday"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                     min={minDate}
                     max={maxDate}
                   />
@@ -190,7 +190,7 @@ const Signup = () => {
                 <div>
                   <label
                     htmlFor="officialEmail"
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    className="block mb-2 text-sm font-medium text-gray-700"
                   >
                     Official Email
                   </label>
@@ -198,7 +198,7 @@ const Signup = () => {
                     type="email"
                     name="officialEmail"
                     id="officialEmail"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                     placeholder="Enter your official email"
                   />
                   <ErrorMessage
@@ -212,7 +212,7 @@ const Signup = () => {
                 <div>
                   <label
                     htmlFor="alternateEmail"
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    className="block mb-2 text-sm font-medium text-gray-700"
                   >
                     Alternate Email (Optional)
                   </label>
@@ -220,7 +220,7 @@ const Signup = () => {
                     type="email"
                     name="alternateEmail"
                     id="alternateEmail"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                     placeholder="Enter your alternate email"
                   />
                   <ErrorMessage
@@ -234,7 +234,7 @@ const Signup = () => {
                 <div>
                   <label
                     htmlFor="contactNumber"
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    className="block mb-2 text-sm font-medium text-gray-700"
                   >
                     Contact Number
                   </label>
@@ -242,7 +242,7 @@ const Signup = () => {
                     type="tel"
                     name="contactNumber"
                     id="contactNumber"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                     placeholder="Enter your contact number"
                     maxLength={10}
                     pattern="[0-9]*"
@@ -261,7 +261,7 @@ const Signup = () => {
                 <div>
                   <label
                     htmlFor="alternateContactNumber"
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    className="block mb-2 text-sm font-medium text-gray-700"
                   >
                     Alternate Contact Number (Optional)
                   </label>
@@ -269,7 +269,7 @@ const Signup = () => {
                     type="tel"
                     name="alternateContactNumber"
                     id="alternateContactNumber"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                     placeholder="Enter your alternate contact number"
                     maxLength={10}
                     pattern="[0-9]*"
@@ -288,7 +288,7 @@ const Signup = () => {
                 <div>
                   <label
                     htmlFor="password"
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    className="block mb-2 text-sm font-medium text-gray-700"
                   >
                     Password
                   </label>
@@ -296,7 +296,7 @@ const Signup = () => {
                     type="password"
                     name="password"
                     id="password"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                     placeholder="Enter your password"
                   />
                   <ErrorMessage
@@ -310,7 +310,7 @@ const Signup = () => {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+                  className="w-full text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
                 >
                   Create Account
                 </button>
@@ -319,11 +319,11 @@ const Signup = () => {
           </Formik>
 
           <div className="mt-4 text-center">
-            <p className="text-sm font-light text-gray-500 dark:text-gray-400">
+            <p className="text-sm font-light text-gray-500">
               Already have an account?{" "}
               <a
                 href={AppRoutes.LOGIN}
-                className="font-medium text-primary-600 hover:underline dark:text-primary-500"
+                className="font-medium text-blue-600 hover:underline"
               >
                 Sign in
               </a>
