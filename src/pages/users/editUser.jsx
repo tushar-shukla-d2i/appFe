@@ -1,14 +1,11 @@
-/*
- * Signup page
- */
-
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 
-import { authApis } from "../../apis";
-import { AppRoutes } from "../../constants";
+import { userApis } from "../../apis";
+import { USER_DATA, AppRoutes } from "../../constants";
+import { LocalStorageHelper } from "../../utils/HttpUtils";
 
 // Helper function to calculate date range
 const getDateFromYearsAgo = (years) => {
@@ -40,9 +37,6 @@ const validationSchema = Yup.object().shape({
     .required("Birthday is required")
     .max(new Date(maxDate), "You must be at least 18 years old")
     .min(new Date(minDate), "You must be at most 55 years old"),
-  password: Yup.string()
-    .min(8, "Password must be at least 8 characters long")
-    .required("Password is required"),
 });
 
 const bloodGroupOptions = [
@@ -57,12 +51,18 @@ const bloodGroupOptions = [
   { value: "O-", label: "O-" },
 ];
 
-const Signup = () => {
+const EditUser = () => {
   const navigate = useNavigate();
+  const userData = JSON.parse(LocalStorageHelper.get(USER_DATA)) || {};
 
   const handleSubmit = async (values) => {
-    const response = await authApis.signup(values);
+    const response = await userApis.updateUserById({
+      user_id: userData?.userId,
+      payload: values,
+    });
     if (response.success) {
+      LocalStorageHelper.store(USER_DATA, JSON.stringify(values));
+      alert("Profile updated successfully!");
       navigate(AppRoutes.DASHBOARD);
     }
   };
@@ -72,20 +72,20 @@ const Signup = () => {
       <div className="w-full max-w-md bg-white rounded-lg shadow dark:border dark:bg-gray-800 dark:border-gray-700">
         <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
           <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
-            Create an account
+            Edit Profile
           </h1>
 
           <Formik
             initialValues={{
-              firstName: "",
-              lastName: "",
-              bloodGroup: "",
-              officialEmail: "",
-              alternateEmail: "",
-              contactNumber: "",
-              alternateContactNumber: "",
-              birthday: "",
-              password: "",
+              firstName: userData.firstName || "",
+              lastName: userData.lastName || "",
+              bloodGroup: userData.bloodGroup || "",
+              officialEmail: userData.officialEmail || "",
+              alternateEmail: userData.alternateEmail || "",
+              contactNumber: userData.contactNumber || "",
+              alternateContactNumber: userData.alternateContactNumber || "",
+              birthday: userData.birthday || "",
+              password: userData.password || "", // You may want to handle passwords differently, e.g., not pre-populating
             }}
             validationSchema={validationSchema}
             onSubmit={handleSubmit}
@@ -239,16 +239,11 @@ const Signup = () => {
                     Contact Number
                   </label>
                   <Field
-                    type="tel"
+                    type="text"
                     name="contactNumber"
                     id="contactNumber"
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
                     placeholder="Enter your contact number"
-                    maxLength={10}
-                    pattern="[0-9]*"
-                    onInput={(e) => {
-                      e.target.value = e.target.value?.replace?.(/[^0-9]/g, "");
-                    }}
                   />
                   <ErrorMessage
                     name="contactNumber"
@@ -266,16 +261,11 @@ const Signup = () => {
                     Alternate Contact Number (Optional)
                   </label>
                   <Field
-                    type="tel"
+                    type="text"
                     name="alternateContactNumber"
                     id="alternateContactNumber"
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
                     placeholder="Enter your alternate contact number"
-                    maxLength={10}
-                    pattern="[0-9]*"
-                    onInput={(e) => {
-                      e.target.value = e.target.value?.replace?.(/[^0-9]/g, "");
-                    }}
                   />
                   <ErrorMessage
                     name="alternateContactNumber"
@@ -306,14 +296,15 @@ const Signup = () => {
                   />
                 </div>
 
-                {/* Submit Button */}
-                <button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
-                >
-                  Create Account
-                </button>
+                <div className="flex justify-center">
+                  <button
+                    type="submit"
+                    className="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+                    disabled={isSubmitting}
+                  >
+                    Save Changes
+                  </button>
+                </div>
               </Form>
             )}
           </Formik>
@@ -323,4 +314,4 @@ const Signup = () => {
   );
 };
 
-export { Signup };
+export { EditUser };

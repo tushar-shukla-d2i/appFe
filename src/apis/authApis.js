@@ -32,4 +32,14 @@ export const authApis = {
       console.log("Error login:-", error);
     }
   },
+
+  logout: async () => {
+    try {
+      LocalStorageHelper.delete(TOKEN);
+      LocalStorageHelper.delete(USER_DATA);
+      return true;
+    } catch (error) {
+      console.log("Error logout:-", error);
+    }
+  },
 };

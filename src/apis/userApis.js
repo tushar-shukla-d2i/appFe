@@ -15,12 +15,24 @@ export const userApis = {
     }
   },
 
-  getUserById: async (userId) => {
+  getUserById: async ({ user_id }) => {
     try {
-      const response = await httpClient.get(`${endpoints.GET_USER}/${userId}`);
+      const response = await httpClient.get(`${endpoints.USERS}/${user_id}`);
       return response;
     } catch (error) {
       console.log("getUserById:", error);
+    }
+  },
+
+  updateUserById: async ({ user_id, payload }) => {
+    try {
+      const response = await httpClient.put(
+        `${endpoints.USERS}/${user_id}`,
+        payload
+      );
+      return response;
+    } catch (error) {
+      console.log("updateUserById:", error);
     }
   },
 };

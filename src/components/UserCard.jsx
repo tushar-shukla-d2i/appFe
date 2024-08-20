@@ -43,18 +43,14 @@ const UserCard = ({ userData }) => {
 
       <div className="px-6 py-4 border-t border-gray-200">
         <RenderDetails label="🩸" value={bloodGroup} />
-        <RenderDetails
-          label="📧"
-          value={`${officialEmail} ${
-            alternateEmail ? `, ${alternateEmail}` : ""
-          }`}
-        />
-        <RenderDetails
-          label="📞"
-          value={`${contactNumber} ${
-            alternateContactNumber ? `, ${alternateContactNumber}` : ""
-          }`}
-        />
+        <RenderDetails label="✉️" value={officialEmail} />
+        {!!alternateEmail && (
+          <RenderDetails label="📬" value={alternateEmail} />
+        )}
+        <RenderDetails label="☎️" value={contactNumber} />
+        {!!alternateContactNumber && (
+          <RenderDetails label="📲" value={alternateContactNumber} />
+        )}
         <RenderDetails
           label="🎂"
           value={formatDateToShortMonthString(birthday)}

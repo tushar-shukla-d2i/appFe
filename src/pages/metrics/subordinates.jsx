@@ -39,7 +39,7 @@ const Subordinates = () => {
     console.log(response, "response");
 
     if (response.success) {
-      // alert("OK");
+      alert("Reward assigned successfully!");
     }
   };
 
