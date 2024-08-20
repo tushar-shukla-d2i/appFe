@@ -1,5 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { FaArrowLeft } from "react-icons/fa";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 
@@ -55,6 +56,10 @@ const EditUser = () => {
   const navigate = useNavigate();
   const userData = JSON.parse(LocalStorageHelper.get(USER_DATA)) || {};
 
+  const handleBackClick = () => {
+    navigate(-1);
+  };
+
   const handleSubmit = async (values) => {
     const response = await userApis.updateUserById({
       user_id: userData?.userId,
@@ -71,9 +76,17 @@ const EditUser = () => {
     <section className="bg-gray-50 dark:bg-gray-900 flex justify-center items-center">
       <div className="w-full max-w-md bg-white rounded-lg shadow dark:border dark:bg-gray-800 dark:border-gray-700">
         <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
-          <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
-            Edit Profile
-          </h1>
+          <div className="flex items-center">
+            <button
+              onClick={handleBackClick}
+              className="text-xl text-white mr-3"
+            >
+              <FaArrowLeft />
+            </button>
+            <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
+              Edit Profile
+            </h1>
+          </div>
 
           <Formik
             initialValues={{
