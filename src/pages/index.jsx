@@ -4,5 +4,5 @@
 
 export * from "./auth";
 export * from "./dashboard";
-export * from "./matrics";
+export * from "./metrics";
 export * from "./users";

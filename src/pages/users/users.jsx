@@ -3,19 +3,23 @@
  */
 
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { FaArrowLeft } from "react-icons/fa";
+import { FaSearch, FaTimes } from "react-icons/fa";
 
 import { userApis } from "../../apis";
-import { UserCard } from "../../components";
+import { ScreenHeader, UserCard } from "../../components";
 
 const Users = () => {
-  const navigate = useNavigate();
   const [usersList, setUsersList] = useState([]);
+  const [searchQuery, setSearchQuery] = useState(""); // State for search query
+  const [filteredUsers, setFilteredUsers] = useState([]); // State for filtered users
 
   useEffect(() => {
     getUsersList();
   }, []);
+
+  useEffect(() => {
+    filterUsers();
+  }, [usersList, searchQuery]);
 
   const getUsersList = async () => {
     const resp = await userApis.getAllUsers();
@@ -24,26 +28,63 @@ const Users = () => {
     }
   };
 
-  const handleBackClick = () => {
-    navigate(-1); // Navigate back to the previous page
+  const filterUsers = () => {
+    const lowercasedQuery = searchQuery?.toLowerCase();
+
+    const fieldsToSearch = [
+      "_id",
+      "firstName",
+      "lastName",
+      "role",
+      "bloodGroup",
+      "officialEmail",
+      "alternateEmail",
+      "contactNumber",
+      "alternateContactNumber",
+      "birthday",
+    ];
+
+    const filtered = usersList?.filter?.((user) =>
+      fieldsToSearch?.some?.((field) =>
+        user?.[field]?.toString()?.toLowerCase()?.includes?.(lowercasedQuery)
+      )
+    );
+
+    setFilteredUsers(filtered);
   };
 
   return (
-    <div className="bg-white h-screen flex flex-col">
+    <div className="bg-white">
       {/* Top Bar */}
-      <div className="p-4 flex items-center justify-between shadow-lg">
-        <button onClick={handleBackClick} className="text-xl">
-          <FaArrowLeft />
-        </button>
-        <h1 className="text-lg font-semibold">Our Team</h1>
-        <div></div> {/* Empty div for spacing */}
+      <ScreenHeader title="Our Team" />
+
+      {/* Search Input */}
+      <div className="mt-10 mb-6 mx-10 relative">
+        <input
+          type="text"
+          placeholder="Search..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="p-2 border border-gray-500 rounded w-full pr-10"
+        />
+        <div className="absolute top-3 right-2">
+          {searchQuery ? (
+            <FaTimes
+              className="cursor-pointer text-gray-500"
+              onClick={() => setSearchQuery("")}
+            />
+          ) : (
+            <FaSearch className="text-gray-500" />
+          )}
+        </div>
       </div>
 
       {/* Team Members List */}
-
-      {usersList?.map((user) => (
-        <UserCard userData={user} />
-      ))}
+      <div className="mb-14 grid grid-cols-1 md:grid-cols-2">
+        {filteredUsers.map((user) => (
+          <UserCard key={user._id} userData={user} />
+        ))}
+      </div>
     </div>
   );
 };

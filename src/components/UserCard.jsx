@@ -30,16 +30,9 @@ const UserCard = ({ userData }) => {
   };
 
   return (
-    <div
-      key={_id}
-      className="mx-8 my-4 bg-gray-50 shadow-lg rounded-lg overflow-hidden"
-    >
+    <div key={_id} className="mx-8 my-4 bg-gray-50 shadow-lg rounded-lg">
       <div className="flex justify-center items-center p-2">
-        <img
-          src={d2iLogo}
-          alt="logo"
-          className="rounded-full h-16 w-16 mr-4"
-        />
+        <img src={d2iLogo} alt="logo" className="rounded-full h-16 w-16 mr-4" />
         <div>
           <h2 className="text-xl font-semibold text-gray-800">{`${
             firstName || ""
@@ -50,18 +43,14 @@ const UserCard = ({ userData }) => {
 
       <div className="px-6 py-4 border-t border-gray-200">
         <RenderDetails label="🩸" value={bloodGroup} />
-        <RenderDetails
-          label="📧"
-          value={`${officialEmail} ${
-            alternateEmail ? `, ${alternateEmail}` : ""
-          }`}
-        />
-        <RenderDetails
-          label="📞"
-          value={`${contactNumber} ${
-            alternateContactNumber ? `, ${alternateContactNumber}` : ""
-          }`}
-        />
+        <RenderDetails label="✉️" value={officialEmail} />
+        {!!alternateEmail && (
+          <RenderDetails label="📬" value={alternateEmail} />
+        )}
+        <RenderDetails label="☎️" value={contactNumber} />
+        {!!alternateContactNumber && (
+          <RenderDetails label="📲" value={alternateContactNumber} />
+        )}
         <RenderDetails
           label="🎂"
           value={formatDateToShortMonthString(birthday)}

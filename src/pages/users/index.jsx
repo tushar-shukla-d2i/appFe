@@ -2,5 +2,7 @@
  * User Screens
  */
 
-export { UserDetail } from "./userDetail";
+export { ChangePassword } from "./changePassword";
+export { ManageUser } from "./manageUser";
+export { ManageUsers } from "./manageUsers";
 export { Users } from "./users";
