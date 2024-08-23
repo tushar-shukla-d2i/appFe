@@ -71,11 +71,11 @@ const Dashboard = () => {
             icon="🧑‍💼"
             onClick={() => navigate(`${AppRoutes.USER}/${_id}`)}
           />
-          {/* <IconButton
+          <IconButton
             label="Change Password"
             icon="🔒"
-            onClick={() => navigate(AppRoutes.USER)}
-          /> */}
+            onClick={() => navigate(AppRoutes.CHANGE_PASSWORD)}
+          />
           <IconButton
             label="Team"
             icon="👥"

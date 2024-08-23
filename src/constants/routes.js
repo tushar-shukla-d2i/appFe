@@ -9,6 +9,7 @@ const AppRoutes = {
   MANAGE_USERS: "/manage-users",
   USER: "/user",
   USERS: "/users",
+  CHANGE_PASSWORD: "/change-password",
   METRICS: "/metrics",
   SUBORDINATES: "/subordinates",
 };

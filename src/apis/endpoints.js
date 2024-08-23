@@ -9,6 +9,8 @@ const endpoints = {
   METRICS: "metrics",
   GET_METRIC: "metric",
   REWARDS: "rewards",
+  LOOKUPS: "lookups",
+  ME: "me",
 };
 
 export { endpoints };

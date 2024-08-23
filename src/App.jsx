@@ -14,6 +14,7 @@ import {
   SubMetrics,
   ManageUser,
   ManageUsers,
+  ChangePassword,
 } from "./pages";
 
 const App = () => {
@@ -27,8 +28,12 @@ const App = () => {
           <Route path={AppRoutes.DASHBOARD} element={<Dashboard />} />
           <Route path={AppRoutes.USER} element={<ManageUser />} />
           <Route path={`${AppRoutes.USER}/:user_id`} element={<ManageUser />} />
-          <Route path={AppRoutes.USERS} element={<Users />} />
           <Route path={AppRoutes.MANAGE_USERS} element={<ManageUsers />} />
+          <Route
+            path={AppRoutes.CHANGE_PASSWORD}
+            element={<ChangePassword />}
+          />
+          <Route path={AppRoutes.USERS} element={<Users />} />
           <Route path={AppRoutes.METRICS} element={<Metrics />} />
           <Route
             path={`${AppRoutes.METRICS}/:metric_id`}

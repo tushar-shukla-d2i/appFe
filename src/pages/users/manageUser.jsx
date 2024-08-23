@@ -331,33 +331,37 @@ const ManageUser = () => {
                   </div>
 
                   {/* Password */}
-                  <div>
-                    <label
-                      htmlFor="password"
-                      className="block mb-2 text-sm font-medium text-gray-700"
-                    >
-                      Password
-                    </label>
-                    <Field
-                      type="password"
-                      name="password"
-                      id="password"
-                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                      placeholder="Enter your password"
-                    />
-                    <ErrorMessage
-                      name="password"
-                      component="div"
-                      className="text-red-600 text-sm mt-2"
-                    />
-                  </div>
+                  {!isMyProfile && (
+                    <div>
+                      <label
+                        htmlFor="password"
+                        className="block mb-2 text-sm font-medium text-gray-700"
+                      >
+                        Password
+                      </label>
+                      <Field
+                        type="password"
+                        name="password"
+                        id="password"
+                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                        placeholder="Enter your password"
+                      />
+                      <ErrorMessage
+                        name="password"
+                        component="div"
+                        className="text-red-600 text-sm mt-2"
+                      />
+                    </div>
+                  )}
 
                   <button
                     type="submit"
                     className="w-full text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
                     disabled={isSubmitting}
                   >
-                    {user_id ? "Update" : "Add"} User
+                    {`${user_id ? "Update" : "Add"} ${
+                      isMyProfile ? "Profile" : "User"
+                    }`}
                   </button>
                 </Form>
               );
