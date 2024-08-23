@@ -15,9 +15,12 @@ export const commonApis = {
     }
   },
 
-  me: async (payload) => {
+  me: async ({ user_id, payload }) => {
     try {
-      const response = await httpClient.put(endpoints.ME, payload);
+      const response = await httpClient.put(
+        `${endpoints.ME}/${user_id}`,
+        payload
+      );
       return response;
     } catch (error) {
       console.log("me:", error);
