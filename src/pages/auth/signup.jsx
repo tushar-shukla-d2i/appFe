@@ -8,7 +8,7 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 
 import { authApis } from "../../apis";
-import { AppRoutes } from "../../constants";
+import { AppRoutes, BLOOD_GROUPS } from "../../constants";
 
 // Helper function to calculate date range
 const getDateFromYearsAgo = (years) => {
@@ -44,18 +44,6 @@ const validationSchema = Yup.object().shape({
     .min(8, "Password must be at least 8 characters long")
     .required("Password is required"),
 });
-
-const bloodGroupOptions = [
-  { value: "", label: "Select your blood group" },
-  { value: "A+", label: "A+" },
-  { value: "A-", label: "A-" },
-  { value: "B+", label: "B+" },
-  { value: "B-", label: "B-" },
-  { value: "AB+", label: "AB+" },
-  { value: "AB-", label: "AB-" },
-  { value: "O+", label: "O+" },
-  { value: "O-", label: "O-" },
-];
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -150,7 +138,7 @@ const Signup = () => {
                     id="bloodGroup"
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                   >
-                    {bloodGroupOptions.map((option) => (
+                    {BLOOD_GROUPS?.map?.((option) => (
                       <option key={option.value} value={option.value}>
                         {option.label}
                       </option>

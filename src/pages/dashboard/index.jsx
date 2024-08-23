@@ -8,17 +8,17 @@ import { FiLogOut } from "react-icons/fi";
 
 import { authApis } from "../../apis";
 import placeholderImg from "../../assets/react.svg";
-import { AppRoutes, USER_DATA } from "../../constants";
+import { AppRoutes, USER_DATA, USER_ROLES } from "../../constants";
 import { LocalStorageHelper } from "../../utils/HttpUtils";
 
 const IconButton = ({ label, img, icon, onClick }) => (
   <div className="flex flex-col items-center">
     <div
-      className="w-12 h-12 bg-gray-100 flex items-center justify-center rounded-xl hover:cursor-pointer"
+      className="w-14 h-14 bg-slate-100 flex items-center justify-center rounded-xl hover:cursor-pointer"
       onClick={onClick}
     >
       {!!img && <img src={img} alt={label} className="w-6 h-6" />}
-      {!!icon && <span className="text-xl">{icon}</span>}
+      {!!icon && <span className="text-3xl">{icon}</span>}
     </div>
     <p className="text-center font-semibold text-md mt-2">{label}</p>
   </div>
@@ -27,7 +27,7 @@ const IconButton = ({ label, img, icon, onClick }) => (
 const Dashboard = () => {
   const navigate = useNavigate();
   const userData = JSON.parse(LocalStorageHelper.get(USER_DATA));
-  const { firstName, lastName, officialEmail } = userData ?? {};
+  const { userId, firstName, lastName, officialEmail, role } = userData ?? {};
 
   const handleLogout = async () => {
     const resp = await authApis.logout();
@@ -41,7 +41,6 @@ const Dashboard = () => {
           alt="user_img"
           src={placeholderImg}
           className="h-20 w-20 rounded-full mr-6 hover:cursor-pointer"
-          onClick={() => navigate(AppRoutes.EDIT_USER)}
         />
         <div className="flex-1">
           <h1 className="text-white font-bold text-xl uppercase tracking-wider mb-2">{`${firstName} ${lastName}`}</h1>
@@ -59,7 +58,24 @@ const Dashboard = () => {
 
       <div className="bg-gray-50 mx-6 mt-[-3rem] px-4 py-6 shadow-xl rounded-lg">
         <h1 className="font-bold text-lg tracking-wider mb-8">Features</h1>
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-3 gap-x-4 gap-y-8">
+          {role === USER_ROLES.ADMIN && (
+            <IconButton
+              label="Manage Users"
+              icon="🗂️"
+              onClick={() => navigate(AppRoutes.MANAGE_USERS)}
+            />
+          )}
+          <IconButton
+            label="Profile"
+            icon="🧑‍💼"
+            onClick={() => navigate(`${AppRoutes.USER}/${userId}`)}
+          />
+          {/* <IconButton
+            label="Change Password"
+            icon="🔒"
+            onClick={() => navigate(AppRoutes.USER)}
+          /> */}
           <IconButton
             label="Team"
             icon="👥"

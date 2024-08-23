@@ -15,6 +15,15 @@ export const userApis = {
     }
   },
 
+  createUser: async (payload) => {
+    try {
+      const response = await httpClient.post(endpoints.USERS, payload);
+      return response;
+    } catch (error) {
+      console.log("createUser:", error);
+    }
+  },
+
   getUserById: async ({ user_id }) => {
     try {
       const response = await httpClient.get(`${endpoints.USERS}/${user_id}`);

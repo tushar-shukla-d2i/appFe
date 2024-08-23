@@ -12,7 +12,8 @@ import {
   Users,
   Subordinates,
   SubMetrics,
-  EditUser,
+  ManageUser,
+  ManageUsers,
 } from "./pages";
 
 const App = () => {
@@ -24,8 +25,10 @@ const App = () => {
           <Route path={AppRoutes.LOGIN} element={<Login />} />
           <Route path={AppRoutes.SIGNUP} element={<Signup />} />
           <Route path={AppRoutes.DASHBOARD} element={<Dashboard />} />
-          <Route path={AppRoutes.EDIT_USER} element={<EditUser />} />
+          <Route path={AppRoutes.USER} element={<ManageUser />} />
+          <Route path={`${AppRoutes.USER}/:user_id`} element={<ManageUser />} />
           <Route path={AppRoutes.USERS} element={<Users />} />
+          <Route path={AppRoutes.MANAGE_USERS} element={<ManageUsers />} />
           <Route path={AppRoutes.METRICS} element={<Metrics />} />
           <Route
             path={`${AppRoutes.METRICS}/:metric_id`}

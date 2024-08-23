@@ -59,7 +59,7 @@ const Users = () => {
       <ScreenHeader title="Our Team" />
 
       {/* Search Input */}
-      <div className="mt-10 mb-6 mx-24 relative">
+      <div className="mt-10 mb-6 mx-10 relative">
         <input
           type="text"
           placeholder="Search..."

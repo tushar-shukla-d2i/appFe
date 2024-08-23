@@ -2,5 +2,6 @@
  * User Screens
  */
 
-export { EditUser } from "./editUser";
+export { ManageUser } from "./manageUser";
+export { ManageUsers } from "./manageUsers";
 export { Users } from "./users";
