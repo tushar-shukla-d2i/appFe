@@ -27,7 +27,7 @@ const ManageUser = () => {
   const navigate = useNavigate();
   const { user_id } = useParams();
   const userData = JSON.parse(LocalStorageHelper.get(USER_DATA)) || {};
-  const isMyProfile = userData?.userId === user_id;
+  const isMyProfile = userData?._id === user_id;
 
   // Validation Schema
   const validationSchema = Yup.object().shape({
@@ -119,7 +119,11 @@ const ManageUser = () => {
                   const getUserData = async () => {
                     const resp = await userApis.getUserById({ user_id });
                     if (resp?.data) {
-                      setValues({ ...resp.data, password: "" });
+                      setValues({
+                        ...resp.data,
+                        birthday: resp?.data?.birthday?.split?.("T")[0] || "",
+                        password: "",
+                      });
                     }
                   };
                   getUserData();

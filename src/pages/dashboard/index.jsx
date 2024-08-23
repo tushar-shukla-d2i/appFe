@@ -27,7 +27,7 @@ const IconButton = ({ label, img, icon, onClick }) => (
 const Dashboard = () => {
   const navigate = useNavigate();
   const userData = JSON.parse(LocalStorageHelper.get(USER_DATA));
-  const { userId, firstName, lastName, officialEmail, role } = userData ?? {};
+  const { _id, firstName, lastName, officialEmail, role } = userData ?? {};
 
   const handleLogout = async () => {
     const resp = await authApis.logout();
@@ -69,7 +69,7 @@ const Dashboard = () => {
           <IconButton
             label="Profile"
             icon="🧑‍💼"
-            onClick={() => navigate(`${AppRoutes.USER}/${userId}`)}
+            onClick={() => navigate(`${AppRoutes.USER}/${_id}`)}
           />
           {/* <IconButton
             label="Change Password"
