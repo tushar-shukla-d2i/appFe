@@ -5,11 +5,11 @@
 import React, { useEffect } from "react";
 import { useParams } from "react-router";
 import { useNavigate } from "react-router-dom";
-import { FaArrowLeft } from "react-icons/fa";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 
 import { userApis } from "../../apis";
+import { ScreenHeader } from "../../components";
 import { BLOOD_GROUPS, USER_DATA } from "../../constants";
 import { LocalStorageHelper } from "../../utils/HttpUtils";
 
@@ -85,18 +85,15 @@ const ManageUser = () => {
   };
 
   return (
-    <section className="bg-gray-100 flex justify-center items-center">
-      <div className="w-full max-w-md bg-white rounded-lg shadow-lg border border-gray-300">
-        <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
-          <div className="flex items-center mb-8">
-            <button onClick={handleBackClick} className="text-xl mr-3">
-              <FaArrowLeft />
-            </button>
-            <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl">
-              {user_id ? "Edit" : "Add New"} {isMyProfile ? "Profile" : "User"}
-            </h1>
-          </div>
+    <div className="bg-white">
+      <ScreenHeader
+        title={`${user_id ? "Edit" : "Add New"} ${
+          isMyProfile ? "Profile" : "User"
+        }`}
+      />
 
+      <div className="w-[60%] mx-auto mt-14">
+        <div className="p-8 space-y-4 rounded-lg shadow-lg border border-gray-300">
           <Formik
             enableReinitialize
             initialValues={{
@@ -369,7 +366,7 @@ const ManageUser = () => {
           </Formik>
         </div>
       </div>
-    </section>
+    </div>
   );
 };
 

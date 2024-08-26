@@ -5,11 +5,11 @@
 import React from "react";
 import { useParams } from "react-router";
 import { useNavigate } from "react-router-dom";
-import { FaArrowLeft } from "react-icons/fa";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 
 import { commonApis } from "../../apis";
+import { ScreenHeader } from "../../components";
 
 const ChangePassword = () => {
   const navigate = useNavigate();
@@ -42,18 +42,11 @@ const ChangePassword = () => {
   };
 
   return (
-    <section className="bg-gray-100 flex justify-center h-screen">
-      <div className="w-full max-w-md">
-        <div className="space-y-8 p-8 mt-8 bg-white rounded-lg shadow-lg border border-gray-300">
-          <div className="flex items-center mb-8">
-            <button onClick={handleBackClick} className="text-xl mr-3">
-              <FaArrowLeft />
-            </button>
-            <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl">
-              Change Password
-            </h1>
-          </div>
+    <div className="bg-white">
+      <ScreenHeader title="Change Password" />
 
+      <div className="w-[60%] mx-auto mt-20">
+        <div className="space-y-8 p-8 mt-8 bg-white rounded-lg shadow-lg border border-gray-300">
           <Formik
             enableReinitialize
             initialValues={{ password: "", confirmPassword: "" }}
@@ -116,7 +109,7 @@ const ChangePassword = () => {
           </Formik>
         </div>
       </div>
-    </section>
+    </div>
   );
 };
 
