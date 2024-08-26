@@ -92,7 +92,7 @@ const ManageUser = () => {
         }`}
       />
 
-      <div className="w-[60%] mx-auto mt-14">
+      <div className="w-[70%] mx-auto mt-14">
         <div className="p-8 space-y-4 rounded-lg shadow-lg border border-gray-300">
           <Formik
             enableReinitialize
