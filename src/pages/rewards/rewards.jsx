@@ -32,7 +32,7 @@ const RewardItem = ({ reward }) => {
   const { _id, name, rate, comment, date } = reward ?? {};
 
   return (
-    <div key={_id} className="m-8 p-4 bg-gray-50 shadow-lg rounded-lg">
+    <div key={_id} className="mx-8 my-4 p-4 bg-gray-50 shadow rounded-lg">
       <div
         className="flex justify-between cursor-pointer"
         onClick={() => setIsExpanded(!isExpanded)}
