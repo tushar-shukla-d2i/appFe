@@ -43,8 +43,8 @@ const ChangePassword = () => {
 
   return (
     <section className="bg-gray-100 flex justify-center h-screen">
-      <div className="w-full max-w-md bg-white rounded-lg h-[50%] shadow-lg border border-gray-300">
-        <div className="space-y-8 p-8">
+      <div className="w-full max-w-md">
+        <div className="space-y-8 p-8 mt-8 bg-white rounded-lg shadow-lg border border-gray-300">
           <div className="flex items-center mb-8">
             <button onClick={handleBackClick} className="text-xl mr-3">
               <FaArrowLeft />
