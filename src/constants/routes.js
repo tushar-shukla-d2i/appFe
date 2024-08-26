@@ -12,6 +12,7 @@ const AppRoutes = {
   CHANGE_PASSWORD: "/change-password",
   METRICS: "/metrics",
   SUBORDINATES: "/subordinates",
+  REWARDS: "/rewards",
 };
 
 export { AppRoutes };

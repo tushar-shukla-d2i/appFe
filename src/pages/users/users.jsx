@@ -6,12 +6,12 @@ import React, { useEffect, useState } from "react";
 import { FaSearch, FaTimes } from "react-icons/fa";
 
 import { userApis } from "../../apis";
-import { ScreenHeader, UserCard } from "../../components";
+import { NoRecordsFound, ScreenHeader, UserCard } from "../../components";
 
 const Users = () => {
   const [usersList, setUsersList] = useState([]);
-  const [searchQuery, setSearchQuery] = useState(""); // State for search query
-  const [filteredUsers, setFilteredUsers] = useState([]); // State for filtered users
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filteredUsers, setFilteredUsers] = useState([]);
 
   useEffect(() => {
     getUsersList();
@@ -80,11 +80,15 @@ const Users = () => {
       </div>
 
       {/* Team Members List */}
-      <div className="mb-14 grid grid-cols-1 md:grid-cols-2">
-        {filteredUsers.map((user) => (
-          <UserCard key={user._id} userData={user} />
-        ))}
-      </div>
+      {filteredUsers?.length ? (
+        <div className="mb-14 grid grid-cols-1 md:grid-cols-2">
+          {filteredUsers.map((user) => (
+            <UserCard key={user._id} userData={user} />
+          ))}
+        </div>
+      ) : (
+        <NoRecordsFound />
+      )}
     </div>
   );
 };

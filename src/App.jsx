@@ -15,6 +15,7 @@ import {
   ManageUser,
   ManageUsers,
   ChangePassword,
+  Rewards,
 } from "./pages";
 
 const App = () => {
@@ -43,6 +44,7 @@ const App = () => {
             path={`${AppRoutes.SUBORDINATES}/:metric_id`}
             element={<Subordinates />}
           />
+          <Route path={AppRoutes.REWARDS} element={<Rewards />} />
         </Routes>
       </main>
     </div>

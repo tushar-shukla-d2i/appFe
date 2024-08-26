@@ -4,29 +4,15 @@
 
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  FiCamera,
-  FiChevronDown,
-  FiChevronUp,
-  FiEdit,
-  FiLogOut,
-} from "react-icons/fi";
+import { FiCamera, FiEdit, FiLogOut } from "react-icons/fi";
 
 import { authApis } from "../../apis";
 import placeholderImg from "../../assets/react.svg";
-import { AppRoutes, USER_DATA, USER_ROLES } from "../../constants";
 import { LocalStorageHelper } from "../../utils/HttpUtils";
+import { AppRoutes, USER_DATA, USER_ROLES } from "../../constants";
 
 // Dummy data for rewards
-const rewards = [
-  { name: "John Doe", rate: 8, comment: "Great job on the project!" },
-  {
-    name: "Jane Smith",
-    rate: 9,
-    comment: "Excellent work on the last sprint.",
-  },
-  // Add more reward objects as needed
-];
+const rewards = [1, 2];
 
 const IconButton = ({ label, img, icon, onClick }) => (
   <div className="flex flex-col items-center">
@@ -40,42 +26,6 @@ const IconButton = ({ label, img, icon, onClick }) => (
     <p className="text-center font-semibold text-md mt-2">{label}</p>
   </div>
 );
-
-const RewardCard = ({ rewards }) => {
-  const [expanded, setExpanded] = useState(false);
-  return (
-    <div>
-      <div
-        className="flex items-center justify-between cursor-pointer"
-        onClick={() => setExpanded(!expanded)}
-      >
-        <h1 className="font-bold text-lg tracking-wider">Rewards</h1>
-        {expanded ? (
-          <FiChevronUp className="text-black text-2xl transition-transform duration-500" />
-        ) : (
-          <FiChevronDown className="text-black text-2xl transition-transform duration-500" />
-        )}
-      </div>
-      <div
-        className={`overflow-hidden transition-all duration-500 ease-in-out ${
-          expanded ? "max-h-screen" : "max-h-0"
-        }`}
-      >
-        <div className="mt-6">
-          {rewards?.map?.((reward, index) => (
-            <div key={index} className="border-b border-gray-200 py-2">
-              <div className="flex justify-between">
-                <span className="font-semibold">{reward.name}</span>
-                <span className="text-gray-600">{reward.rate}/10</span>
-              </div>
-              <p className="text-gray-600 mt-1">{reward.comment}</p>
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-};
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -139,11 +89,7 @@ const Dashboard = () => {
         </button>
       </div>
 
-      <div className="bg-gray-50 mx-6 mt-[-3rem] mb-10 px-4 py-6 shadow-xl rounded-lg">
-        <RewardCard rewards={rewards} />
-      </div>
-
-      <div className="bg-gray-50 mx-6 px-4 py-6 shadow-2xl rounded-lg">
+      <div className="bg-gray-50 mx-6 mt-[-3rem] mb-10 px-4 py-6 shadow-2xl rounded-lg">
         <h1 className="font-bold text-lg tracking-wider mb-8">Features</h1>
         <div className="grid grid-cols-3 gap-x-4 gap-y-8">
           {role === USER_ROLES.ADMIN && (
@@ -173,11 +119,13 @@ const Dashboard = () => {
             icon="🎁"
             onClick={() => navigate(AppRoutes.METRICS)}
           />
-          {/* <IconButton
-            label="Rewards"
-            icon="🎖️"
-            onClick={() => navigate(AppRoutes.METRICS)}
-          /> */}
+          {!!rewards?.length && (
+            <IconButton
+              label="Rewards"
+              icon="🎖️"
+              onClick={() => navigate(AppRoutes.REWARDS)}
+            />
+          )}
         </div>
       </div>
     </div>
