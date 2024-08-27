@@ -2,7 +2,7 @@
  * Login page
  */
 
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -23,15 +23,19 @@ const validationSchema = {
 
 const Login = () => {
   const navigate = useNavigate();
+  const [apiError, setApiError] = useState("");
 
   // Formik initialization
   const formik = useFormik({
     initialValues: { officialEmail: "", password: "" },
     validationSchema: Yup.object(validationSchema),
     onSubmit: async (values) => {
-      const response = await authApis.login(values);
-      if (response.success) {
+      setApiError("");
+      const resp = await authApis.login(values);
+      if (resp?.success) {
         navigate(AppRoutes.DASHBOARD);
+      } else if (resp?.errors) {
+        setApiError(resp?.errors?.global);
       }
     },
   });
@@ -45,8 +49,7 @@ const Login = () => {
               Sign in to your account
             </h1>
 
-            {/* <ErrorComponent error="Invalid email or password" /> */}
-
+            {!!apiError && <ErrorComponent error={apiError} />}
             <form
               className="space-y-4 md:space-y-6"
               onSubmit={formik.handleSubmit}

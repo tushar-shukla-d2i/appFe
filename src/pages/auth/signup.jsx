@@ -2,13 +2,14 @@
  * Signup page
  */
 
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 
 import { authApis } from "../../apis";
 import { AppRoutes, BLOOD_GROUPS } from "../../constants";
+import { ErrorComponent } from "../../components";
 
 // Helper function to calculate date range
 const getDateFromYearsAgo = (years) => {
@@ -47,11 +48,18 @@ const validationSchema = Yup.object().shape({
 
 const Signup = () => {
   const navigate = useNavigate();
+  const [apiError, setApiError] = useState("");
 
   const handleSubmit = async (values) => {
-    const response = await authApis.signup(values);
-    if (response.success) {
+    setApiError("");
+    let payload = values;
+    !values?.alternateEmail && delete payload["alternateEmail"];
+    !values?.alternateContactNumber && delete payload["alternateContactNumber"];
+    const resp = await authApis.signup(payload);
+    if (resp?.success) {
       navigate(AppRoutes.DASHBOARD);
+    } else if (resp?.errors) {
+      setApiError(resp?.errors?.global);
     }
   };
 
@@ -62,6 +70,8 @@ const Signup = () => {
           <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl">
             Create Account
           </h1>
+
+          {!!apiError && <ErrorComponent error={apiError} />}
 
           <Formik
             initialValues={{
