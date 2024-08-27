@@ -2,17 +2,14 @@
  * Dashboard screen
  */
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FiCamera, FiEdit, FiLogOut } from "react-icons/fi";
 
-import { authApis } from "../../apis";
+import { authApis, rewardsApis } from "../../apis";
 import placeholderImg from "../../assets/react.svg";
 import { LocalStorageHelper } from "../../utils/HttpUtils";
 import { AppRoutes, USER_DATA, USER_ROLES } from "../../constants";
-
-// Dummy data for rewards
-const rewards = [1, 2];
 
 const IconButton = ({ label, img, icon, onClick }) => (
   <div className="flex flex-col items-center">
@@ -31,7 +28,19 @@ const Dashboard = () => {
   const navigate = useNavigate();
   const userData = JSON.parse(LocalStorageHelper.get(USER_DATA));
   const { _id, firstName, lastName, officialEmail, role } = userData ?? {};
+  const [hasRewards, setHasRewards] = useState(false);
   const [userImage, setUserImage] = useState("");
+
+  useEffect(() => {
+    getRewardsList();
+  }, []);
+
+  const getRewardsList = async () => {
+    const resp = await rewardsApis.getAllRewards({ user_id: _id });
+    if (resp?.success) {
+      setHasRewards(resp?.data?.data?.length);
+    }
+  };
 
   const handleImageUpload = (e) => {
     const file = e.target.files?.[0];
@@ -78,7 +87,7 @@ const Dashboard = () => {
             {officialEmail}
           </h2>
           <p className="text-white font-bold text-xl mt-2">
-            Total Rewards - {rewards?.length}
+            Total Rewards - {hasRewards}
           </p>
         </div>
         <button
@@ -119,7 +128,7 @@ const Dashboard = () => {
             icon="🎁"
             onClick={() => navigate(AppRoutes.METRICS)}
           />
-          {!!rewards?.length && (
+          {!!hasRewards && (
             <IconButton
               label="Rewards"
               icon="🎖️"
