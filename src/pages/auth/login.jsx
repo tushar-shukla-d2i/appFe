@@ -10,7 +10,7 @@ import * as Yup from "yup";
 import { authApis } from "../../apis";
 import { AppRoutes } from "../../constants";
 import { emailRegex } from "../../utils/CommonUtils";
-import { ErrorComponent } from "../../components";
+import { Button, ErrorComponent } from "../../components";
 
 const validationSchema = {
   officialEmail: Yup.string()
@@ -24,14 +24,17 @@ const validationSchema = {
 const Login = () => {
   const navigate = useNavigate();
   const [apiError, setApiError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   // Formik initialization
   const formik = useFormik({
     initialValues: { officialEmail: "", password: "" },
     validationSchema: Yup.object(validationSchema),
     onSubmit: async (values) => {
+      setLoading(true);
       setApiError("");
       const resp = await authApis.login(values);
+      setLoading(false);
       if (resp?.success) {
         navigate(AppRoutes.DASHBOARD);
       } else if (resp?.errors) {
@@ -72,6 +75,7 @@ const Login = () => {
                   onBlur={formik.handleBlur}
                   className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
                   placeholder="Enter your official email"
+                  disabled={loading}
                 />
                 {formik.touched.officialEmail && formik.errors.officialEmail ? (
                   <div className="text-red-500 text-sm mt-2">
@@ -97,6 +101,7 @@ const Login = () => {
                   onBlur={formik.handleBlur}
                   className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
                   placeholder="Enter your password"
+                  disabled={loading}
                 />
                 {formik.touched.password && formik.errors.password ? (
                   <div className="text-red-500 text-sm mt-2">
@@ -105,12 +110,7 @@ const Login = () => {
                 ) : null}
               </div>
 
-              <button
-                type="submit"
-                className="w-full text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
-              >
-                Sign in
-              </button>
+              <Button loading={loading} title="Sign in" />
             </form>
             <div className="mt-4 text-center">
               <p className="text-sm font-light text-gray-500">
@@ -118,6 +118,7 @@ const Login = () => {
                 <a
                   href={AppRoutes.SIGNUP}
                   className="font-medium text-blue-600 hover:underline"
+                  style={loading ? { pointerEvents: "none" } : {}}
                 >
                   Sign up
                 </a>

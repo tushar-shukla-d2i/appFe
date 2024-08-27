@@ -11,10 +11,11 @@ import { FaSearch, FaTimes } from "react-icons/fa";
 import { userApis } from "../../apis";
 import { AppRoutes } from "../../constants";
 import d2iLogo from "../../assets/d2i_logo.jpg";
-import { ScreenHeader } from "../../components";
+import { Loader, NoRecordsFound, ScreenHeader } from "../../components";
 
 const ManageUsers = () => {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
   const [usersList, setUsersList] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredUsers, setFilteredUsers] = useState([]);
@@ -28,10 +29,12 @@ const ManageUsers = () => {
   }, [usersList, searchQuery]);
 
   const getUsersList = async () => {
+    setLoading(true);
     const resp = await userApis.getAllUsers();
     if (resp?.success) {
       setUsersList(resp?.data);
     }
+    setLoading(false);
   };
 
   const filterUsers = () => {
@@ -49,7 +52,7 @@ const ManageUsers = () => {
   };
 
   return (
-    <div className="bg-white">
+    <div className="bg-white min-h-screen flex flex-col">
       {/* Top Bar */}
       <ScreenHeader title="Manage Users" />
 
@@ -86,41 +89,47 @@ const ManageUsers = () => {
 
       {/* Team Members List */}
 
-      <ul className="mx-10 my-4">
-        {filteredUsers.map((user, index) => {
-          const { _id, firstName, lastName, officialEmail } = user ?? {};
-          return (
-            <li
-              key={_id}
-              className="items-center px-3 border-2 border-gray-200 bg-gray-50 mb-1"
-            >
-              <div className="flex items-center space-x-4">
-                <div className="flex-shrink-0">
-                  <img
-                    className="w-16 h-w-16 rounded-full"
-                    src={d2iLogo}
-                    alt={`${firstName || "user"} image`}
-                  />
+      {loading ? (
+        <Loader />
+      ) : filteredUsers?.length ? (
+        <ul className="mx-10 my-4">
+          {filteredUsers.map((user) => {
+            const { _id, firstName, lastName, officialEmail } = user ?? {};
+            return (
+              <li
+                key={_id}
+                className="items-center px-3 border-2 border-gray-200 bg-gray-50 mb-1"
+              >
+                <div className="flex items-center space-x-4">
+                  <div className="flex-shrink-0">
+                    <img
+                      className="w-16 h-w-16 rounded-full"
+                      src={d2iLogo}
+                      alt={`${firstName || "user"} image`}
+                    />
+                  </div>
+                  <div className="flex-1">
+                    <p className="text-sm font-medium truncate">{`${
+                      firstName || ""
+                    } ${lastName || ""}`}</p>
+                    <p className="text-sm text-gray-500 truncate">
+                      {officialEmail}
+                    </p>
+                  </div>
+                  <button
+                    className="cursor-pointer"
+                    onClick={() => navigate(`${AppRoutes.USER}/${_id}`)}
+                  >
+                    <MdEditNote className="text-3xl text-gray-500" />
+                  </button>
                 </div>
-                <div className="flex-1">
-                  <p className="text-sm font-medium truncate">{`${
-                    firstName || ""
-                  } ${lastName || ""}`}</p>
-                  <p className="text-sm text-gray-500 truncate">
-                    {officialEmail}
-                  </p>
-                </div>
-                <button
-                  className="cursor-pointer"
-                  onClick={() => navigate(`${AppRoutes.USER}/${_id}`)}
-                >
-                  <MdEditNote className="text-3xl text-gray-500" />
-                </button>
-              </div>
-            </li>
-          );
-        })}
-      </ul>
+              </li>
+            );
+          })}
+        </ul>
+      ) : (
+        <NoRecordsFound />
+      )}
     </div>
   );
 };

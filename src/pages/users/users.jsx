@@ -6,9 +6,15 @@ import React, { useEffect, useState } from "react";
 import { FaSearch, FaTimes } from "react-icons/fa";
 
 import { userApis } from "../../apis";
-import { NoRecordsFound, ScreenHeader, UserCard } from "../../components";
+import {
+  Loader,
+  NoRecordsFound,
+  ScreenHeader,
+  UserCard,
+} from "../../components";
 
 const Users = () => {
+  const [loading, setLoading] = useState(true);
   const [usersList, setUsersList] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredUsers, setFilteredUsers] = useState([]);
@@ -22,10 +28,12 @@ const Users = () => {
   }, [usersList, searchQuery]);
 
   const getUsersList = async () => {
+    setLoading(true);
     const resp = await userApis.getAllUsers();
     if (resp?.success) {
       setUsersList(resp?.data);
     }
+    setLoading(false);
   };
 
   const filterUsers = () => {
@@ -54,7 +62,7 @@ const Users = () => {
   };
 
   return (
-    <div className="bg-white">
+    <div className="bg-white min-h-screen flex flex-col">
       {/* Top Bar */}
       <ScreenHeader title="Our Team" />
 
@@ -80,7 +88,9 @@ const Users = () => {
       </div>
 
       {/* Team Members List */}
-      {filteredUsers?.length ? (
+      {loading ? (
+        <Loader />
+      ) : filteredUsers?.length ? (
         <div className="mb-14 grid grid-cols-1 md:grid-cols-2">
           {filteredUsers.map((user) => (
             <UserCard key={user._id} userData={user} />

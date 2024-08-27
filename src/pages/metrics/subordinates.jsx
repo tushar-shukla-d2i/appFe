@@ -7,7 +7,7 @@ import { useParams } from "react-router";
 import { useNavigate } from "react-router-dom";
 
 import { metricsApis, rewardsApis, userApis } from "../../apis";
-import { ScreenHeader } from "../../components";
+import { Button, ScreenHeader } from "../../components";
 
 const minimum_points = -10;
 const maximum_points = 10;
@@ -15,6 +15,7 @@ const maximum_points = 10;
 const Subordinates = () => {
   const navigate = useNavigate();
   const { metric_id } = useParams();
+  const [loading, setLoading] = useState(false);
   const [metricData, setMetricData] = useState(null);
   const [comment, setComment] = useState("");
   const [usersList, setUsersList] = useState([]);
@@ -42,6 +43,7 @@ const Subordinates = () => {
   };
 
   const onSubmitFeedback = async () => {
+    setLoading(true);
     const payload = {
       metric_id,
       user_id: selectedUser,
@@ -49,8 +51,7 @@ const Subordinates = () => {
       comment,
     };
     const response = await rewardsApis.assignReward(payload);
-    console.log(response, "response");
-
+    setLoading(false);
     if (response.success) {
       alert("Reward assigned successfully!");
       navigate(-1);
@@ -66,6 +67,7 @@ const Subordinates = () => {
           className="w-full p-2 bg-gray-200 rounded"
           onChange={(e) => setSelectedUser(e.target.value)}
           defaultValue=""
+          disabled={loading}
         >
           <option value="" disabled>
             Select User
@@ -96,7 +98,7 @@ const Subordinates = () => {
               type="range"
               min={minimum_points}
               max={maximum_points}
-              disabled={!selectedUser}
+              disabled={!selectedUser || loading}
               value={sliderValue}
               onChange={(e) => setSliderValue(e.target.value)}
               className="w-full"
@@ -105,17 +107,17 @@ const Subordinates = () => {
           <textarea
             className="w-full p-2 bg-gray-100 border-2"
             placeholder="Comment"
-            disabled={!selectedUser}
+            disabled={!selectedUser || loading}
             value={comment}
             onChange={(e) => setComment(e.target.value)}
           />
-          <button
-            disabled={!selectedUser}
-            className="w-full bg-blue-500 disabled:bg-slate-400 text-white p-2"
+
+          <Button
+            title="Save"
+            disabled={!selectedUser || loading}
+            loading={loading}
             onClick={onSubmitFeedback}
-          >
-            Save
-          </button>
+          />
         </div>
       </div>
     </div>

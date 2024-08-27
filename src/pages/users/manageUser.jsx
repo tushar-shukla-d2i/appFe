@@ -2,14 +2,14 @@
  * Add/Edit User
  */
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { useNavigate } from "react-router-dom";
-import { Formik, Form, Field, ErrorMessage } from "formik";
+import { Formik, Form } from "formik";
 import * as Yup from "yup";
 
 import { userApis } from "../../apis";
-import { Input, ScreenHeader } from "../../components";
+import { Button, Input, ScreenHeader } from "../../components";
 import { BLOOD_GROUPS, USER_DATA } from "../../constants";
 import { LocalStorageHelper } from "../../utils/HttpUtils";
 
@@ -26,6 +26,7 @@ const maxDate = getDateFromYearsAgo(18); // 18 years ago
 const ManageUser = () => {
   const navigate = useNavigate();
   const { user_id } = useParams();
+  const [loading, setLoading] = useState(false);
   const userData = JSON.parse(LocalStorageHelper.get(USER_DATA)) || {};
   const isMyProfile = userData?._id === user_id;
 
@@ -56,11 +57,8 @@ const ManageUser = () => {
           .required("Password is required"),
   });
 
-  const handleBackClick = () => {
-    navigate(-1);
-  };
-
   const handleSubmit = async (values) => {
+    setLoading(true);
     let payload = { ...values };
 
     if (user_id && !values.password) {
@@ -70,7 +68,7 @@ const ManageUser = () => {
     const resp = user_id
       ? await userApis.updateUserById({ user_id, payload })
       : await userApis.createUser(payload);
-
+    setLoading(false);
     if (resp?.success) {
       if (isMyProfile) {
         LocalStorageHelper.store(USER_DATA, JSON.stringify(values));
@@ -133,12 +131,14 @@ const ManageUser = () => {
                     id="firstName"
                     label="First Name"
                     placeholder="Enter your first name"
+                    disabled={loading}
                   />
 
                   <Input
                     id="lastName"
                     label="Last Name"
                     placeholder="Enter your last name"
+                    disabled={loading}
                   />
 
                   <Input
@@ -146,6 +146,7 @@ const ManageUser = () => {
                     label="Blood Group"
                     type="select"
                     options={BLOOD_GROUPS}
+                    disabled={loading}
                   />
 
                   <Input
@@ -154,6 +155,7 @@ const ManageUser = () => {
                     type="date"
                     min={minDate}
                     max={maxDate}
+                    disabled={loading}
                   />
 
                   <Input
@@ -161,6 +163,7 @@ const ManageUser = () => {
                     label="Official Email"
                     placeholder="Enter your official email"
                     type="email"
+                    disabled={loading}
                   />
 
                   <Input
@@ -168,6 +171,7 @@ const ManageUser = () => {
                     label="Alternate Email (Optional)"
                     placeholder="Enter your alternate email"
                     type="email"
+                    disabled={loading}
                   />
 
                   <Input
@@ -175,6 +179,7 @@ const ManageUser = () => {
                     label="Contact Number"
                     placeholder="Enter your contact number"
                     type="tel"
+                    disabled={loading}
                   />
 
                   <Input
@@ -182,6 +187,7 @@ const ManageUser = () => {
                     label="Alternate Contact Number (Optional)"
                     placeholder="Enter your alternate contact number"
                     type="tel"
+                    disabled={loading}
                   />
 
                   {/* Password */}
@@ -191,18 +197,16 @@ const ManageUser = () => {
                       label="Password"
                       placeholder="Enter your password"
                       type="password"
+                      disabled={loading}
                     />
                   )}
 
-                  <button
-                    type="submit"
-                    className="w-full text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
-                    disabled={isSubmitting}
-                  >
-                    {`${user_id ? "Update" : "Add"} ${
+                  <Button
+                    loading={loading || isSubmitting}
+                    title={`${user_id ? "Update" : "Add"} ${
                       isMyProfile ? "Profile" : "User"
                     }`}
-                  </button>
+                  />
                 </Form>
               );
             }}

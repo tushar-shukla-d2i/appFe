@@ -7,10 +7,11 @@ import { useParams } from "react-router";
 
 import { metricsApis } from "../../apis";
 import { AppRoutes } from "../../constants";
-import { MetricCard, ScreenHeader } from "../../components";
+import { Loader, MetricCard, ScreenHeader } from "../../components";
 
 const SubMetrics = () => {
   const { metric_id } = useParams();
+  const [loading, setLoading] = useState(true);
   const [parentMetricData, setParentMetricData] = useState([]);
 
   useEffect(() => {
@@ -18,20 +19,26 @@ const SubMetrics = () => {
   }, []);
 
   const getSubMetricsList = async () => {
+    setLoading(true);
     const resp = await metricsApis.getMetricById({ metric_id });
     if (resp?.success) {
       setParentMetricData(resp?.data?.data);
     }
+    setLoading(false);
   };
 
   return (
-    <div className="bg-white">
+    <div className="bg-white min-h-screen flex flex-col">
       <ScreenHeader title={parentMetricData?.label} />
 
-      <MetricCard
-        data={parentMetricData?.sub_metrics}
-        route={AppRoutes.SUBORDINATES}
-      />
+      {loading ? (
+        <Loader />
+      ) : (
+        <MetricCard
+          data={parentMetricData?.sub_metrics}
+          route={AppRoutes.SUBORDINATES}
+        />
+      )}
     </div>
   );
 };

@@ -9,7 +9,7 @@ import * as Yup from "yup";
 
 import { authApis } from "../../apis";
 import { AppRoutes, BLOOD_GROUPS } from "../../constants";
-import { ErrorComponent } from "../../components";
+import { Button, ErrorComponent } from "../../components";
 
 // Helper function to calculate date range
 const getDateFromYearsAgo = (years) => {
@@ -49,13 +49,16 @@ const validationSchema = Yup.object().shape({
 const Signup = () => {
   const navigate = useNavigate();
   const [apiError, setApiError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (values) => {
     setApiError("");
+    setLoading(true);
     let payload = values;
     !values?.alternateEmail && delete payload["alternateEmail"];
     !values?.alternateContactNumber && delete payload["alternateContactNumber"];
     const resp = await authApis.signup(payload);
+    setLoading(false);
     if (resp?.success) {
       navigate(AppRoutes.DASHBOARD);
     } else if (resp?.errors) {
@@ -104,6 +107,7 @@ const Signup = () => {
                     id="firstName"
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                     placeholder="Enter your first name"
+                    disabled={loading}
                   />
                   <ErrorMessage
                     name="firstName"
@@ -126,6 +130,7 @@ const Signup = () => {
                     id="lastName"
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                     placeholder="Enter your last name"
+                    disabled={loading}
                   />
                   <ErrorMessage
                     name="lastName"
@@ -147,6 +152,7 @@ const Signup = () => {
                     name="bloodGroup"
                     id="bloodGroup"
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                    disabled={loading}
                   >
                     {BLOOD_GROUPS?.map?.((option) => (
                       <option key={option.value} value={option.value}>
@@ -176,6 +182,7 @@ const Signup = () => {
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                     min={minDate}
                     max={maxDate}
+                    disabled={loading}
                   />
                   <ErrorMessage
                     name="birthday"
@@ -198,6 +205,7 @@ const Signup = () => {
                     id="officialEmail"
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                     placeholder="Enter your official email"
+                    disabled={loading}
                   />
                   <ErrorMessage
                     name="officialEmail"
@@ -220,6 +228,7 @@ const Signup = () => {
                     id="alternateEmail"
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                     placeholder="Enter your alternate email"
+                    disabled={loading}
                   />
                   <ErrorMessage
                     name="alternateEmail"
@@ -247,6 +256,7 @@ const Signup = () => {
                     onInput={(e) => {
                       e.target.value = e.target.value?.replace?.(/[^0-9]/g, "");
                     }}
+                    disabled={loading}
                   />
                   <ErrorMessage
                     name="contactNumber"
@@ -274,6 +284,7 @@ const Signup = () => {
                     onInput={(e) => {
                       e.target.value = e.target.value?.replace?.(/[^0-9]/g, "");
                     }}
+                    disabled={loading}
                   />
                   <ErrorMessage
                     name="alternateContactNumber"
@@ -296,6 +307,7 @@ const Signup = () => {
                     id="password"
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                     placeholder="Enter your password"
+                    disabled={loading}
                   />
                   <ErrorMessage
                     name="password"
@@ -305,13 +317,7 @@ const Signup = () => {
                 </div>
 
                 {/* Submit Button */}
-                <button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="w-full text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
-                >
-                  Create Account
-                </button>
+                <Button loading={loading} title="Create Account" />
               </Form>
             )}
           </Formik>
@@ -322,6 +328,7 @@ const Signup = () => {
               <a
                 href={AppRoutes.LOGIN}
                 className="font-medium text-blue-600 hover:underline"
+                style={loading ? { pointerEvents: "none" } : {}}
               >
                 Sign in
               </a>
