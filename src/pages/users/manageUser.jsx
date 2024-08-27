@@ -9,7 +9,7 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 
 import { userApis } from "../../apis";
-import { ScreenHeader } from "../../components";
+import { Input, ScreenHeader } from "../../components";
 import { BLOOD_GROUPS, USER_DATA } from "../../constants";
 import { LocalStorageHelper } from "../../utils/HttpUtils";
 
@@ -129,226 +129,69 @@ const ManageUser = () => {
 
               return (
                 <Form className="space-y-5">
-                  {/* First Name */}
-                  <div>
-                    <label
-                      htmlFor="firstName"
-                      className="block mb-2 text-sm font-medium text-gray-700"
-                    >
-                      First Name
-                    </label>
-                    <Field
-                      type="text"
-                      name="firstName"
-                      id="firstName"
-                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                      placeholder="Enter your first name"
-                    />
-                    <ErrorMessage
-                      name="firstName"
-                      component="div"
-                      className="text-red-600 text-sm mt-2"
-                    />
-                  </div>
+                  <Input
+                    id="firstName"
+                    label="First Name"
+                    placeholder="Enter your first name"
+                  />
 
-                  {/* Last Name */}
-                  <div>
-                    <label
-                      htmlFor="lastName"
-                      className="block mb-2 text-sm font-medium text-gray-700"
-                    >
-                      Last Name
-                    </label>
-                    <Field
-                      type="text"
-                      name="lastName"
-                      id="lastName"
-                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                      placeholder="Enter your last name"
-                    />
-                    <ErrorMessage
-                      name="lastName"
-                      component="div"
-                      className="text-red-600 text-sm mt-2"
-                    />
-                  </div>
+                  <Input
+                    id="lastName"
+                    label="Last Name"
+                    placeholder="Enter your last name"
+                  />
 
-                  {/* Blood Group */}
-                  <div>
-                    <label
-                      htmlFor="bloodGroup"
-                      className="block mb-2 text-sm font-medium text-gray-700"
-                    >
-                      Blood Group
-                    </label>
-                    <Field
-                      as="select"
-                      name="bloodGroup"
-                      id="bloodGroup"
-                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                    >
-                      {BLOOD_GROUPS?.map?.((option) => (
-                        <option key={option.value} value={option.value}>
-                          {option.label}
-                        </option>
-                      ))}
-                    </Field>
-                    <ErrorMessage
-                      name="bloodGroup"
-                      component="div"
-                      className="text-red-600 text-sm mt-2"
-                    />
-                  </div>
+                  <Input
+                    id="bloodGroup"
+                    label="Blood Group"
+                    type="select"
+                    options={BLOOD_GROUPS}
+                  />
 
-                  {/* Birthday */}
-                  <div>
-                    <label
-                      htmlFor="birthday"
-                      className="block mb-2 text-sm font-medium text-gray-700"
-                    >
-                      Birthday
-                    </label>
-                    <Field
-                      type="date"
-                      name="birthday"
-                      id="birthday"
-                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                      min={minDate}
-                      max={maxDate}
-                    />
-                    <ErrorMessage
-                      name="birthday"
-                      component="div"
-                      className="text-red-600 text-sm mt-2"
-                    />
-                  </div>
+                  <Input
+                    id="birthday"
+                    label="Birthday"
+                    type="date"
+                    min={minDate}
+                    max={maxDate}
+                  />
 
-                  {/* Official Email */}
-                  <div>
-                    <label
-                      htmlFor="officialEmail"
-                      className="block mb-2 text-sm font-medium text-gray-700"
-                    >
-                      Official Email
-                    </label>
-                    <Field
-                      type="email"
-                      name="officialEmail"
-                      id="officialEmail"
-                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                      placeholder="Enter your official email"
-                    />
-                    <ErrorMessage
-                      name="officialEmail"
-                      component="div"
-                      className="text-red-600 text-sm mt-2"
-                    />
-                  </div>
+                  <Input
+                    id="officialEmail"
+                    label="Official Email"
+                    placeholder="Enter your official email"
+                    type="email"
+                  />
 
-                  {/* Alternate Email */}
-                  <div>
-                    <label
-                      htmlFor="alternateEmail"
-                      className="block mb-2 text-sm font-medium text-gray-700"
-                    >
-                      Alternate Email (Optional)
-                    </label>
-                    <Field
-                      type="email"
-                      name="alternateEmail"
-                      id="alternateEmail"
-                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                      placeholder="Enter your alternate email"
-                    />
-                    <ErrorMessage
-                      name="alternateEmail"
-                      component="div"
-                      className="text-red-600 text-sm mt-2"
-                    />
-                  </div>
+                  <Input
+                    id="alternateEmail"
+                    label="Alternate Email (Optional)"
+                    placeholder="Enter your alternate email"
+                    type="email"
+                  />
 
-                  {/* Contact Number */}
-                  <div>
-                    <label
-                      htmlFor="contactNumber"
-                      className="block mb-2 text-sm font-medium text-gray-700"
-                    >
-                      Contact Number
-                    </label>
-                    <Field
-                      type="tel"
-                      name="contactNumber"
-                      id="contactNumber"
-                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                      placeholder="Enter your contact number"
-                      maxLength={10}
-                      pattern="[0-9]*"
-                      onInput={(e) => {
-                        e.target.value = e.target.value?.replace?.(
-                          /[^0-9]/g,
-                          ""
-                        );
-                      }}
-                    />
-                    <ErrorMessage
-                      name="contactNumber"
-                      component="div"
-                      className="text-red-600 text-sm mt-2"
-                    />
-                  </div>
+                  <Input
+                    id="contactNumber"
+                    label="Contact Number"
+                    placeholder="Enter your contact number"
+                    type="tel"
+                  />
 
-                  {/* Alternate Contact Number */}
-                  <div>
-                    <label
-                      htmlFor="alternateContactNumber"
-                      className="block mb-2 text-sm font-medium text-gray-700"
-                    >
-                      Alternate Contact Number (Optional)
-                    </label>
-                    <Field
-                      type="tel"
-                      name="alternateContactNumber"
-                      id="alternateContactNumber"
-                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                      placeholder="Enter your alternate contact number"
-                      maxLength={10}
-                      pattern="[0-9]*"
-                      onInput={(e) => {
-                        e.target.value = e.target.value?.replace?.(
-                          /[^0-9]/g,
-                          ""
-                        );
-                      }}
-                    />
-                    <ErrorMessage
-                      name="alternateContactNumber"
-                      component="div"
-                      className="text-red-600 text-sm mt-2"
-                    />
-                  </div>
+                  <Input
+                    id="alternateContactNumber"
+                    label="Alternate Contact Number (Optional)"
+                    placeholder="Enter your alternate contact number"
+                    type="tel"
+                  />
 
                   {/* Password */}
                   {!isMyProfile && (
-                    <div>
-                      <label
-                        htmlFor="password"
-                        className="block mb-2 text-sm font-medium text-gray-700"
-                      >
-                        Password
-                      </label>
-                      <Field
-                        type="password"
-                        name="password"
-                        id="password"
-                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                        placeholder="Enter your password"
-                      />
-                      <ErrorMessage
-                        name="password"
-                        component="div"
-                        className="text-red-600 text-sm mt-2"
-                      />
-                    </div>
+                    <Input
+                      id="password"
+                      label="Password"
+                      placeholder="Enter your password"
+                      type="password"
+                    />
                   )}
 
                   <button
