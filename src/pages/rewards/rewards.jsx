@@ -7,29 +7,14 @@ import { FaSearch, FaTimes } from "react-icons/fa";
 import { FiChevronDown, FiChevronUp } from "react-icons/fi";
 
 import { rewardsApis } from "../../apis";
+import { USER_DATA } from "../../constants";
 import { formattedMDYDate } from "../../utils/CommonUtils";
-import { NoRecordsFound, ScreenHeader } from "../../components";
-
-const rewardsData = [
-  {
-    _id: 1,
-    name: "John Doe",
-    rate: 8,
-    comment: "Great job on the project!",
-    date: "2024-08-01",
-  },
-  {
-    _id: 2,
-    name: "Jane Smith",
-    rate: 9,
-    comment: "Excellent work on the last sprint.",
-    date: "2024-08-15",
-  },
-];
+import { LocalStorageHelper } from "../../utils/HttpUtils";
+import { Loader, NoRecordsFound, ScreenHeader } from "../../components";
 
 const RewardItem = ({ reward }) => {
   const [isExpanded, setIsExpanded] = useState(false);
-  const { _id, name, rate, comment, date } = reward ?? {};
+  const { _id, submitted_by_user, points, comment, date } = reward ?? {};
 
   return (
     <div key={_id} className="mx-8 my-4 p-4 bg-gray-50 shadow rounded-lg">
@@ -37,7 +22,7 @@ const RewardItem = ({ reward }) => {
         className="flex justify-between cursor-pointer"
         onClick={() => setIsExpanded(!isExpanded)}
       >
-        <span className="font-bold text-lg">{name}</span>
+        <span className="font-bold text-lg">{submitted_by_user}</span>
         <div className="flex items-center">
           <span className="font-semibold text-sm mr-4">
             {formattedMDYDate(date)}
@@ -51,8 +36,10 @@ const RewardItem = ({ reward }) => {
       </div>
       {isExpanded && (
         <div className="mt-2">
-          <p className="text-gray-600 font-semibold">Rate: {rate}/10</p>
-          <p className="text-gray-600 font-semibold mt-1">{comment}</p>
+          <p className="text-gray-600 text-sm font-semibold">
+            Rate: {points}/10
+          </p>
+          <p className="text-gray-600 text-sm font-semibold mt-1">{comment}</p>
         </div>
       )}
     </div>
@@ -60,12 +47,14 @@ const RewardItem = ({ reward }) => {
 };
 
 const Rewards = () => {
-  const [rewardsList, setRewardsList] = useState(rewardsData);
+  const [loading, setLoading] = useState(false);
+  const [rewardsList, setRewardsList] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
-  const [filteredRewards, setFilteredRewards] = useState(rewardsData);
+  const [filteredRewards, setFilteredRewards] = useState([]);
+  const userData = JSON.parse(LocalStorageHelper.get(USER_DATA)) || {};
 
   useEffect(() => {
-    // getRewardsList();
+    getRewardsList();
   }, []);
 
   useEffect(() => {
@@ -73,9 +62,11 @@ const Rewards = () => {
   }, [rewardsList, searchQuery]);
 
   const getRewardsList = async () => {
-    const resp = await rewardsApis.getAllRewards();
+    setLoading(true);
+    const resp = await rewardsApis.getAllRewards({ user_id: userData?._id });
+    setLoading(false);
     if (resp?.success) {
-      setRewardsList(resp?.data);
+      setRewardsList(resp?.data?.data);
     }
   };
 
@@ -94,7 +85,7 @@ const Rewards = () => {
   };
 
   return (
-    <div className="bg-white">
+    <div className="bg-white min-h-screen flex flex-col">
       {/* Top Bar */}
       <ScreenHeader title="Rewards" />
 
@@ -118,7 +109,9 @@ const Rewards = () => {
           )}
         </div>
       </div>
-      {filteredRewards?.length ? (
+      {loading ? (
+        <Loader />
+      ) : filteredRewards?.length ? (
         filteredRewards?.map?.((reward, index) => (
           <RewardItem key={index} reward={reward} />
         ))
