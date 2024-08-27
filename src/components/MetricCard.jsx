@@ -5,6 +5,8 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
+import { NoRecordsFound } from "./NoRecordsFound";
+
 const MetricCard = ({ data, route }) => {
   const navigate = useNavigate();
 
@@ -12,7 +14,7 @@ const MetricCard = ({ data, route }) => {
     navigate(`${route}/${metric._id}`);
   };
 
-  return (
+  return data?.length ? (
     <div className="p-4 grid grid-cols-3 gap-4 my-8">
       {data?.map?.((metric) => (
         <div
@@ -24,6 +26,8 @@ const MetricCard = ({ data, route }) => {
         </div>
       ))}
     </div>
+  ) : (
+    <NoRecordsFound />
   );
 };
 
