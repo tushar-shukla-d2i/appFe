@@ -109,7 +109,7 @@ httpClient.interceptors.response.use(
 
         return Promise.resolve({
           success: false,
-          errors: errors,
+          errors: { global: errorResponse?.data?.message || "Invalid data" },
           code: 422,
         });
       case 429:
@@ -137,6 +137,7 @@ httpClient.interceptors.response.use(
         return Promise.resolve({
           success: false,
           code: 403,
+          errors: { global: errorResponse?.data?.message || "Access Denied" },
         });
       case 404:
         // showGlobalModalNotification({
