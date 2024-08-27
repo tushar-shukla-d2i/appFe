@@ -18,7 +18,7 @@ const ScreenHeader = ({ title }) => {
       <button onClick={handleBackClick} className="text-xl">
         <FaArrowLeft />
       </button>
-      <h1 className="text-lg font-semibold">{title}</h1>
+      <h1 className="text-lg font-semibold">{title || ""}</h1>
       <div /> {/* Empty div for spacing */}
     </div>
   );
