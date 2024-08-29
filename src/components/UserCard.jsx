@@ -12,7 +12,6 @@ const UserCard = ({ userData }) => {
     _id,
     firstName,
     lastName,
-    role,
     bloodGroup,
     officialEmail,
     alternateEmail,
@@ -37,7 +36,7 @@ const UserCard = ({ userData }) => {
           <h2 className="text-xl font-semibold text-gray-800">{`${
             firstName || ""
           } ${lastName || ""}`}</h2>
-          <p className="text-gray-600">{role || "S/W Engineer"}</p>
+          {/* <p className="text-gray-600">{"S/W Engineer"}</p> */}
         </div>
       </div>
 
