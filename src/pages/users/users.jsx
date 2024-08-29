@@ -64,7 +64,7 @@ const Users = () => {
   return (
     <div className="bg-white min-h-screen flex flex-col">
       {/* Top Bar */}
-      <ScreenHeader title="Our Team" />
+      <ScreenHeader title="Directory" />
 
       {/* Search Input */}
       <div className="mt-10 mb-6 mx-10 relative">
