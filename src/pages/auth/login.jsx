@@ -112,18 +112,6 @@ const Login = () => {
 
               <Button loading={loading} title="Sign in" />
             </form>
-            <div className="mt-4 text-center">
-              <p className="text-sm font-light text-gray-500">
-                Don't have an account?{" "}
-                <a
-                  href={AppRoutes.SIGNUP}
-                  className="font-medium text-blue-600 hover:underline"
-                  style={loading ? { pointerEvents: "none" } : {}}
-                >
-                  Sign up
-                </a>
-              </p>
-            </div>
           </div>
         </div>
       </section>
