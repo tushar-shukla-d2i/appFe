@@ -28,7 +28,7 @@ const Dashboard = () => {
   const navigate = useNavigate();
   const userData = JSON.parse(LocalStorageHelper.get(USER_DATA));
   const { _id, firstName, lastName, officialEmail, role } = userData ?? {};
-  const [hasRewards, setHasRewards] = useState(false);
+  const [rewards, setRewards] = useState(false);
   const [userImage, setUserImage] = useState("");
 
   useEffect(() => {
@@ -38,7 +38,7 @@ const Dashboard = () => {
   const getRewardsList = async () => {
     const resp = await rewardsApis.getAllRewards({ user_id: _id });
     if (resp?.success) {
-      setHasRewards(resp?.data?.data?.length);
+      setRewards(resp?.data?.data);
     }
   };
 
@@ -87,7 +87,7 @@ const Dashboard = () => {
             {officialEmail}
           </h2>
           <p className="text-white font-bold text-xl mt-2">
-            Total Rewards - {hasRewards}
+            Total Rewards -{rewards?.reduce?.((s, i) => s + i?.points, 0)}
           </p>
         </div>
         <button
@@ -119,7 +119,7 @@ const Dashboard = () => {
             onClick={() => navigate(`${AppRoutes.CHANGE_PASSWORD}/${_id}`)}
           />
           <IconButton
-            label="Team"
+            label="Directory"
             icon="👥"
             onClick={() => navigate(AppRoutes.USERS)}
           />
@@ -128,7 +128,7 @@ const Dashboard = () => {
             icon="🎁"
             onClick={() => navigate(AppRoutes.METRICS)}
           />
-          {!!hasRewards && (
+          {!!rewards?.length && (
             <IconButton
               label="Rewards"
               icon="🎖️"
