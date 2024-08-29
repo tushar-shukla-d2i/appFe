@@ -14,7 +14,7 @@ import { Loader, NoRecordsFound, ScreenHeader } from "../../components";
 
 const RewardItem = ({ reward }) => {
   const [isExpanded, setIsExpanded] = useState(false);
-  const { _id, submitted_by_user, points, comment, date } = reward ?? {};
+  const { _id, submittedByName, points, comment, date } = reward ?? {};
 
   return (
     <div key={_id} className="mx-8 my-4 p-4 bg-gray-50 shadow rounded-lg">
@@ -22,7 +22,7 @@ const RewardItem = ({ reward }) => {
         className="flex justify-between cursor-pointer"
         onClick={() => setIsExpanded(!isExpanded)}
       >
-        <span className="font-bold text-lg">{submitted_by_user}</span>
+        <span className="font-bold">{submittedByName}</span>
         <div className="flex items-center">
           <span className="font-semibold text-sm mr-4">
             {formattedMDYDate(date)}
