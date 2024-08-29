@@ -8,10 +8,11 @@ import { useNavigate } from "react-router-dom";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 
-import { userApis } from "../../apis";
-import { Button, Input, ScreenHeader } from "../../components";
+import { commonApis, userApis } from "../../apis";
+import { UtilFunctions } from "../../utils/CommonUtils";
 import { BLOOD_GROUPS, USER_DATA } from "../../constants";
 import { LocalStorageHelper } from "../../utils/HttpUtils";
+import { Button, Input, ScreenHeader } from "../../components";
 
 // Helper function to calculate date range
 const getDateFromYearsAgo = (years) => {
@@ -61,11 +62,20 @@ const ManageUser = () => {
     setLoading(true);
     let payload = { ...values };
 
-    if (user_id && !values.password) {
-      delete payload.password;
+    if (user_id) {
+      if (!values.password) {
+        delete payload.password;
+      }
+      payload = UtilFunctions.deleteKeys(payload, [
+        "officialEmail",
+        "bloodGroup",
+        "role",
+      ]);
     }
 
-    const resp = user_id
+    const resp = isMyProfile
+      ? await commonApis.me({ user_id, payload })
+      : user_id
       ? await userApis.updateUserById({ user_id, payload })
       : await userApis.createUser(payload);
     setLoading(false);
@@ -146,7 +156,7 @@ const ManageUser = () => {
                     label="Blood Group"
                     type="select"
                     options={BLOOD_GROUPS}
-                    disabled={loading}
+                    disabled={!!user_id || loading}
                   />
 
                   <Input
@@ -163,7 +173,7 @@ const ManageUser = () => {
                     label="Official Email"
                     placeholder="Enter your official email"
                     type="email"
-                    disabled={loading}
+                    disabled={!!user_id || loading}
                   />
 
                   <Input
