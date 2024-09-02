@@ -9,12 +9,13 @@ import { Formik, Form } from "formik";
 import * as Yup from "yup";
 
 import { commonApis } from "../../apis";
-import { Button, Input, ScreenHeader } from "../../components";
+import { Button, Input, ScreenHeader, Toast } from "../../components";
 
 const ChangePassword = () => {
   const navigate = useNavigate();
   const { user_id } = useParams();
   const [loading, setLoading] = useState(false);
+  const [toastMsg, setToastMsg] = useState("");
 
   // Validation Schema
   const validationSchema = Yup.object().shape({
@@ -34,8 +35,7 @@ const ChangePassword = () => {
     });
     setLoading(false);
     if (resp?.success) {
-      alert("Password updated successfully!");
-      navigate(-1);
+      setToastMsg("Password updated successfully!");
     }
   };
 
@@ -75,6 +75,8 @@ const ChangePassword = () => {
           </Formik>
         </div>
       </div>
+
+      <Toast message={toastMsg} />
     </div>
   );
 };

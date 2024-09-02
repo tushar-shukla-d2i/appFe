@@ -7,7 +7,7 @@ import { useParams } from "react-router";
 import { useNavigate } from "react-router-dom";
 
 import { metricsApis, rewardsApis, userApis } from "../../apis";
-import { Button, ScreenHeader } from "../../components";
+import { Button, ScreenHeader, Toast } from "../../components";
 
 const minimum_points = -10;
 
@@ -21,6 +21,7 @@ const Subordinates = () => {
   const [usersList, setUsersList] = useState([]);
   const [sliderValue, setSliderValue] = useState(10);
   const [selectedUser, setSelectedUser] = useState(null);
+  const [toastMsg, setToastMsg] = useState("");
   const { label, maximum_points } = metricData ?? {};
 
   useEffect(() => {
@@ -61,8 +62,7 @@ const Subordinates = () => {
     const response = await rewardsApis.assignReward(payload);
     setLoading(false);
     if (response.success) {
-      alert("Reward assigned successfully!");
-      navigate(-1);
+      setToastMsg("Reward assigned successfully!");
     }
   };
 
@@ -76,6 +76,7 @@ const Subordinates = () => {
             {label}
           </>
         }
+        toastMsg={toastMsg}
       />
       <div className="p-6 w-[80%] mx-auto mt-8 shadow-lg rounded-lg">
         <select
@@ -135,6 +136,8 @@ const Subordinates = () => {
           />
         </div>
       </div>
+
+      <Toast message={toastMsg} />
     </div>
   );
 };

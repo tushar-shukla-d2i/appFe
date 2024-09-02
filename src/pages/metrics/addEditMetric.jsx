@@ -8,7 +8,7 @@ import { Formik, Form } from "formik";
 import * as Yup from "yup";
 
 import { metricsApis } from "../../apis";
-import { Button, Input, ScreenHeader } from "../../components";
+import { Button, Input, ScreenHeader, Toast } from "../../components";
 
 const AddEditMetric = () => {
   const navigate = useNavigate();
@@ -16,6 +16,7 @@ const AddEditMetric = () => {
   const [loading, setLoading] = useState(false);
   const [initialMetric, setInitialMetric] = useState({});
   const [parentMetricData, setParentMetricData] = useState([]);
+  const [toastMsg, setToastMsg] = useState("");
 
   useEffect(() => {
     !!metric_id && fetchMetricDetails(metric_id);
@@ -54,8 +55,7 @@ const AddEditMetric = () => {
       : await metricsApis.createMetric(payload);
     setLoading(false);
     if (resp?.success) {
-      alert(`Metric ${metric_id ? "updated" : "created"} successfully!`);
-      navigate(-1);
+      setToastMsg(`Metric ${metric_id ? "updated" : "created"} successfully!`);
     }
   };
 
@@ -69,6 +69,7 @@ const AddEditMetric = () => {
             ? parentMetricData?.label
             : "Add Metric"
         }
+        toastMsg={toastMsg}
       />
 
       <div className="w-[60%] mx-auto mt-20">
@@ -105,6 +106,7 @@ const AddEditMetric = () => {
           </Formik>
         </div>
       </div>
+      <Toast message={toastMsg} />
     </div>
   );
 };

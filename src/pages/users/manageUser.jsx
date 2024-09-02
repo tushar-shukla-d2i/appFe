@@ -12,7 +12,7 @@ import { commonApis, userApis } from "../../apis";
 import { UtilFunctions } from "../../utils/CommonUtils";
 import { BLOOD_GROUPS, USER_DATA } from "../../constants";
 import { LocalStorageHelper } from "../../utils/HttpUtils";
-import { Button, Input, ScreenHeader } from "../../components";
+import { Button, Input, ScreenHeader, Toast } from "../../components";
 
 // Helper function to calculate date range
 const getDateFromYearsAgo = (years) => {
@@ -28,6 +28,7 @@ const ManageUser = () => {
   const navigate = useNavigate();
   const { user_id } = useParams();
   const [loading, setLoading] = useState(false);
+  const [toastMsg, setToastMsg] = useState("");
   const userData = JSON.parse(LocalStorageHelper.get(USER_DATA)) || {};
   const isMyProfile = userData?._id === user_id;
 
@@ -83,12 +84,11 @@ const ManageUser = () => {
       if (isMyProfile) {
         LocalStorageHelper.store(USER_DATA, JSON.stringify(values));
       }
-      alert(
+      setToastMsg(
         `${isMyProfile ? "Profile" : "User"} ${
           user_id ? "updated" : "added"
         } successfully!`
       );
-      navigate(-1);
     }
   };
 
@@ -98,6 +98,7 @@ const ManageUser = () => {
         title={`${user_id ? "Edit" : "Add New"} ${
           isMyProfile ? "Profile" : "User"
         }`}
+        toastMsg={toastMsg}
       />
 
       <div className="w-[70%] mx-auto mt-14">
@@ -223,6 +224,7 @@ const ManageUser = () => {
           </Formik>
         </div>
       </div>
+      <Toast message={toastMsg} />
     </div>
   );
 };
