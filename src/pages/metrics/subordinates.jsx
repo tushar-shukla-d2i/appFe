@@ -10,18 +10,18 @@ import { metricsApis, rewardsApis, userApis } from "../../apis";
 import { Button, ScreenHeader } from "../../components";
 
 const minimum_points = -10;
-const maximum_points = 10;
 
 const Subordinates = () => {
   const navigate = useNavigate();
   const { metric_id } = useParams();
   const [loading, setLoading] = useState(false);
+  const [parentMetricData, setParentMetricData] = useState([]);
   const [metricData, setMetricData] = useState(null);
   const [comment, setComment] = useState("");
   const [usersList, setUsersList] = useState([]);
   const [sliderValue, setSliderValue] = useState(10);
   const [selectedUser, setSelectedUser] = useState(null);
-  const { label } = metricData ?? {};
+  const { label, maximum_points } = metricData ?? {};
 
   useEffect(() => {
     getUsersList();
@@ -39,6 +39,14 @@ const Subordinates = () => {
     const resp = await metricsApis.getMetricById({ metric_id });
     if (resp?.success) {
       setMetricData(resp?.data?.data);
+      getParentMetricData(resp?.data?.data?.parent_id);
+    }
+  };
+
+  const getParentMetricData = async (parent_id) => {
+    const resp = await metricsApis.getMetricById({ metric_id: parent_id });
+    if (resp?.success) {
+      setParentMetricData(resp?.data?.data);
     }
   };
 
@@ -60,8 +68,15 @@ const Subordinates = () => {
 
   return (
     <div className="bg-white">
-      <ScreenHeader title={label} />
-
+      <ScreenHeader
+        title={
+          <>
+            {parentMetricData?.label}
+            <span className="mx-3"> &gt; </span>
+            {label}
+          </>
+        }
+      />
       <div className="p-6 w-[80%] mx-auto mt-8 shadow-lg rounded-lg">
         <select
           className="w-full p-2 bg-gray-200 rounded"

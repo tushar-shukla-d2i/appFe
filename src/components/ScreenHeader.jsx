@@ -5,9 +5,15 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { FaArrowLeft } from "react-icons/fa";
+import { FiPlusCircle } from "react-icons/fi";
 
-const ScreenHeader = ({ title }) => {
+import { USER_DATA, USER_ROLES } from "../constants";
+import { LocalStorageHelper } from "../utils/HttpUtils";
+
+const ScreenHeader = ({ title, handleAddClick }) => {
   const navigate = useNavigate();
+  const userData = JSON.parse(LocalStorageHelper.get(USER_DATA));
+  const { role } = userData ?? {};
 
   const handleBackClick = () => {
     navigate(-1);
@@ -19,7 +25,13 @@ const ScreenHeader = ({ title }) => {
         <FaArrowLeft />
       </button>
       <h1 className="text-lg font-semibold">{title || ""}</h1>
-      <div /> {/* Empty div for spacing */}
+      {role === USER_ROLES.ADMIN && !!handleAddClick ? (
+        <button onClick={handleAddClick} className="text-2xl">
+          <FiPlusCircle />
+        </button>
+      ) : (
+        <div />
+      )}
     </div>
   );
 };

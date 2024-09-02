@@ -8,6 +8,8 @@ import { ErrorMessage, Field } from "formik";
 const inputStyle =
   "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5";
 
+const checkboxStyle = "mr-2 text-gray-700 h-4 w-4";
+
 const Input = ({
   id,
   label,
@@ -43,6 +45,17 @@ const Input = ({
             </option>
           ))}
         </Field>
+      ) : type === "checkbox" ? (
+        <div className="flex items-center">
+          <Field
+            type="checkbox"
+            name={id}
+            id={id}
+            className={checkboxStyle}
+            {...rest}
+          />
+          <span>{placeholder}</span>
+        </div>
       ) : (
         <Field
           type={type}

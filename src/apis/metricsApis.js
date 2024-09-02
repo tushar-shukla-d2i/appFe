@@ -25,4 +25,25 @@ export const metricsApis = {
       console.log("getMetricById:", error);
     }
   },
+
+  createMetric: async (payload) => {
+    try {
+      const response = await httpClient.post(endpoints.METRICS, payload);
+      return response;
+    } catch (error) {
+      console.log("createMetric:", error);
+    }
+  },
+
+  updateMetric: async ({ metric_id, payload }) => {
+    try {
+      const response = await httpClient.put(
+        `${endpoints.METRICS}/${metric_id}`,
+        payload
+      );
+      return response;
+    } catch (error) {
+      console.log("updateMetric:", error);
+    }
+  },
 };

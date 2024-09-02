@@ -16,6 +16,7 @@ import {
   ManageUsers,
   ChangePassword,
   Rewards,
+  AddEditMetric,
 } from "./pages";
 
 const App = () => {
@@ -35,6 +36,10 @@ const App = () => {
             element={<ChangePassword />}
           />
           <Route path={AppRoutes.USERS} element={<Users />} />
+          <Route
+            path={`${AppRoutes.ADD_EDIT_METRIC}/:parent_id?/:metric_id?`}
+            element={<AddEditMetric />}
+          />
           <Route path={AppRoutes.METRICS} element={<Metrics />} />
           <Route
             path={`${AppRoutes.METRICS}/:metric_id`}
