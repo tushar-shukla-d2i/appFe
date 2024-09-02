@@ -4,7 +4,6 @@
 
 import React, { useState } from "react";
 import { useParams } from "react-router";
-import { useNavigate } from "react-router-dom";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 
@@ -12,7 +11,6 @@ import { commonApis } from "../../apis";
 import { Button, Input, ScreenHeader, Toast } from "../../components";
 
 const ChangePassword = () => {
-  const navigate = useNavigate();
   const { user_id } = useParams();
   const [loading, setLoading] = useState(false);
   const [toastMsg, setToastMsg] = useState("");

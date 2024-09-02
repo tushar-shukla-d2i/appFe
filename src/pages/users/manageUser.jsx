@@ -4,7 +4,6 @@
 
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router";
-import { useNavigate } from "react-router-dom";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 
@@ -25,7 +24,6 @@ const minDate = getDateFromYearsAgo(55); // 55 years ago
 const maxDate = getDateFromYearsAgo(18); // 18 years ago
 
 const ManageUser = () => {
-  const navigate = useNavigate();
   const { user_id } = useParams();
   const [loading, setLoading] = useState(false);
   const [toastMsg, setToastMsg] = useState("");

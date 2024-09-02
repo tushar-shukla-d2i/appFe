@@ -3,7 +3,7 @@
  */
 
 import React, { useState, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 
@@ -11,7 +11,6 @@ import { metricsApis } from "../../apis";
 import { Button, Input, ScreenHeader, Toast } from "../../components";
 
 const AddEditMetric = () => {
-  const navigate = useNavigate();
   const { parent_id, metric_id } = useParams();
   const [loading, setLoading] = useState(false);
   const [initialMetric, setInitialMetric] = useState({});
@@ -27,7 +26,7 @@ const AddEditMetric = () => {
     setLoading(true);
     const resp = await metricsApis.getMetricById({ metric_id });
     if (resp?.success) {
-      setInitialMetric(resp.data);
+      setInitialMetric(resp?.data?.data);
     }
     setLoading(false);
   };
@@ -51,7 +50,7 @@ const AddEditMetric = () => {
       payload = { ...payload, parent_id };
     }
     const resp = metric_id
-      ? await metricsApis.updateMetric({ metric_id: initialMetric.id, payload })
+      ? await metricsApis.updateMetric({ metric_id, payload })
       : await metricsApis.createMetric(payload);
     setLoading(false);
     if (resp?.success) {

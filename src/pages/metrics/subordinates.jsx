@@ -4,7 +4,6 @@
 
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router";
-import { useNavigate } from "react-router-dom";
 
 import { metricsApis, rewardsApis, userApis } from "../../apis";
 import { Button, ScreenHeader, Toast } from "../../components";
@@ -12,7 +11,6 @@ import { Button, ScreenHeader, Toast } from "../../components";
 const minimum_points = -10;
 
 const Subordinates = () => {
-  const navigate = useNavigate();
   const { metric_id } = useParams();
   const [loading, setLoading] = useState(false);
   const [parentMetricData, setParentMetricData] = useState([]);
