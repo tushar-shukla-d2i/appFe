@@ -6,9 +6,9 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FiCamera, FiEdit, FiLogOut } from "react-icons/fi";
 
-import { authApis, rewardsApis } from "../../apis";
 import placeholderImg from "../../assets/react.svg";
 import { LocalStorageHelper } from "../../utils/HttpUtils";
+import { authApis, commonApis, rewardsApis } from "../../apis";
 import { AppRoutes, USER_DATA, USER_ROLES } from "../../constants";
 
 const IconButton = ({ label, img, icon, onClick }) => (
@@ -32,14 +32,28 @@ const Dashboard = () => {
   const [userImage, setUserImage] = useState("");
 
   useEffect(() => {
+    getUserData();
     getRewardsList();
   }, []);
+
+  const getUserData = async () => {
+    const resp = await commonApis.getMyData();
+    if (resp?.success && resp?.data?.userProfile) {
+      setUserImage(resp?.data?.userProfile);
+    }
+  };
 
   const getRewardsList = async () => {
     const resp = await rewardsApis.getAllRewards({ user_id: _id });
     if (resp?.success) {
       setRewards(resp?.data?.data);
     }
+  };
+
+  const uploadProfilePicture = async (file) => {
+    const formData = new FormData();
+    formData.append("userProfile", file);
+    await commonApis.me({ user_id: _id, payload: formData });
   };
 
   const handleImageUpload = (e) => {
@@ -50,6 +64,7 @@ const Dashboard = () => {
         setUserImage(reader.result);
       };
       reader.readAsDataURL(file);
+      uploadProfilePicture(file);
     }
   };
 
@@ -75,6 +90,7 @@ const Dashboard = () => {
             )}
             <input
               type="file"
+              id="image"
               accept="image/*"
               onChange={handleImageUpload}
               className="hidden"

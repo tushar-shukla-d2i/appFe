@@ -19,11 +19,21 @@ export const commonApis = {
     try {
       const response = await httpClient.put(
         `${endpoints.ME}/${user_id}`,
-        payload
+        payload,
+        { headers: { "Content-Type": "multipart/form-data" } }
       );
       return response;
     } catch (error) {
       console.log("me:", error);
+    }
+  },
+
+  getMyData: async () => {
+    try {
+      const response = await httpClient.get(endpoints.ME);
+      return response;
+    } catch (error) {
+      console.log("getMyData:", error);
     }
   },
 };
