@@ -18,3 +18,8 @@ export const BLOOD_GROUPS = [
   { value: "O+", label: "O+" },
   { value: "O-", label: "O-" },
 ];
+
+export const PUNCHING_ACTIONS = {
+  PUNCH_IN: "punchIn",
+  PUNCH_OUT: "punchOut",
+};

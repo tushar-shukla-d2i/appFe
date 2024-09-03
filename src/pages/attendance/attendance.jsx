@@ -6,28 +6,32 @@ import React, { useEffect, useState } from "react";
 
 import { attendanceApis } from "../../apis";
 import { ScreenHeader } from "../../components";
+import { LocalStorageHelper } from "../../utils/HttpUtils";
+import { PUNCHING_ACTIONS, USER_DATA } from "../../constants";
+
+const { PUNCH_IN, PUNCH_OUT } = PUNCHING_ACTIONS;
 
 const Attendance = () => {
   const [attendance, setAttendance] = useState(null);
   const [date, setDate] = useState(new Date().toISOString().split("T")[0]); // Default to today's date
+  const userData = JSON.parse(LocalStorageHelper.get(USER_DATA));
   let workingHours = 8;
   let afkHours = 1;
-  const isPunchedIn = attendance?.employees?.punchInTime;
+  const isPunchedIn = attendance?.punchInTime;
 
   useEffect(() => {
-    // getAttendance();
+    getAttendance();
   }, []);
 
   const getAttendance = async () => {
-    const resp = await attendanceApis.getAttendance();
+    const resp = await attendanceApis.getAttendance({ user_id: userData?._id });
     setAttendance(resp?.data?.data);
   };
 
   const handlePunchToggle = async () => {
-    attendance?.employees?.punchInTime
-      ? await attendanceApis.updatePunchInOut()
-      : await attendanceApis.punchInOut();
-    // getAttendance();
+    const payload = { action: isPunchedIn ? PUNCH_OUT : PUNCH_IN };
+    await attendanceApis.punchInOut(payload);
+    getAttendance();
   };
 
   const handleDateChange = (event) => {
@@ -42,25 +46,17 @@ const Attendance = () => {
       <ScreenHeader title="Attendance" />
 
       <div className="w-[70%] mx-auto p-8 mt-8 bg-white rounded-lg shadow-lg border border-gray-300">
-        {isToday ? (
-          <button
-            onClick={handlePunchToggle}
-            className={`w-full py-2 px-4 text-white rounded-md mb-6 transition-all ${
-              isPunchedIn
-                ? "bg-red-500 hover:bg-red-600"
-                : "bg-green-500 hover:bg-green-600"
-            }`}
-          >
-            {isPunchedIn ? "Punch Out" : "Punch In"}
-          </button>
-        ) : (
-          <button
-            disabled
-            className="w-full py-2 px-4 text-white rounded-md mb-6 bg-gray-400 cursor-not-allowed"
-          >
-            Punch In/Out
-          </button>
-        )}
+        <button
+          disabled={!isToday || !!attendance?.punchOutTime}
+          onClick={handlePunchToggle}
+          className={`w-full py-2 px-4 text-white rounded-md mb-6 transition-all ${
+            isPunchedIn
+              ? "bg-red-500 hover:bg-red-600"
+              : "bg-green-500 hover:bg-green-600"
+          } disabled:text-white disabled:rounded-md disabled:bg-gray-400`}
+        >
+          {isPunchedIn ? "Punch Out" : "Punch In"}
+        </button>
 
         <div className="my-6">
           <label htmlFor="datePicker" className="block text-gray-700 mb-2">
