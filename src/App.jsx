@@ -17,6 +17,7 @@ import {
   ChangePassword,
   Rewards,
   AddEditMetric,
+  Attendance,
 } from "./pages";
 
 const App = () => {
@@ -50,6 +51,7 @@ const App = () => {
             element={<Subordinates />}
           />
           <Route path={AppRoutes.REWARDS} element={<Rewards />} />
+          <Route path={AppRoutes.ATTENDANCE} element={<Attendance />} />
         </Routes>
       </main>
     </div>

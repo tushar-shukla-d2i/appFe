@@ -61,6 +61,13 @@ const ManageUser = () => {
     setLoading(true);
     let payload = { ...values };
 
+    if (!values.alternateContactNumber) {
+      delete payload.alternateContactNumber;
+    }
+    if (!values.alternateEmail) {
+      delete payload.alternateEmail;
+    }
+
     if (user_id) {
       if (!values.password) {
         delete payload.password;

@@ -135,6 +135,11 @@ const Dashboard = () => {
               onClick={() => navigate(AppRoutes.REWARDS)}
             />
           )}
+          <IconButton
+            label="Attendance"
+            icon="📅"
+            onClick={() => navigate(AppRoutes.ATTENDANCE)}
+          />
         </div>
       </div>
     </div>
