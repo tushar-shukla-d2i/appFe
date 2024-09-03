@@ -27,8 +27,24 @@ const ManageUser = () => {
   const { user_id } = useParams();
   const [loading, setLoading] = useState(false);
   const [toastMsg, setToastMsg] = useState("");
+  const [usersList, setUsersList] = useState([{ value: "", label: "Select" }]);
   const userData = JSON.parse(LocalStorageHelper.get(USER_DATA)) || {};
   const isMyProfile = userData?._id === user_id;
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      const resp = await userApis.getAllUsers();
+      if (resp?.success) {
+        const fetchedUsers = resp?.data?.map?.((user) => ({
+          value: user?._id,
+          label: `${user?.firstName} ${user?.lastName}`,
+        }));
+        setUsersList((prevList) => [...prevList, ...fetchedUsers]);
+      }
+    };
+
+    fetchUsers();
+  }, []);
 
   // Validation Schema
   const validationSchema = Yup.object().shape({
@@ -55,6 +71,9 @@ const ManageUser = () => {
       : Yup.string()
           .min(8, "Password must be at least 8 characters long")
           .required("Password is required"),
+    parent_id: user_id
+      ? Yup.string()
+      : Yup.string().required("Please assign the user to someone"),
   });
 
   const handleSubmit = async (values) => {
@@ -120,6 +139,7 @@ const ManageUser = () => {
               alternateContactNumber: "",
               birthday: "",
               password: "",
+              parent_id: "",
             }}
             validationSchema={validationSchema}
             onSubmit={handleSubmit}
@@ -134,6 +154,7 @@ const ManageUser = () => {
                         ...resp.data,
                         birthday: resp?.data?.birthday?.split?.("T")[0] || "",
                         password: "",
+                        parent_id: resp?.data?.parent_id || "",
                       });
                     }
                   };
@@ -206,7 +227,16 @@ const ManageUser = () => {
                     disabled={loading}
                   />
 
-                  {/* Password */}
+                  {!isMyProfile && (
+                    <Input
+                      id="parent_id"
+                      label="Assign To"
+                      type="select"
+                      options={usersList}
+                      disabled={loading}
+                    />
+                  )}
+
                   {!isMyProfile && (
                     <Input
                       id="password"
