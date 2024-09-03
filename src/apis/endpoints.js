@@ -3,6 +3,7 @@
  */
 
 const endpoints = {
+  ATTENDANCE: "attendance",
   SIGNUP: "signup",
   lOGIN: "login",
   USERS: "users",

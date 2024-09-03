@@ -2,16 +2,32 @@
  * Attendance Screen
  */
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+
+import { attendanceApis } from "../../apis";
+import { ScreenHeader } from "../../components";
 
 const Attendance = () => {
-  const [isPunchedIn, setIsPunchedIn] = useState(false);
+  const [attendance, setAttendance] = useState(null);
   const [date, setDate] = useState(new Date().toISOString().split("T")[0]); // Default to today's date
   let workingHours = 8;
   let afkHours = 1;
+  const isPunchedIn = attendance?.employees?.punchInTime;
 
-  const handlePunchToggle = () => {
-    setIsPunchedIn(!isPunchedIn);
+  useEffect(() => {
+    // getAttendance();
+  }, []);
+
+  const getAttendance = async () => {
+    const resp = await attendanceApis.getAttendance();
+    setAttendance(resp?.data?.data);
+  };
+
+  const handlePunchToggle = async () => {
+    attendance?.employees?.punchInTime
+      ? await attendanceApis.updatePunchInOut()
+      : await attendanceApis.punchInOut();
+    // getAttendance();
   };
 
   const handleDateChange = (event) => {
@@ -22,10 +38,10 @@ const Attendance = () => {
   const isToday = date === new Date().toISOString().split("T")[0];
 
   return (
-    <div className="p-6 bg-gray-100 min-h-screen flex flex-col items-center">
-      <div className="w-full max-w-md bg-white rounded-lg shadow-md p-6">
-        <h1 className="text-2xl font-semibold text-center mb-4">Attendance</h1>
+    <div className="bg-white">
+      <ScreenHeader title="Attendance" />
 
+      <div className="w-[70%] mx-auto p-8 mt-8 bg-white rounded-lg shadow-lg border border-gray-300">
         {isToday ? (
           <button
             onClick={handlePunchToggle}
