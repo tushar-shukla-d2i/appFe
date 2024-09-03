@@ -6,6 +6,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FiCamera, FiEdit, FiLogOut } from "react-icons/fi";
 
+import { Config } from "../../utils/Config";
 import placeholderImg from "../../assets/react.svg";
 import { LocalStorageHelper } from "../../utils/HttpUtils";
 import { authApis, commonApis, rewardsApis } from "../../apis";
@@ -39,7 +40,7 @@ const Dashboard = () => {
   const getUserData = async () => {
     const resp = await commonApis.getMyData();
     if (resp?.success && resp?.data?.userProfile) {
-      setUserImage(resp?.data?.userProfile);
+      setUserImage(`${Config.LOCAL.IMAGE_BASE_URL}${resp?.data?.userProfile}`);
     }
   };
 
