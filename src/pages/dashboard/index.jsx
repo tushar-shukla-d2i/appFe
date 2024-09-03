@@ -104,7 +104,10 @@ const Dashboard = () => {
             {officialEmail}
           </h2>
           <p className="text-white font-bold text-xl mt-2">
-            Total Rewards -{rewards?.reduce?.((s, i) => s + i?.points, 0)}
+            {`Total Rewards - (${rewards?.reduce?.(
+              (s, i) => s + i?.points,
+              0
+            )})`}
           </p>
         </div>
         <button

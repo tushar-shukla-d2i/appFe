@@ -73,7 +73,13 @@ const Rewards = () => {
   const filterRewards = () => {
     const lowercasedQuery = searchQuery?.toLowerCase();
 
-    const fieldsToSearch = ["_id", "name", "rate", "comment", "date"];
+    const fieldsToSearch = [
+      "_id",
+      "submittedByName",
+      "points",
+      "comment",
+      "date",
+    ];
 
     const filtered = rewardsList?.filter?.((reward) =>
       fieldsToSearch?.some?.((field) =>

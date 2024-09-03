@@ -12,6 +12,7 @@ const endpoints = {
   REWARDS: "rewards",
   LOOKUPS: "lookups",
   ME: "me",
+  SUBORDINATES: "subordinates",
 };
 
 export { endpoints };

@@ -5,7 +5,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router";
 
-import { metricsApis, rewardsApis, userApis } from "../../apis";
+import { metricsApis, rewardsApis, subordinatesApis } from "../../apis";
 import { Button, ScreenHeader, Toast } from "../../components";
 
 const minimum_points = -10;
@@ -16,21 +16,21 @@ const Subordinates = () => {
   const [parentMetricData, setParentMetricData] = useState([]);
   const [metricData, setMetricData] = useState(null);
   const [comment, setComment] = useState("");
-  const [usersList, setUsersList] = useState([]);
+  const [subordinatesList, setSubordinatesList] = useState([]);
   const [sliderValue, setSliderValue] = useState(10);
   const [selectedUser, setSelectedUser] = useState(null);
   const [toastMsg, setToastMsg] = useState("");
   const { label, maximum_points } = metricData ?? {};
 
   useEffect(() => {
-    getUsersList();
+    getSubordinatesList();
     getMetricData();
   }, []);
 
-  const getUsersList = async () => {
-    const resp = await userApis.getAllUsers();
+  const getSubordinatesList = async () => {
+    const resp = await subordinatesApis.getSubordinates();
     if (resp?.success) {
-      setUsersList(resp?.data);
+      setSubordinatesList(resp?.data?.data);
     }
   };
 
@@ -86,7 +86,7 @@ const Subordinates = () => {
           <option value="" disabled>
             Select User
           </option>
-          {usersList?.map((user, index) => {
+          {subordinatesList?.map?.((user, index) => {
             const { _id, firstName, lastName } = user ?? {};
             return (
               <option key={index} value={_id}>
