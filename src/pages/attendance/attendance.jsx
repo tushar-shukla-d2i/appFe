@@ -14,7 +14,7 @@ const { PUNCH_IN, PUNCH_OUT } = PUNCHING_ACTIONS;
 
 const Attendance = () => {
   const [attendance, setAttendance] = useState(null);
-  const [date, setDate] = useState(new Date().toISOString().split("T")[0]); // Default to today's date
+  const [date, setDate] = useState(new Date().toISOString().split("T")[0]);
   const userData = JSON.parse(LocalStorageHelper.get(USER_DATA));
   const isPunchedIn = attendance?.punchInTime;
 

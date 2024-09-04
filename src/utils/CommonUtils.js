@@ -168,9 +168,9 @@ export const convertUTCtoIST = (utcDateStr) => {
   const istTimeInMs = utcTimeInMs + istOffsetInMs;
   const istDate = new Date(istTimeInMs);
   // Extract the time string in the format HH:mm:ss
-  const istTime = `${padZero(istDate.getHours())}:${padZero(
+  const istTime = `${padZero(istDate.getHours())} : ${padZero(
     istDate.getMinutes()
-  )}:${padZero(istDate.getSeconds())}`;
+  )}`;
 
   return istTime;
 };

@@ -15,6 +15,7 @@ const AppRoutes = {
   SUBORDINATES: "/subordinates",
   REWARDS: "/rewards",
   ATTENDANCE: "/attendance",
+  ATTENDANCE_RECORDS: "/attendance-records",
 };
 
 export { AppRoutes };

@@ -160,6 +160,13 @@ const Dashboard = () => {
             icon="📅"
             onClick={() => navigate(AppRoutes.ATTENDANCE)}
           />
+          {role === USER_ROLES.ADMIN && (
+            <IconButton
+              label="Attendance Records"
+              icon="📊"
+              onClick={() => navigate(AppRoutes.ATTENDANCE_RECORDS)}
+            />
+          )}
         </div>
       </div>
     </div>
