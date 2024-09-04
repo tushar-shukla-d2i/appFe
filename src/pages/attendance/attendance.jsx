@@ -8,6 +8,7 @@ import { attendanceApis } from "../../apis";
 import { ScreenHeader } from "../../components";
 import { LocalStorageHelper } from "../../utils/HttpUtils";
 import { PUNCHING_ACTIONS, USER_DATA } from "../../constants";
+import { convertUTCtoIST, UtilFunctions } from "../../utils/CommonUtils";
 
 const { PUNCH_IN, PUNCH_OUT } = PUNCHING_ACTIONS;
 
@@ -15,16 +16,21 @@ const Attendance = () => {
   const [attendance, setAttendance] = useState(null);
   const [date, setDate] = useState(new Date().toISOString().split("T")[0]); // Default to today's date
   const userData = JSON.parse(LocalStorageHelper.get(USER_DATA));
-  let workingHours = 8;
-  let afkHours = 1;
   const isPunchedIn = attendance?.punchInTime;
 
   useEffect(() => {
     getAttendance();
   }, []);
 
-  const getAttendance = async () => {
-    const resp = await attendanceApis.getAttendance({ user_id: userData?._id });
+  const getAttendance = async (attendanceDate) => {
+    let payload = { user_id: userData?._id };
+    if (attendanceDate) {
+      payload.attendanceDate = attendanceDate;
+      payload = UtilFunctions.convertToDayjsYMDFormat(payload, [
+        "attendanceDate",
+      ]);
+    }
+    const resp = await attendanceApis.getAttendance(payload);
     setAttendance(resp?.data?.data);
   };
 
@@ -36,6 +42,7 @@ const Attendance = () => {
 
   const handleDateChange = (event) => {
     setDate(event.target.value);
+    getAttendance(event.target.value);
   };
 
   // Check if the selected date is today's date
@@ -67,21 +74,21 @@ const Attendance = () => {
             type="date"
             value={date}
             onChange={handleDateChange}
-            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer"
           />
         </div>
 
         <div className="flex items-center text-gray-700 mt-10">
-          <span className="block font-medium mr-4">Total Working Hours:</span>
-          <span className="text-lg font-semibold">{`${workingHours} ${
-            workingHours > 1 ? "hrs" : "hr"
-          }`}</span>
+          <span className="block font-medium mr-4">Punch in time:</span>
+          <span className="text-lg font-semibold">{`${convertUTCtoIST(
+            attendance?.punchInTime
+          )}`}</span>
         </div>
         <div className="flex items-center text-gray-700">
-          <span className="block font-medium mr-4">Total AFK Time:</span>
-          <span className="text-lg font-semibold">{`${afkHours} ${
-            afkHours > 1 ? "hrs" : "hr"
-          }`}</span>
+          <span className="block font-medium mr-4">Punch out time:</span>
+          <span className="text-lg font-semibold">{`${convertUTCtoIST(
+            attendance?.punchOutTime
+          )}`}</span>
         </div>
       </div>
     </div>

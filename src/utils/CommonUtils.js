@@ -154,6 +154,32 @@ export const constructStateList = (stateList = []) => {
 
 export const emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$/;
 
+export const convertUTCtoIST = (utcDateStr) => {
+  if (!utcDateStr) {
+    return "-";
+  }
+
+  const utcTime = utcDateStr;
+  const utcDate = new Date(utcTime);
+  utcDate.setTime(utcDate.getTime() + utcDate.getTimezoneOffset() * 60 * 1000);
+  const utcTimeInMs = utcDate.getTime();
+  // Add the IST offset (5 hours 30 minutes) to the UTC time
+  const istOffsetInMs = 5.5 * 60 * 60 * 1000;
+  const istTimeInMs = utcTimeInMs + istOffsetInMs;
+  const istDate = new Date(istTimeInMs);
+  // Extract the time string in the format HH:mm:ss
+  const istTime = `${padZero(istDate.getHours())}:${padZero(
+    istDate.getMinutes()
+  )}:${padZero(istDate.getSeconds())}`;
+
+  return istTime;
+};
+
+// Helper function to pad zeros to the time components
+const padZero = (value) => {
+  return (value < 10 ? "0" : "") + value;
+};
+
 // Format each date in the newDateRange array
 export const convertDateRangeToString = (newDateRange) => {
   const formattedDates = newDateRange?.map((date) => {
