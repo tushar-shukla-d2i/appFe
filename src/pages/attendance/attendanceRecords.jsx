@@ -36,7 +36,7 @@ const AttendanceRecords = () => {
     const lowercasedQuery = searchQuery?.toLowerCase();
     const fieldsToSearch = [
       "_id",
-      "user_name",
+      "userName",
       "punchInTime",
       "punchOutTime",
       "timesheet",
@@ -111,12 +111,17 @@ const AttendanceRecords = () => {
               </thead>
               <tbody>
                 {filteredUsers?.map?.((employee) => {
-                  const { _id, name, punchInTime, punchOutTime, timesheet } =
-                    employee ?? {};
+                  const {
+                    _id,
+                    userName,
+                    punchInTime,
+                    punchOutTime,
+                    timesheet,
+                  } = employee ?? {};
                   return (
                     <tr key={_id} className="border-b border-gray-200">
-                      <td className="py-2 px-4 border-r border-gray-300">
-                        {name}
+                      <td className="py-2 px-4 text-sm border-r border-gray-300">
+                        {userName}
                       </td>
                       <td className="py-2 px-4 border-r border-gray-300">
                         <div className="text-sm">

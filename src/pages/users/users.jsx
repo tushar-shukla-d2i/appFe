@@ -31,7 +31,7 @@ const Users = () => {
     setLoading(true);
     const resp = await userApis.getAllUsers();
     if (resp?.success) {
-      setUsersList(resp?.data);
+      setUsersList(resp?.data?.data);
     }
     setLoading(false);
   };

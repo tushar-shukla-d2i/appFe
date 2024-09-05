@@ -6,9 +6,13 @@ import { endpoints } from "./endpoints";
 import { httpClient } from "../utils/HttpUtils";
 
 export const userApis = {
-  getAllUsers: async () => {
+  getAllUsers: async ({ includeSelf } = {}) => {
     try {
-      const response = await httpClient.get(endpoints.USERS);
+      let url = endpoints.USERS;
+      if (includeSelf) {
+        url += `?includeSelf=true`;
+      }
+      const response = await httpClient.get(url);
       return response;
     } catch (error) {
       console.log("getAllUsers:", error);

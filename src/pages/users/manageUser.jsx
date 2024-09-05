@@ -33,9 +33,9 @@ const ManageUser = () => {
 
   useEffect(() => {
     const fetchUsers = async () => {
-      const resp = await userApis.getAllUsers();
+      const resp = await userApis.getAllUsers({ includeSelf: true });
       if (resp?.success) {
-        const fetchedUsers = resp?.data?.map?.((user) => ({
+        const fetchedUsers = resp?.data?.data?.map?.((user) => ({
           value: user?._id,
           label: `${user?.firstName} ${user?.lastName}`,
         }));
@@ -43,7 +43,7 @@ const ManageUser = () => {
       }
     };
 
-    fetchUsers();
+    !isMyProfile && fetchUsers();
   }, []);
 
   // Validation Schema
