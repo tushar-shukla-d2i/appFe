@@ -149,12 +149,13 @@ const ManageUser = () => {
                 if (user_id) {
                   const getUserData = async () => {
                     const resp = await userApis.getUserById({ user_id });
-                    if (resp?.data) {
+                    if (resp?.data?.data) {
                       setValues({
-                        ...resp.data,
-                        birthday: resp?.data?.birthday?.split?.("T")[0] || "",
+                        ...resp?.data?.data,
+                        birthday:
+                          resp?.data?.data?.birthday?.split?.("T")[0] || "",
                         password: "",
-                        parent_id: resp?.data?.parent_id || "",
+                        parent_id: resp?.data?.data?.parent_id || "",
                       });
                     }
                   };

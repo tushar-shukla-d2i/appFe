@@ -5,7 +5,7 @@
 import React, { useEffect, useState, useRef } from "react";
 
 import { attendanceApis } from "../../apis";
-import { ScreenHeader } from "../../components";
+import { Button, ScreenHeader } from "../../components";
 import { LocalStorageHelper } from "../../utils/HttpUtils";
 import { PUNCHING_ACTIONS, USER_DATA } from "../../constants";
 import { convertUTCtoIST, UtilFunctions } from "../../utils/CommonUtils";
@@ -16,6 +16,8 @@ const Attendance = () => {
   const [attendance, setAttendance] = useState(null);
   const [date, setDate] = useState(new Date().toISOString().split("T")[0]);
   const [elapsedTime, setElapsedTime] = useState(null);
+  const [showPunchOutModal, setShowPunchOutModal] = useState(false); // Modal state
+  const [timesheetDescription, setTimesheetDescription] = useState(""); // Timesheet input
   const timerRef = useRef(null);
   const userData = JSON.parse(LocalStorageHelper.get(USER_DATA));
   const isPunchedIn = attendance?.punchInTime;
@@ -66,9 +68,12 @@ const Attendance = () => {
   };
 
   const handlePunchToggle = async () => {
-    const payload = { action: isPunchedIn ? PUNCH_OUT : PUNCH_IN };
-    await attendanceApis.punchInOut(payload);
-    getAttendance();
+    if (isPunchedIn) {
+      setShowPunchOutModal(true);
+    } else {
+      await attendanceApis.punchInOut({ action: PUNCH_IN });
+      getAttendance();
+    }
   };
 
   const handleDateChange = (event) => {
@@ -99,6 +104,14 @@ const Attendance = () => {
     return `${hrs.toString().padStart(2, "0")}:${mins
       .toString()
       .padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
+  };
+
+  // Handle the timesheet form submission and punch out
+  const handleSubmitTimesheet = async () => {
+    const payload = { action: PUNCH_OUT, timesheet: timesheetDescription };
+    await attendanceApis.punchInOut(payload);
+    setShowPunchOutModal(false);
+    getAttendance();
   };
 
   // Check if the selected date is today's date
@@ -155,6 +168,39 @@ const Attendance = () => {
           </span>
         </div>
       </div>
+
+      {/* Punch Out Modal */}
+      {showPunchOutModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-400 bg-opacity-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg w-full mx-20">
+            <h2 className="text-xl font-semibold mb-4">Submit Timesheet</h2>
+            <textarea
+              value={timesheetDescription}
+              onChange={(e) =>
+                e.target.value !== " " &&
+                setTimesheetDescription(e.target.value)
+              }
+              rows="5"
+              className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="Describe today's work..."
+              maxLength={200}
+            />
+            <div className="mt-4 flex justify-center">
+              <button
+                onClick={() => setShowPunchOutModal(false)}
+                className="bg-gray-300 w-[25%] text-gray-800 px-4 py-2 rounded-md mr-2"
+              >
+                Cancel
+              </button>
+              <Button
+                onClick={handleSubmitTimesheet}
+                className="bg-blue-600 w-[25%] text-white px-4 py-2 rounded-md"
+                title="Submit"
+              />
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
