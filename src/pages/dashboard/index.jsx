@@ -39,8 +39,10 @@ const Dashboard = () => {
 
   const getUserData = async () => {
     const resp = await commonApis.getMyData();
-    if (resp?.success && resp?.data?.userProfile) {
-      setUserImage(`${Config.LOCAL.IMAGE_BASE_URL}${resp?.data?.userProfile}`);
+    if (resp?.success && resp?.data?.data?.userProfile) {
+      setUserImage(
+        `${Config.LOCAL.IMAGE_BASE_URL}${resp?.data?.data?.userProfile}`
+      );
     }
   };
 

@@ -30,9 +30,7 @@ const Users = () => {
   const getUsersList = async () => {
     setLoading(true);
     const resp = await userApis.getAllUsers();
-    if (resp?.success) {
-      setUsersList(resp?.data?.data);
-    }
+    setUsersList(resp);
     setLoading(false);
   };
 

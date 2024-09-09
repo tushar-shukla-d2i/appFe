@@ -22,7 +22,7 @@ export const commonApis = {
         headers: { "Content-Type": "multipart/form-data" },
       });
       if (resp?.success) {
-        LocalStorageHelper.store(USER_DATA, JSON.stringify(resp?.data));
+        LocalStorageHelper.store(USER_DATA, JSON.stringify(resp?.data?.data));
       }
       return resp;
     } catch (error) {

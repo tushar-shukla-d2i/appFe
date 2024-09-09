@@ -13,7 +13,7 @@ export const userApis = {
         url += `?includeSelf=true`;
       }
       const response = await httpClient.get(url);
-      return response;
+      return response?.data?.data || [];
     } catch (error) {
       console.log("getAllUsers:", error);
     }

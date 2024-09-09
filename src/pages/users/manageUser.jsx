@@ -34,13 +34,13 @@ const ManageUser = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       const resp = await userApis.getAllUsers({ includeSelf: true });
-      if (resp?.success) {
-        const fetchedUsers = resp?.data?.data?.map?.((user) => ({
+      const fetchedUsers = resp
+        ?.filter?.((u) => u?._id !== user_id)
+        ?.map?.((user) => ({
           value: user?._id,
           label: `${user?.firstName} ${user?.lastName}`,
         }));
-        setUsersList((prevList) => [...prevList, ...fetchedUsers]);
-      }
+      setUsersList((prevList) => [...prevList, ...fetchedUsers]);
     };
 
     !isMyProfile && fetchUsers();
