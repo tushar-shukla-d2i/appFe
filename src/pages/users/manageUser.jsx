@@ -169,7 +169,7 @@ const ManageUser = () => {
                     id="firstName"
                     label="First Name"
                     placeholder="Enter your first name"
-                    disabled={loading}
+                    disabled={!!user_id || loading}
                   />
 
                   <Input
@@ -193,7 +193,7 @@ const ManageUser = () => {
                     type="date"
                     min={minDate}
                     max={maxDate}
-                    disabled={loading}
+                    disabled={!!user_id || loading}
                   />
 
                   <Input
