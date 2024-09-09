@@ -143,7 +143,7 @@ const Dashboard = () => {
           <IconButton
             label="Directory"
             icon="👥"
-            onClick={() => navigate(AppRoutes.USERS)}
+            onClick={() => navigate(AppRoutes.DIRECTORY)}
           />
           <IconButton
             label="Metrics"

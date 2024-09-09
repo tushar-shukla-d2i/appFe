@@ -10,6 +10,7 @@ import {
   AttendanceRecords,
   ChangePassword,
   Dashboard,
+  Directory,
   Login,
   ManageUser,
   ManageUsers,
@@ -18,7 +19,6 @@ import {
   Signup,
   SubMetrics,
   Subordinates,
-  Users,
 } from "./pages";
 
 const App = () => {
@@ -37,7 +37,7 @@ const App = () => {
             path={`${AppRoutes.CHANGE_PASSWORD}/:user_id`}
             element={<ChangePassword />}
           />
-          <Route path={AppRoutes.USERS} element={<Users />} />
+          <Route path={AppRoutes.DIRECTORY} element={<Directory />} />
           <Route
             path={`${AppRoutes.ADD_EDIT_METRIC}/:parent_id?/:metric_id?`}
             element={<AddEditMetric />}
