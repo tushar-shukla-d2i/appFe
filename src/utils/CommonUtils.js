@@ -112,7 +112,7 @@ export const UtilFunctions = {
 };
 
 export const formattedMDYDate = (date) => {
-  return dayjs(date ?? new Date()).format("MM-DD-YYYY");
+  return dayjs(date ?? new Date()).format("MM/DD/YYYY");
 };
 
 export const formatDateToShortMonthString = (date) => {
@@ -143,16 +143,43 @@ export const trimMiddleSpace = (str) => {
   return str?.replace?.(/^ /, "")?.replace(/ +/g, " ");
 };
 
-export const constructStateList = (stateList = []) => {
-  return stateList
-    ?.map?.((country) => ({
-      label: country?.state,
-      value: country?.state_code,
-    }))
-    ?.sort((a, b) => a?.label?.localeCompare?.(b?.label));
+export const sortList = (data = [], key1, key2) => {
+  return data?.sort((a, b) => {
+    const firstNameComparison = a?.[key1]?.localeCompare?.(b?.[key1]);
+    if (firstNameComparison === 0) {
+      return a?.[key2]?.localeCompare?.(b?.[key2]);
+    }
+    return firstNameComparison;
+  });
 };
 
 export const emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$/;
+
+export const convertUTCtoIST = (utcDateStr) => {
+  if (!utcDateStr) {
+    return "-";
+  }
+
+  const utcTime = utcDateStr;
+  const utcDate = new Date(utcTime);
+  utcDate.setTime(utcDate.getTime() + utcDate.getTimezoneOffset() * 60 * 1000);
+  const utcTimeInMs = utcDate.getTime();
+  // Add the IST offset (5 hours 30 minutes) to the UTC time
+  const istOffsetInMs = 5.5 * 60 * 60 * 1000;
+  const istTimeInMs = utcTimeInMs + istOffsetInMs;
+  const istDate = new Date(istTimeInMs);
+  // Extract the time string in the format HH:mm:ss
+  const istTime = `${padZero(istDate.getHours())} : ${padZero(
+    istDate.getMinutes()
+  )}`;
+
+  return istTime;
+};
+
+// Helper function to pad zeros to the time components
+const padZero = (value) => {
+  return (value < 10 ? "0" : "") + value;
+};
 
 // Format each date in the newDateRange array
 export const convertDateRangeToString = (newDateRange) => {

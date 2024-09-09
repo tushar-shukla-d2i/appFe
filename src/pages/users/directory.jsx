@@ -1,5 +1,5 @@
 /**
- * Users listing screen
+ * Directory screen
  */
 
 import React, { useEffect, useState } from "react";
@@ -13,7 +13,7 @@ import {
   UserCard,
 } from "../../components";
 
-const Users = () => {
+const Directory = () => {
   const [loading, setLoading] = useState(true);
   const [usersList, setUsersList] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
@@ -30,9 +30,7 @@ const Users = () => {
   const getUsersList = async () => {
     setLoading(true);
     const resp = await userApis.getAllUsers();
-    if (resp?.success) {
-      setUsersList(resp?.data);
-    }
+    setUsersList(resp);
     setLoading(false);
   };
 
@@ -103,4 +101,4 @@ const Users = () => {
   );
 };
 
-export { Users };
+export { Directory };

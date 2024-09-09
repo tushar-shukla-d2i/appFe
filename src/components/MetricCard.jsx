@@ -33,18 +33,13 @@ const MetricCard = ({ data, route }) => {
   const getMenuItems = (metric) => {
     const items = [
       {
-        label: "Next",
-        onClick: () => handleMetricClick(metric),
+        label: "Edit",
+        onClick: (e) => {
+          e.stopPropagation();
+          handleEditClick(metric);
+        },
       },
     ];
-
-    if (isAdmin) {
-      items.unshift({
-        label: "Edit",
-        onClick: () => handleEditClick(metric),
-      });
-    }
-
     return items;
   };
 
@@ -54,13 +49,16 @@ const MetricCard = ({ data, route }) => {
         <div
           key={metric._id}
           className="relative bg-gray-200 p-6 text-center text-sm"
+          onClick={() => handleMetricClick(metric)}
         >
-          <div
-            className="absolute top-2 right-2"
-            onClick={(e) => toggleMenu(e, metric._id)}
-          >
-            <FiMoreVertical className="text-lg cursor-pointer" />
-          </div>
+          {isAdmin && (
+            <div
+              className="absolute top-2 right-2"
+              onClick={(e) => toggleMenu(e, metric._id)}
+            >
+              <FiMoreVertical className="text-lg cursor-pointer" />
+            </div>
+          )}
 
           {activeMenu === metric._id && (
             <div className="absolute right-3 top-6 bg-white border rounded shadow-md z-10">

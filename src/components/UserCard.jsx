@@ -7,6 +7,14 @@ import React from "react";
 import d2iLogo from "../assets/d2i_logo.jpg";
 import { formatDateToShortMonthString } from "../utils/CommonUtils";
 
+const formatDate = (date) =>
+  new Date(date)?.toLocaleDateString?.("en-US", {
+    month: "2-digit",
+    day: "2-digit",
+  });
+
+const isToday = (date) => formatDate(date) === formatDate(new Date());
+
 const UserCard = ({ userData }) => {
   const {
     _id,
@@ -20,13 +28,17 @@ const UserCard = ({ userData }) => {
     birthday,
   } = userData ?? {};
 
-  const RenderDetails = ({ label, value }) => {
-    return (
-      <p className="font-semibold text-black my-2">
-        <span className="mr-2">{`${label}: `}</span> {value}
-      </p>
-    );
-  };
+  const RenderDetails = ({ label, value, highlight }) => (
+    <p
+      className={`font-semibold my-2 ${
+        highlight
+          ? "bg-gradient-to-r from-purple-300 via-pink-200 to-yellow-200 py-2 rounded"
+          : ""
+      }`}
+    >
+      <span className="mr-2">{label} :</span> {value}
+    </p>
+  );
 
   return (
     <div key={_id} className="mx-8 my-4 bg-gray-50 shadow-lg rounded-lg">
@@ -36,7 +48,6 @@ const UserCard = ({ userData }) => {
           <h2 className="text-xl font-semibold text-gray-800">{`${
             firstName || ""
           } ${lastName || ""}`}</h2>
-          {/* <p className="text-gray-600">{"S/W Engineer"}</p> */}
         </div>
       </div>
 
@@ -53,6 +64,7 @@ const UserCard = ({ userData }) => {
         <RenderDetails
           label="🎂"
           value={formatDateToShortMonthString(birthday)}
+          highlight={isToday(birthday)}
         />
       </div>
     </div>

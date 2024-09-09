@@ -4,7 +4,6 @@
 
 import React, { useEffect, useState } from "react";
 import { FaSearch, FaTimes } from "react-icons/fa";
-import { FiChevronDown, FiChevronUp } from "react-icons/fi";
 
 import { rewardsApis } from "../../apis";
 import { USER_DATA } from "../../constants";
@@ -13,35 +12,24 @@ import { LocalStorageHelper } from "../../utils/HttpUtils";
 import { Loader, NoRecordsFound, ScreenHeader } from "../../components";
 
 const RewardItem = ({ reward }) => {
-  const [isExpanded, setIsExpanded] = useState(false);
   const { _id, submittedByName, points, comment, date } = reward ?? {};
 
   return (
     <div key={_id} className="mx-8 my-4 p-4 bg-gray-50 shadow rounded-lg">
-      <div
-        className="flex justify-between cursor-pointer"
-        onClick={() => setIsExpanded(!isExpanded)}
-      >
-        <span className="font-bold">{submittedByName}</span>
+      <div className="flex justify-between cursor-pointer">
+        <span className="font-bold">Rate: {points}/10</span>
         <div className="flex items-center">
           <span className="font-semibold text-sm mr-4">
             {formattedMDYDate(date)}
           </span>
-          {isExpanded ? (
-            <FiChevronUp className="text-black text-xl" />
-          ) : (
-            <FiChevronDown className="text-black text-xl" />
-          )}
         </div>
       </div>
-      {isExpanded && (
-        <div className="mt-2">
-          <p className="text-gray-600 text-sm font-semibold">
-            Rate: {points}/10
-          </p>
-          <p className="text-gray-600 text-sm font-semibold mt-1">{comment}</p>
-        </div>
-      )}
+      <div className="mt-2 flex items-center">
+        <p className="text-gray-600 text-sm font-semibold mt-1 mr-3">
+          {comment} -
+        </p>
+        <p className="text-gray-500 text-sm mt-1">{submittedByName}</p>
+      </div>
     </div>
   );
 };
@@ -73,7 +61,13 @@ const Rewards = () => {
   const filterRewards = () => {
     const lowercasedQuery = searchQuery?.toLowerCase();
 
-    const fieldsToSearch = ["_id", "name", "rate", "comment", "date"];
+    const fieldsToSearch = [
+      "_id",
+      "submittedByName",
+      "points",
+      "comment",
+      "date",
+    ];
 
     const filtered = rewardsList?.filter?.((reward) =>
       fieldsToSearch?.some?.((field) =>

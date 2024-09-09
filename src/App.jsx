@@ -5,18 +5,20 @@ import "./App.css";
 import { AppHeader } from "./components";
 import { AppRoutes } from "./constants";
 import {
+  AddEditMetric,
+  Attendance,
+  AttendanceRecords,
+  ChangePassword,
   Dashboard,
-  Signup,
+  Directory,
   Login,
-  Metrics,
-  Users,
-  Subordinates,
-  SubMetrics,
   ManageUser,
   ManageUsers,
-  ChangePassword,
+  Metrics,
   Rewards,
-  AddEditMetric,
+  Signup,
+  SubMetrics,
+  Subordinates,
 } from "./pages";
 
 const App = () => {
@@ -35,7 +37,7 @@ const App = () => {
             path={`${AppRoutes.CHANGE_PASSWORD}/:user_id`}
             element={<ChangePassword />}
           />
-          <Route path={AppRoutes.USERS} element={<Users />} />
+          <Route path={AppRoutes.DIRECTORY} element={<Directory />} />
           <Route
             path={`${AppRoutes.ADD_EDIT_METRIC}/:parent_id?/:metric_id?`}
             element={<AddEditMetric />}
@@ -50,6 +52,11 @@ const App = () => {
             element={<Subordinates />}
           />
           <Route path={AppRoutes.REWARDS} element={<Rewards />} />
+          <Route path={AppRoutes.ATTENDANCE} element={<Attendance />} />
+          <Route
+            path={AppRoutes.ATTENDANCE_RECORDS}
+            element={<AttendanceRecords />}
+          />
         </Routes>
       </main>
     </div>

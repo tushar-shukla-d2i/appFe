@@ -31,9 +31,7 @@ const ManageUsers = () => {
   const getUsersList = async () => {
     setLoading(true);
     const resp = await userApis.getAllUsers();
-    if (resp?.success) {
-      setUsersList(resp?.data);
-    }
+    setUsersList(resp);
     setLoading(false);
   };
 
@@ -51,40 +49,33 @@ const ManageUsers = () => {
     setFilteredUsers(filtered);
   };
 
+  const handleAddClick = () => {
+    navigate(AppRoutes.USER);
+  };
+
   return (
     <div className="bg-white min-h-screen flex flex-col">
       {/* Top Bar */}
-      <ScreenHeader title="Manage Users" />
+      <ScreenHeader title="Manage Users" handleAddClick={handleAddClick} />
 
-      {/* Search Input */}
-      <div className="mt-10 mb-6 mx-10 flex justify-between items-center">
-        <div className="relative">
-          <input
-            type="text"
-            placeholder="Search..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="p-2 border border-gray-500 rounded-lg"
-          />
-          <div className="absolute top-3 right-2">
-            {searchQuery ? (
-              <FaTimes
-                className="cursor-pointer text-gray-500"
-                onClick={() => setSearchQuery("")}
-              />
-            ) : (
-              <FaSearch className="text-gray-500" />
-            )}
-          </div>
+      <div className="relative mx-11 mt-10 mb-5">
+        <input
+          type="text"
+          placeholder="Search..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="p-2 border border-gray-500 rounded-lg w-full"
+        />
+        <div className="absolute top-3 right-2">
+          {searchQuery ? (
+            <FaTimes
+              className="cursor-pointer text-gray-500"
+              onClick={() => setSearchQuery("")}
+            />
+          ) : (
+            <FaSearch className="text-gray-500" />
+          )}
         </div>
-        <button
-          type="button"
-          className="text-white bg-[#0375a7] hover:bg-[#22617b] font-medium rounded-lg text-sm p-3 text-center inline-flex items-center me-2"
-          onClick={() => navigate(AppRoutes.USER)}
-        >
-          <FaPlus className="text-xl mr-2 font-bold" />
-          Add New User
-        </button>
       </div>
 
       {/* Team Members List */}
