@@ -112,7 +112,7 @@ export const UtilFunctions = {
 };
 
 export const formattedMDYDate = (date) => {
-  return dayjs(date ?? new Date()).format("MM-DD-YYYY");
+  return dayjs(date ?? new Date()).format("MM/DD/YYYY");
 };
 
 export const formatDateToShortMonthString = (date) => {
