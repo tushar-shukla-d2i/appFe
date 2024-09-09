@@ -196,6 +196,16 @@ const ManageUser = () => {
                     disabled={!!user_id || loading}
                   />
 
+                  {!isMyProfile && (
+                    <Input
+                      id="parent_id"
+                      label="Assign To"
+                      type="select"
+                      options={usersList}
+                      disabled={loading}
+                    />
+                  )}
+
                   <Input
                     id="officialEmail"
                     label="Official Email"
@@ -227,16 +237,6 @@ const ManageUser = () => {
                     type="tel"
                     disabled={loading}
                   />
-
-                  {!isMyProfile && (
-                    <Input
-                      id="parent_id"
-                      label="Assign To"
-                      type="select"
-                      options={usersList}
-                      disabled={loading}
-                    />
-                  )}
 
                   {!isMyProfile && (
                     <Input

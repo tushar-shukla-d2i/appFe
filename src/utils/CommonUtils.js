@@ -143,13 +143,14 @@ export const trimMiddleSpace = (str) => {
   return str?.replace?.(/^ /, "")?.replace(/ +/g, " ");
 };
 
-export const constructStateList = (stateList = []) => {
-  return stateList
-    ?.map?.((country) => ({
-      label: country?.state,
-      value: country?.state_code,
-    }))
-    ?.sort((a, b) => a?.label?.localeCompare?.(b?.label));
+export const sortList = (data = [], key1, key2) => {
+  return data?.sort((a, b) => {
+    const firstNameComparison = a?.[key1]?.localeCompare?.(b?.[key1]);
+    if (firstNameComparison === 0) {
+      return a?.[key2]?.localeCompare?.(b?.[key2]);
+    }
+    return firstNameComparison;
+  });
 };
 
 export const emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$/;
