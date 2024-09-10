@@ -3,10 +3,16 @@
  */
 
 const endpoints = {
+  ATTENDANCE: "attendance",
   SIGNUP: "signup",
   lOGIN: "login",
   USERS: "users",
-  GET_USER: "user",
+  METRICS: "metrics",
+  GET_METRIC: "metric",
+  REWARDS: "rewards",
+  LOOKUPS: "lookups",
+  ME: "me",
+  SUBORDINATES: "subordinates",
 };
 
 export { endpoints };

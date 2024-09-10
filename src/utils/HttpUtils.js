@@ -109,7 +109,7 @@ httpClient.interceptors.response.use(
 
         return Promise.resolve({
           success: false,
-          errors: errors,
+          errors: { global: errorResponse?.data?.message || "Invalid data" },
           code: 422,
         });
       case 429:
@@ -133,10 +133,11 @@ httpClient.interceptors.response.use(
         //     message: "Permission Denied",
         //     isError: true
         // })
-        window.history.go(-1);
+        // window.history.go(-1);
         return Promise.resolve({
           success: false,
           code: 403,
+          errors: { global: errorResponse?.data?.message || "Access Denied" },
         });
       case 404:
         // showGlobalModalNotification({

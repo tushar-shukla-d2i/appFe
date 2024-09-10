@@ -2,5 +2,5 @@
  * Auth Screens
  */
 
-export { Signup } from "./Signup";
-export { Login } from "./Login";
+export { Signup } from "./signup";
+export { Login } from "./login";
