@@ -1,6 +1,6 @@
 import axios from "axios";
 // import { triggerGlobalNotification } from "../components/GlobalNotification";
-import { Config } from "./Config";
+import { Config } from "./config";
 import { navigate } from "./CommonUtils";
 import { TOKEN } from "../constants";
 

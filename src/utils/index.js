@@ -1,3 +1,3 @@
 export * from "./CommonUtils";
-export * from "./Config";
+export * from "./config";
 export * from "./HttpUtils";
