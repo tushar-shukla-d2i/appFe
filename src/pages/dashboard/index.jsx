@@ -6,7 +6,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FiCamera, FiEdit, FiLogOut } from "react-icons/fi";
 
-import { Config } from "../../utils/Config";
+import { Config } from "../../utils/config";
 import placeholderImg from "../../assets/react.svg";
 import { LocalStorageHelper } from "../../utils/HttpUtils";
 import { authApis, commonApis, rewardsApis } from "../../apis";
