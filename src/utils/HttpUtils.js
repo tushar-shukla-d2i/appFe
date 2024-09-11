@@ -59,6 +59,7 @@ httpClient.interceptors.request.use((config) => {
   // Do something before request is sent
   const token = LocalStorageHelper.getUserToken(TOKEN);
   config.headers["Content-type"] = contentType || `application/json`;
+  config.headers["ngrok-skip-browser-warning"] = true;
   config.headers["Authorization"] = `Bearer ${token}`;
   return config;
 });

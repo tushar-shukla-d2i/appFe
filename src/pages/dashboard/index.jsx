@@ -41,7 +41,11 @@ const Dashboard = () => {
     const resp = await commonApis.getMyData();
     if (resp?.success && resp?.data?.data?.userProfile) {
       setUserImage(
-        `${Config.LOCAL.IMAGE_BASE_URL}${resp?.data?.data?.userProfile}`
+        `${
+          window.location.host.includes("localhost")
+            ? `${Config.LOCAL.IMAGE_BASE_URL}`
+            : `${Config.DEV.IMAGE_BASE_URL}`
+        }${resp?.data?.data?.userProfile}`
       );
     }
   };
