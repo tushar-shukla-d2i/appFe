@@ -10,12 +10,19 @@ import * as Yup from "yup";
 
 import { AppRoutes } from "../../constants";
 import { authApis, commonApis } from "../../apis";
-import { Button, Input, ScreenHeader, Toast } from "../../components";
+import {
+  Button,
+  ErrorComponent,
+  Input,
+  ScreenHeader,
+  Toast,
+} from "../../components";
 
 const ChangePassword = () => {
   const { user_id } = useParams();
   const [searchParams] = useSearchParams();
   const [loading, setLoading] = useState(false);
+  const [apiError, setApiError] = useState("");
   const [toastMsg, setToastMsg] = useState("");
   const inviteCode = searchParams.get("inviteCode");
 
@@ -31,6 +38,7 @@ const ChangePassword = () => {
 
   const handleSubmit = async (values) => {
     setLoading(true);
+    setApiError("");
     const resp = inviteCode
       ? await authApis.resetPassword({ inviteCode, password: values.password })
       : await commonApis.me({
@@ -40,6 +48,8 @@ const ChangePassword = () => {
     setLoading(false);
     if (resp?.success) {
       setToastMsg("Password updated successfully!");
+    } else if (resp?.errors) {
+      setApiError(resp?.errors?.global);
     }
   };
 
@@ -49,6 +59,8 @@ const ChangePassword = () => {
 
       <div className="w-[60%] mx-auto mt-20">
         <div className="space-y-8 p-8 mt-8 bg-white rounded-lg shadow-lg border border-gray-300">
+          {!!apiError && <ErrorComponent error={apiError} />}
+
           <Formik
             enableReinitialize
             initialValues={{ password: "", confirmPassword: "" }}
