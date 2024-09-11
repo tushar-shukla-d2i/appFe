@@ -5,9 +5,6 @@
 import React from "react";
 import { ErrorMessage, Field } from "formik";
 
-const inputStyle =
-  "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5";
-
 const checkboxStyle = "mr-2 text-gray-700 h-4 w-4";
 
 const Input = ({
@@ -16,8 +13,17 @@ const Input = ({
   placeholder,
   type = "text",
   options = [],
+  disabled = false,
   ...rest
 }) => {
+  const inputStyle = `${
+    disabled ? "bg-neutral-100" : "bg-[#fcfcfd]"
+  } border border-gray-300 ${
+    disabled ? "text-gray-400" : "text-gray-900"
+  } placeholder-gray-600 disabled:placeholder-gray-400 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ${
+    disabled ? "cursor-not-allowed" : ""
+  }`;
+
   const phoneInputProps =
     type === "tel"
       ? {
@@ -33,12 +39,21 @@ const Input = ({
     <div>
       <label
         htmlFor={id}
-        className="block mb-2 text-sm font-medium text-gray-700"
+        className={`block mb-2 text-sm font-medium ${
+          disabled ? "text-gray-400" : "text-gray-700"
+        }`}
       >
         {label}
       </label>
       {type === "select" ? (
-        <Field as="select" name={id} id={id} className={inputStyle} {...rest}>
+        <Field
+          as="select"
+          name={id}
+          id={id}
+          className={inputStyle}
+          disabled={disabled}
+          {...rest}
+        >
           {options?.map?.((option) => (
             <option key={option.value} value={option.value}>
               {option.label}
@@ -52,6 +67,7 @@ const Input = ({
             name={id}
             id={id}
             className={checkboxStyle}
+            disabled={disabled}
             {...rest}
           />
           <span>{placeholder}</span>
@@ -63,6 +79,7 @@ const Input = ({
           id={id}
           className={inputStyle}
           placeholder={placeholder}
+          disabled={disabled}
           {...phoneInputProps}
           {...rest}
         />

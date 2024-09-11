@@ -48,7 +48,7 @@ const MetricCard = ({ data, route }) => {
       {data?.map?.((metric) => (
         <div
           key={metric._id}
-          className="relative bg-gray-200 p-6 text-center text-sm"
+          className="relative bg-gray-200 p-6 text-center text-sm cursor-pointer"
           onClick={() => handleMetricClick(metric)}
         >
           {isAdmin && (

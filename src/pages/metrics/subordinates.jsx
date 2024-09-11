@@ -29,9 +29,7 @@ const Subordinates = () => {
 
   const getSubordinatesList = async () => {
     const resp = await subordinatesApis.getSubordinates();
-    if (resp?.success) {
-      setSubordinatesList(resp?.data?.data);
-    }
+    setSubordinatesList(resp);
   };
 
   const getMetricData = async () => {

@@ -20,6 +20,23 @@ export const authApis = {
     }
   },
 
+  resetPassword: async (payload) => {
+    const { inviteCode, ...rest } = payload || {};
+    try {
+      const resp = await httpClient.post(
+        `${endpoints.RESET_PASSWORD}?inviteCode=${inviteCode}`,
+        rest
+      );
+      if (resp?.success) {
+        LocalStorageHelper.store(TOKEN, resp?.data?.data?.token);
+        LocalStorageHelper.store(USER_DATA, JSON.stringify(resp?.data?.data));
+      }
+      return resp;
+    } catch (error) {
+      console.log("Error resetPassword:-", error);
+    }
+  },
+
   login: async (payload) => {
     try {
       const resp = await httpClient.post(endpoints.lOGIN, payload);

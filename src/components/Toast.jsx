@@ -6,7 +6,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaRegCheckCircle } from "react-icons/fa";
 
-const Toast = ({ message, duration = 1000 }) => {
+const Toast = ({ message, duration = 1000, navigateUrl }) => {
   const navigate = useNavigate();
   const [visible, setVisible] = useState(false);
 
@@ -15,7 +15,7 @@ const Toast = ({ message, duration = 1000 }) => {
       setVisible(true);
       const timer = setTimeout(() => {
         setVisible(false);
-        navigate(-1);
+        navigate(navigateUrl ?? -1);
       }, duration);
 
       return () => clearTimeout(timer);

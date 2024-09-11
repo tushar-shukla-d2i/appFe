@@ -34,7 +34,7 @@ const App = () => {
           <Route path={`${AppRoutes.USER}/:user_id`} element={<ManageUser />} />
           <Route path={AppRoutes.MANAGE_USERS} element={<ManageUsers />} />
           <Route
-            path={`${AppRoutes.CHANGE_PASSWORD}/:user_id`}
+            path={`${AppRoutes.CHANGE_PASSWORD}/:user_id?`}
             element={<ChangePassword />}
           />
           <Route path={AppRoutes.DIRECTORY} element={<Directory />} />

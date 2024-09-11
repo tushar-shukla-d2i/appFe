@@ -4,16 +4,20 @@
 
 import React, { useState } from "react";
 import { useParams } from "react-router";
+import { useSearchParams } from "react-router-dom";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 
-import { commonApis } from "../../apis";
+import { AppRoutes } from "../../constants";
+import { authApis, commonApis } from "../../apis";
 import { Button, Input, ScreenHeader, Toast } from "../../components";
 
 const ChangePassword = () => {
   const { user_id } = useParams();
+  const [searchParams] = useSearchParams();
   const [loading, setLoading] = useState(false);
   const [toastMsg, setToastMsg] = useState("");
+  const inviteCode = searchParams.get("inviteCode");
 
   // Validation Schema
   const validationSchema = Yup.object().shape({
@@ -27,10 +31,12 @@ const ChangePassword = () => {
 
   const handleSubmit = async (values) => {
     setLoading(true);
-    const resp = await commonApis.me({
-      user_id,
-      payload: { password: values.password },
-    });
+    const resp = inviteCode
+      ? await authApis.resetPassword({ inviteCode, password: values.password })
+      : await commonApis.me({
+          user_id,
+          payload: { password: values.password },
+        });
     setLoading(false);
     if (resp?.success) {
       setToastMsg("Password updated successfully!");
@@ -39,7 +45,7 @@ const ChangePassword = () => {
 
   return (
     <div className="bg-white">
-      <ScreenHeader title="Change Password" />
+      {!inviteCode && <ScreenHeader title="Change Password" />}
 
       <div className="w-[60%] mx-auto mt-20">
         <div className="space-y-8 p-8 mt-8 bg-white rounded-lg shadow-lg border border-gray-300">
@@ -74,7 +80,10 @@ const ChangePassword = () => {
         </div>
       </div>
 
-      <Toast message={toastMsg} />
+      <Toast
+        message={toastMsg}
+        {...(inviteCode && { navigateUrl: AppRoutes.DASHBOARD })}
+      />
     </div>
   );
 };

@@ -13,6 +13,7 @@ const endpoints = {
   LOOKUPS: "lookups",
   ME: "me",
   SUBORDINATES: "subordinates",
+  RESET_PASSWORD: "resetpassword",
 };
 
 export { endpoints };

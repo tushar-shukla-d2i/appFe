@@ -9,7 +9,7 @@ const AppRoutes = {
   MANAGE_USERS: "/manage-users",
   USER: "/user",
   DIRECTORY: "/directory",
-  CHANGE_PASSWORD: "/change-password",
+  CHANGE_PASSWORD: "/reset-password",
   ADD_EDIT_METRIC: "/metric",
   METRICS: "/metrics",
   SUBORDINATES: "/subordinates",

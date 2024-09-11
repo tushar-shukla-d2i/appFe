@@ -26,6 +26,7 @@ const UserCard = ({ userData }) => {
     contactNumber,
     alternateContactNumber,
     birthday,
+    joiningDate,
   } = userData ?? {};
 
   const RenderDetails = ({ label, value, highlight }) => (
@@ -52,19 +53,25 @@ const UserCard = ({ userData }) => {
       </div>
 
       <div className="px-6 py-4 border-t border-gray-200">
-        <RenderDetails label="🩸" value={bloodGroup} />
+        {!!bloodGroup && <RenderDetails label="🩸" value={bloodGroup} />}
         <RenderDetails label="✉️" value={officialEmail} />
         {!!alternateEmail && (
           <RenderDetails label="📬" value={alternateEmail} />
         )}
-        <RenderDetails label="☎️" value={contactNumber} />
+        {!!contactNumber && <RenderDetails label="☎️" value={contactNumber} />}
         {!!alternateContactNumber && (
           <RenderDetails label="📲" value={alternateContactNumber} />
         )}
+        {!!birthday && (
+          <RenderDetails
+            label="🎂"
+            value={formatDateToShortMonthString(birthday)}
+            highlight={isToday(birthday)}
+          />
+        )}
         <RenderDetails
-          label="🎂"
-          value={formatDateToShortMonthString(birthday)}
-          highlight={isToday(birthday)}
+          label="🗓️"
+          value={formatDateToShortMonthString(joiningDate)}
         />
       </div>
     </div>
