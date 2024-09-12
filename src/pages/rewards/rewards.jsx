@@ -12,12 +12,22 @@ import { LocalStorageHelper } from "../../utils/HttpUtils";
 import { Loader, NoRecordsFound, ScreenHeader } from "../../components";
 
 const RewardItem = ({ reward }) => {
-  const { _id, submittedByName, points, comment, date } = reward ?? {};
+  const {
+    _id,
+    submittedByName,
+    points,
+    comment,
+    date,
+    metricName,
+    metricParentName,
+  } = reward ?? {};
 
   return (
     <div key={_id} className="mx-8 my-4 p-4 bg-gray-50 shadow rounded-lg">
       <div className="flex justify-between cursor-pointer">
-        <span className="font-bold">Rate: {points}/10</span>
+        <span className="font-bold whitespace-pre">
+          {`${metricParentName}  •  ${metricName}   >   ${points}/10`}
+        </span>
         <div className="flex items-center">
           <span className="font-semibold text-sm mr-4">
             {formattedMDYDate(date)}
