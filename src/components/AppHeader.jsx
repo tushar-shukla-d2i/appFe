@@ -19,10 +19,10 @@ const AppHeader = () => {
         <img
           src={d2iLogo}
           alt="logo"
-          className="rounded-full h-16 w-16 mr-4 hover:cursor-pointer"
+          className="rounded-full h-14 w-14 mr-4 hover:cursor-pointer"
           onClick={() => userData?._id && navigate(AppRoutes.DASHBOARD)}
         />
-        <h1 className="text-lg font-bold tracking-wider	">
+        <h1 className="text-sm font-bold tracking-wider	">
           Innovating Tomorrow, Today
         </h1>
       </div>
