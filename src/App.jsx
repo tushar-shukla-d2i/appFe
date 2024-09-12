@@ -2,8 +2,9 @@ import React, { useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
 
 import "./App.css";
-import { AppHeader } from "./components";
+import { Config } from "./utils/config";
 import { AppRoutes } from "./constants";
+import { AppHeader } from "./components";
 import {
   AddEditMetric,
   Attendance,
@@ -29,7 +30,7 @@ const App = () => {
     OneSignal.push(() => {
       OneSignal.init(
         {
-          appId: "61699a51-2649-4711-9dec-330d06a7d771",
+          appId: Config.ONE_SIGNAL_APP_ID,
           promptOptions: {
             slidedown: {
               enabled: true,
