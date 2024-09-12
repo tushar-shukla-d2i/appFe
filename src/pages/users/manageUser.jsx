@@ -52,40 +52,43 @@ const ManageUser = () => {
   const validationSchema = Yup.object().shape({
     firstName: Yup.string().required("First Name is required"),
     lastName: Yup.string().required("Last Name is required"),
-    parent_id:
-      !isAdmin || isMyProfile
-        ? Yup.string()?.nullable()
-        : Yup.string().required("Please assign the user to someone"),
     officialEmail: Yup.string()
       .email("Invalid email address")
       .required("Official Email is required"),
-    bloodGroup: isAdmin
-      ? Yup.string().nullable()
-      : Yup.string().required("Blood Group is required"),
+    parent_id:
+      !!isAdmin && !isMyProfile
+        ? Yup.string().required("Please assign the user to someone")
+        : Yup.string()?.nullable(),
+    joiningDate:
+      !!isAdmin && !user_id
+        ? Yup.date().required("Joining Date is required")
+        : Yup.string(),
+    bloodGroup:
+      isMyProfile && !userInfo?.bloodGroup
+        ? Yup.string().required("Blood Group is required")
+        : Yup.string().nullable(),
+    contactNumber:
+      isMyProfile && !userInfo?.contactNumber
+        ? Yup.string()
+            .matches(/^[0-9]+$/, "Contact Number must be numeric")
+            .required("Contact Number is required")
+        : Yup.string()
+            .matches(/^[0-9]+$/, "Contact Number must be numeric")
+            .nullable(),
+    birthday:
+      isMyProfile && !userInfo?.birthday
+        ? Yup.date()
+            .required("Birthday is required")
+            .max(new Date(maxDate), "You must be at least 18 years old")
+            .min(new Date(minDate), "You must be at most 55 years old")
+        : Yup.string(),
     alternateEmail: Yup.string()
       .email("Invalid alternate email address")
       .nullable(),
-    contactNumber: isAdmin
-      ? Yup.string()
-          .matches(/^[0-9]+$/, "Contact Number must be numeric")
-          .nullable()
-      : Yup.string()
-          .matches(/^[0-9]+$/, "Contact Number must be numeric")
-          .required("Contact Number is required"),
     alternateContactNumber: Yup.string()
       .matches(/^[0-9]*$/, "Alternate Contact Number must be numeric")
       .nullable(),
-    birthday: isAdmin
-      ? Yup.string()
-      : Yup.date()
-          .required("Birthday is required")
-          .max(new Date(maxDate), "You must be at least 18 years old")
-          .min(new Date(minDate), "You must be at most 55 years old"),
-    joiningDate:
-      isAdmin && !user_id
-        ? Yup.date().required("Joining Date is required")
-        : Yup.date(),
-    anniversaryDate: Yup.string(),
+    anniversaryDate: Yup.string().nullable(),
   });
 
   const handleSubmit = async (values) => {
@@ -211,14 +214,14 @@ const ManageUser = () => {
                   <Input
                     id="firstName"
                     label="First Name"
-                    placeholder="Enter your first name"
+                    placeholder="Enter first name"
                     disabled={!!user_id || loading}
                   />
 
                   <Input
                     id="lastName"
                     label="Last Name"
-                    placeholder="Enter your last name"
+                    placeholder="Enter last name"
                     disabled={!!user_id || loading}
                   />
 
@@ -228,7 +231,7 @@ const ManageUser = () => {
                       label="Blood Group"
                       type="select"
                       options={BLOOD_GROUPS}
-                      disabled={isAdmin || userInfo?.bloodGroup || loading}
+                      disabled={!isMyProfile || userInfo?.bloodGroup || loading}
                     />
                   )}
 
@@ -246,7 +249,7 @@ const ManageUser = () => {
                       type="date"
                       min={minDate}
                       max={maxDate}
-                      disabled={isAdmin || userInfo?.birthday || loading}
+                      disabled={!isMyProfile || userInfo?.birthday || loading}
                     />
                   )}
 
@@ -255,8 +258,6 @@ const ManageUser = () => {
                       id="anniversaryDate"
                       label="Anniversary (Optional)"
                       type="date"
-                      min={minDate}
-                      max={maxDate}
                       disabled={
                         !isMyProfile || userInfo?.anniversaryDate || loading
                       }
@@ -276,7 +277,7 @@ const ManageUser = () => {
                   <Input
                     id="officialEmail"
                     label="Official Email"
-                    placeholder="Enter your official email"
+                    placeholder="Enter official email"
                     type="email"
                     disabled={!!user_id || loading}
                   />
@@ -285,7 +286,7 @@ const ManageUser = () => {
                     <Input
                       id="alternateEmail"
                       label="Alternate Email (Optional)"
-                      placeholder="Enter your alternate email"
+                      placeholder="Enter alternate email"
                       type="email"
                       disabled={!isMyProfile || loading}
                     />
@@ -295,9 +296,11 @@ const ManageUser = () => {
                     <Input
                       id="contactNumber"
                       label="Contact Number"
-                      placeholder="Enter your contact number"
+                      placeholder="Enter contact number"
                       type="tel"
-                      disabled={isAdmin || userInfo?.contactNumber || loading}
+                      disabled={
+                        !isMyProfile || userInfo?.contactNumber || loading
+                      }
                     />
                   )}
 
@@ -305,7 +308,7 @@ const ManageUser = () => {
                     <Input
                       id="alternateContactNumber"
                       label="Alternate Contact Number (Optional)"
-                      placeholder="Enter your alternate contact number"
+                      placeholder="Enter alternate contact number"
                       type="tel"
                       disabled={!isMyProfile || loading}
                     />
