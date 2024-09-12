@@ -12,16 +12,15 @@ import { LocalStorageHelper } from "../../utils/HttpUtils";
 import { authApis, commonApis, rewardsApis } from "../../apis";
 import { AppRoutes, USER_DATA, USER_ROLES } from "../../constants";
 
-const IconButton = ({ label, img, icon, onClick }) => (
+const IconButton = ({ label, icon, onClick }) => (
   <div className="flex flex-col items-center">
     <div
-      className="w-14 h-14 bg-slate-100 flex items-center justify-center rounded-xl hover:cursor-pointer"
+      className="w-11 h-11 bg-slate-100 border flex items-center justify-center rounded-xl hover:cursor-pointer"
       onClick={onClick}
     >
-      {!!img && <img src={img} alt={label} className="w-6 h-6" />}
-      {!!icon && <span className="text-3xl">{icon}</span>}
+      {!!icon && <span className="text-xl">{icon}</span>}
     </div>
-    <p className="text-center font-semibold text-md mt-2">{label}</p>
+    <p className="text-center font-medium text-sm mt-2">{label}</p>
   </div>
 );
 
@@ -34,7 +33,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     getUserData();
-    getRewardsList();
+    !!_id && getRewardsList();
   }, []);
 
   const getUserData = async () => {
@@ -110,10 +109,9 @@ const Dashboard = () => {
             {officialEmail}
           </h2>
           <p className="text-white font-bold mt-2">
-            {`Total Rewards - (${rewards?.reduce?.(
-              (s, i) => s + i?.points,
-              0
-            )})`}
+            {`Total Rewards - (${
+              rewards?.reduce?.((s, i) => s + i?.points, 0) || "0"
+            })`}
           </p>
         </div>
         <button
