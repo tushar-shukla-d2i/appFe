@@ -58,13 +58,13 @@ const ManageUsers = () => {
       {/* Top Bar */}
       <ScreenHeader title="Manage Users" handleAddClick={handleAddClick} />
 
-      <div className="relative mx-11 mt-10 mb-5">
+      <div className="relative mx-7 sm:mx-11 mt-10 mb-5">
         <input
           type="text"
           placeholder="Search..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          className="p-2 border border-gray-500 rounded-lg w-full"
+          className="p-2 border border-gray-500 rounded-lg w-full sm:w-3/4"
         />
         <div className="absolute top-3 right-2">
           {searchQuery ? (
@@ -79,48 +79,47 @@ const ManageUsers = () => {
       </div>
 
       {/* Team Members List */}
-
-      {loading ? (
-        <Loader />
-      ) : filteredUsers?.length ? (
-        <ul className="mx-10 my-4">
-          {filteredUsers.map((user) => {
-            const { _id, firstName, lastName, officialEmail } = user ?? {};
-            return (
-              <li
-                key={_id}
-                className="items-center px-3 border-2 border-gray-200 bg-gray-50 mb-1"
-              >
-                <div className="flex items-center space-x-4">
-                  <div className="flex-shrink-0">
+      <div className="flex-1 overflow-y-auto">
+        {loading ? (
+          <Loader />
+        ) : filteredUsers?.length ? (
+          <ul className="mx-7 sm:mx-10 my-4 space-y-2">
+            {filteredUsers.map((user) => {
+              const { _id, firstName, lastName, officialEmail } = user ?? {};
+              return (
+                <li
+                  key={_id}
+                  className="flex items-center justify-between p-3 border border-gray-200 bg-gray-50 rounded-lg"
+                >
+                  <div className="flex items-center space-x-4 w-full">
                     <img
-                      className="w-16 h-w-16 rounded-full"
+                      className="w-12 h-12 sm:w-16 sm:h-16 rounded-full"
                       src={d2iLogo}
                       alt={`${firstName || "user"} image`}
                     />
-                  </div>
-                  <div className="flex-1">
-                    <p className="text-sm font-medium truncate">{`${
-                      firstName || ""
-                    } ${lastName || ""}`}</p>
-                    <p className="text-sm text-gray-500 truncate">
-                      {officialEmail}
-                    </p>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm sm:text-base font-medium truncate">{`${
+                        firstName || ""
+                      } ${lastName || ""}`}</p>
+                      <p className="text-xs sm:text-sm text-gray-500 truncate">
+                        {officialEmail}
+                      </p>
+                    </div>
                   </div>
                   <button
-                    className="cursor-pointer"
+                    className="cursor-pointer p-2 ml-4"
                     onClick={() => navigate(`${AppRoutes.USER}/${_id}`)}
                   >
-                    <MdEditNote className="text-3xl text-gray-500" />
+                    <MdEditNote className="text-2xl sm:text-3xl text-gray-500" />
                   </button>
-                </div>
-              </li>
-            );
-          })}
-        </ul>
-      ) : (
-        <NoRecordsFound />
-      )}
+                </li>
+              );
+            })}
+          </ul>
+        ) : (
+          <NoRecordsFound />
+        )}
+      </div>
     </div>
   );
 };

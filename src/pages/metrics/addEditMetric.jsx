@@ -8,6 +8,7 @@ import { Formik, Form } from "formik";
 import * as Yup from "yup";
 
 import { metricsApis } from "../../apis";
+import { MAX_METRIC_POINTS } from "../../constants";
 import { Button, Input, ScreenHeader, Toast } from "../../components";
 
 const AddEditMetric = () => {
@@ -45,7 +46,7 @@ const AddEditMetric = () => {
   const handleSubmit = async (values) => {
     setLoading(true);
     let payload = values;
-    payload = { ...payload, maximum_points: 10 };
+    payload = { ...payload, maximum_points: MAX_METRIC_POINTS };
     if (!metric_id && parent_id) {
       payload = { ...payload, parent_id };
     }
@@ -71,8 +72,8 @@ const AddEditMetric = () => {
         toastMsg={toastMsg}
       />
 
-      <div className="w-[60%] mx-auto mt-20">
-        <div className="space-y-8 p-8 mt-8 bg-white rounded-lg shadow-lg border border-gray-300">
+      <div className="w-[80%] mx-auto mt-16">
+        <div className="space-y-8 p-6 mt-8 bg-white rounded-lg shadow-lg border border-gray-300">
           <Formik
             enableReinitialize
             initialValues={{

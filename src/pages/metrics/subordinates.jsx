@@ -5,8 +5,9 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router";
 
-import { metricsApis, rewardsApis, subordinatesApis } from "../../apis";
+import { MAX_METRIC_POINTS } from "../../constants";
 import { Button, ScreenHeader, Toast } from "../../components";
+import { metricsApis, rewardsApis, subordinatesApis } from "../../apis";
 
 const minimum_points = -10;
 
@@ -17,7 +18,7 @@ const Subordinates = () => {
   const [metricData, setMetricData] = useState(null);
   const [comment, setComment] = useState("");
   const [subordinatesList, setSubordinatesList] = useState([]);
-  const [sliderValue, setSliderValue] = useState(10);
+  const [sliderValue, setSliderValue] = useState(MAX_METRIC_POINTS);
   const [selectedUser, setSelectedUser] = useState(null);
   const [toastMsg, setToastMsg] = useState("");
   const { label, maximum_points } = metricData ?? {};
@@ -74,7 +75,7 @@ const Subordinates = () => {
         }
         toastMsg={toastMsg}
       />
-      <div className="p-6 w-[80%] mx-auto mt-8 shadow-lg rounded-lg">
+      <div className="p-6 w-[85%] mx-auto mt-8 shadow-lg rounded-lg">
         <select
           className="w-full p-2 bg-gray-200 rounded"
           onChange={(e) => setSelectedUser(e.target.value)}
