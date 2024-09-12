@@ -2,15 +2,16 @@
  * Login page
  */
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 
 import { authApis } from "../../apis";
-import { AppRoutes } from "../../constants";
 import { emailRegex } from "../../utils/CommonUtils";
+import { AppRoutes, USER_DATA } from "../../constants";
 import { Button, ErrorComponent } from "../../components";
+import { LocalStorageHelper } from "../../utils/HttpUtils";
 
 const validationSchema = {
   officialEmail: Yup.string()
@@ -23,8 +24,15 @@ const validationSchema = {
 
 const Login = () => {
   const navigate = useNavigate();
+  const userData = JSON.parse(LocalStorageHelper.get(USER_DATA));
   const [apiError, setApiError] = useState("");
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (userData?._id) {
+      navigate(AppRoutes.DASHBOARD);
+    }
+  }, []);
 
   // Formik initialization
   const formik = useFormik({
