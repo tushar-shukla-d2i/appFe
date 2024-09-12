@@ -163,8 +163,8 @@ const ManageUser = () => {
         toastMsg={toastMsg}
       />
 
-      <div className="w-[70%] mx-auto mt-14">
-        <div className="p-8 space-y-4 rounded-lg shadow-lg border border-gray-300">
+      <div className="w-[85%] mx-auto mt-10">
+        <div className="p-6 space-y-4 rounded-lg shadow-lg border border-gray-300">
           <Formik
             enableReinitialize
             initialValues={{
