@@ -36,9 +36,11 @@ const RewardItem = ({ reward }) => {
       </div>
       <div className="mt-2 flex items-center">
         <p className="text-gray-600 text-sm font-semibold mt-1 mr-3">
-          {comment} -
+          {comment}
         </p>
-        <p className="text-gray-500 text-sm mt-1">{submittedByName}</p>
+      </div>
+      <div className="flex justify-end mt-2">
+        <p className="text-gray-500 text-xs">By - {submittedByName}</p>
       </div>
     </div>
   );

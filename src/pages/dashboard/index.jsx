@@ -18,7 +18,7 @@ const IconButton = ({ label, icon, onClick }) => (
       className="w-11 h-11 bg-slate-100 border flex items-center justify-center rounded-xl hover:cursor-pointer"
       onClick={onClick}
     >
-      {!!icon && <span className="text-xl">{icon}</span>}
+      {!!icon && <span className="text-2xl">{icon}</span>}
     </div>
     <p className="text-center font-medium text-sm mt-2">{label}</p>
   </div>
