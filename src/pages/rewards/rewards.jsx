@@ -6,9 +6,9 @@ import React, { useEffect, useState } from "react";
 import { FaSearch, FaTimes } from "react-icons/fa";
 
 import { rewardsApis } from "../../apis";
-import { USER_DATA } from "../../constants";
 import { formattedMDYDate } from "../../utils/CommonUtils";
 import { LocalStorageHelper } from "../../utils/HttpUtils";
+import { MAX_METRIC_POINTS, USER_DATA } from "../../constants";
 import { Loader, NoRecordsFound, ScreenHeader } from "../../components";
 
 const RewardItem = ({ reward }) => {
@@ -26,7 +26,7 @@ const RewardItem = ({ reward }) => {
     <div key={_id} className="mx-8 my-4 p-4 bg-gray-50 shadow rounded-lg">
       <div className="flex justify-between cursor-pointer">
         <span className="font-bold whitespace-pre">
-          {`${metricParentName}  •  ${metricName}   >   ${points}/10`}
+          {`${metricParentName}  •  ${metricName}   >   ${points}/${MAX_METRIC_POINTS}`}
         </span>
         <div className="flex items-center">
           <span className="font-semibold text-sm mr-4">

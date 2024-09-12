@@ -16,18 +16,19 @@ const Attendance = () => {
   const [attendance, setAttendance] = useState(null);
   const [date, setDate] = useState(new Date().toISOString().split("T")[0]);
   const [elapsedTime, setElapsedTime] = useState(null);
-  const [showPunchOutModal, setShowPunchOutModal] = useState(false); // Modal state
-  const [timesheetDescription, setTimesheetDescription] = useState(""); // Timesheet input
+  const [showPunchOutModal, setShowPunchOutModal] = useState(false);
+  const [timesheetDescription, setTimesheetDescription] = useState("");
   const timerRef = useRef(null);
   const userData = JSON.parse(LocalStorageHelper.get(USER_DATA));
   const isPunchedIn = attendance?.punchInTime;
+  const isToday = date === new Date().toISOString().split("T")[0];
 
   useEffect(() => {
     getAttendance();
   }, []);
 
   useEffect(() => {
-    if (isPunchedIn && !attendance?.punchOutTime) {
+    if (isToday && isPunchedIn && !attendance?.punchOutTime) {
       startTimer(attendance?.punchInTime);
     } else if (isPunchedIn && attendance?.punchOutTime) {
       const totalDuration = calculateTimeDifference(
@@ -114,19 +115,16 @@ const Attendance = () => {
     getAttendance();
   };
 
-  // Check if the selected date is today's date
-  const isToday = date === new Date().toISOString().split("T")[0];
-
   return (
-    <div className="bg-white">
+    <div className="bg-white min-h-screen">
       <ScreenHeader title="Attendance" />
 
-      <div className="w-[70%] mx-auto p-8 mt-8 bg-white rounded-lg shadow-lg border border-gray-300">
+      <div className="w-[80%] mx-auto p-8 mt-8 bg-white rounded-lg shadow-lg border border-gray-300">
         <div className="flex items-center mb-6">
           <button
             disabled={!isToday || !!attendance?.punchOutTime}
             onClick={handlePunchToggle}
-            className={`w-full py-2 px-4 mr-10 text-white rounded-md transition-all ${
+            className={`w-full py-2 px-4 mr-8 mt-4 text-white rounded-md transition-all ${
               isPunchedIn
                 ? "bg-red-500 hover:bg-red-600"
                 : "bg-green-500 hover:bg-green-600"
@@ -135,8 +133,8 @@ const Attendance = () => {
             {isPunchedIn ? "Punch Out" : "Punch In"}
           </button>
 
-          <div className="flex flex-col items-center ml-auto">
-            <div className="rounded-full h-16 w-16 border-[1px] border-blue-500 flex items-center justify-center text-[0.70rem] font-bold">
+          <div className="flex flex-col items-center mt-4 ml-auto">
+            <div className="rounded-full h-16 w-16 border border-blue-500 flex items-center justify-center text-xs md:text-sm font-bold">
               {elapsedTime ? formatElapsedTime(elapsedTime) : "00:00:00"}
             </div>
           </div>
@@ -172,7 +170,7 @@ const Attendance = () => {
       {/* Punch Out Modal */}
       {showPunchOutModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-400 bg-opacity-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg w-full mx-20">
+          <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md mx-4">
             <h2 className="text-xl font-semibold mb-4">Submit Timesheet</h2>
             <textarea
               value={timesheetDescription}
@@ -188,13 +186,13 @@ const Attendance = () => {
             <div className="mt-4 flex justify-center">
               <button
                 onClick={() => setShowPunchOutModal(false)}
-                className="bg-gray-300 w-[25%] text-gray-800 px-4 py-2 rounded-md mr-2"
+                className="bg-gray-300 text-gray-800 px-4 py-2 rounded-md mr-4"
               >
                 Cancel
               </button>
               <Button
                 onClick={handleSubmitTimesheet}
-                className="bg-blue-600 w-[25%] text-white px-4 py-2 rounded-md"
+                className="bg-blue-600 text-white px-4 py-2 rounded-md"
                 title="Submit"
               />
             </div>

@@ -23,3 +23,5 @@ export const PUNCHING_ACTIONS = {
   PUNCH_IN: "punchIn",
   PUNCH_OUT: "punchOut",
 };
+
+export const MAX_METRIC_POINTS = 10;

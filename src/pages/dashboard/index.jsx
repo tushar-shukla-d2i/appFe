@@ -83,7 +83,7 @@ const Dashboard = () => {
   return (
     <div>
       <div className="flex h-48 items-center w-full px-8 pt-6 pb-20 bg-[#72abbc] rounded-b-[3.5rem]">
-        <div className="relative h-20 w-20 rounded-full mr-8">
+        <div className="relative h-16 w-16 rounded-full mr-6">
           <img
             alt="user_img"
             src={userImage || placeholderImg}
@@ -105,11 +105,11 @@ const Dashboard = () => {
           </label>
         </div>
         <div className="flex-1">
-          <h1 className="text-white font-bold text-xl uppercase tracking-wider mb-2">{`${firstName} ${lastName}`}</h1>
+          <h1 className="text-white font-bold text-sm uppercase tracking-wider mb-2">{`${firstName} ${lastName}`}</h1>
           <h2 className="text-white font-medium sm:text-base md:text-lg lg:text-xl xl:text-2xl">
             {officialEmail}
           </h2>
-          <p className="text-white font-bold text-xl mt-2">
+          <p className="text-white font-bold mt-2">
             {`Total Rewards - (${rewards?.reduce?.(
               (s, i) => s + i?.points,
               0
@@ -120,7 +120,7 @@ const Dashboard = () => {
           onClick={handleLogout}
           className="bg-gray-100 p-3 rounded-full hover:bg-gray-200"
         >
-          <FiLogOut className="h-6 w-6 text-[#0375a7]" />
+          <FiLogOut className="h-4 w-4 text-[#0375a7]" />
         </button>
       </div>
 
@@ -169,7 +169,7 @@ const Dashboard = () => {
           {role === USER_ROLES.ADMIN && (
             <IconButton
               label="Attendance Records"
-              icon="📊"
+              icon="📈"
               onClick={() => navigate(AppRoutes.ATTENDANCE_RECORDS)}
             />
           )}

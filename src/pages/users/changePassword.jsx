@@ -57,8 +57,8 @@ const ChangePassword = () => {
     <div className="bg-white">
       {!inviteCode && <ScreenHeader title="Change Password" />}
 
-      <div className="w-[60%] mx-auto mt-20">
-        <div className="space-y-8 p-8 mt-8 bg-white rounded-lg shadow-lg border border-gray-300">
+      <div className="w-[80%] mx-auto mt-16">
+        <div className="space-y-8 p-6 mt-8 bg-white rounded-lg shadow-lg border border-gray-300">
           {!!apiError && <ErrorComponent error={apiError} />}
 
           <Formik
