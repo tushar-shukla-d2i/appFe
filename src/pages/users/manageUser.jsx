@@ -52,9 +52,10 @@ const ManageUser = () => {
   const validationSchema = Yup.object().shape({
     firstName: Yup.string().required("First Name is required"),
     lastName: Yup.string().required("Last Name is required"),
-    parent_id: user_id
-      ? Yup.string()
-      : Yup.string().required("Please assign the user to someone"),
+    parent_id:
+      !isAdmin || isMyProfile
+        ? Yup.string()?.nullable()
+        : Yup.string().required("Please assign the user to someone"),
     officialEmail: Yup.string()
       .email("Invalid email address")
       .required("Official Email is required"),
@@ -80,9 +81,11 @@ const ManageUser = () => {
           .required("Birthday is required")
           .max(new Date(maxDate), "You must be at least 18 years old")
           .min(new Date(minDate), "You must be at most 55 years old"),
-    joiningDate: isAdmin
-      ? Yup.date().required("Joining Date is required")
-      : Yup.string(),
+    joiningDate:
+      isAdmin && !user_id
+        ? Yup.date().required("Joining Date is required")
+        : Yup.date(),
+    anniversaryDate: Yup.string(),
   });
 
   const handleSubmit = async (values) => {
@@ -95,33 +98,37 @@ const ManageUser = () => {
     if (!values.alternateEmail) {
       delete payload.alternateEmail;
     }
-    if (isMyProfile) {
-      payload = UtilFunctions.deleteKeys(payload, [
-        "parent_id",
-        "passwordNeedsReset",
-        "userState",
-        "createdAt",
-        "__v",
-      ]);
+    if (!values.anniversaryDate) {
+      delete payload.anniversaryDate;
     }
-
+    payload = UtilFunctions.deleteKeys(payload, [
+      "password",
+      "userProfile",
+      "passwordNeedsReset",
+      "userState",
+      "createdAt",
+      "__v",
+      "role",
+      "employeeId",
+      "isActive",
+    ]);
+    if (isMyProfile) {
+      payload = UtilFunctions.deleteKeys(payload, ["parent_id"]);
+    }
     if (isAdmin && !user_id) {
       payload = UtilFunctions.deleteKeys(payload, [
         "birthday",
         "bloodGroup",
         "contactNumber",
+        "anniversaryDate",
       ]);
     }
-
     if (user_id) {
       payload = UtilFunctions.deleteKeys(payload, [
         "_id",
         "firstName",
         "lastName",
         "officialEmail",
-        "role",
-        "employeeId",
-        "isActive",
         "joiningDate",
       ]);
     }
@@ -171,6 +178,7 @@ const ManageUser = () => {
               birthday: "",
               parent_id: "",
               joiningDate: "",
+              anniversaryDate: "",
             }}
             validationSchema={validationSchema}
             onSubmit={handleSubmit}
@@ -188,6 +196,9 @@ const ManageUser = () => {
                           resp?.data?.data?.birthday?.split?.("T")[0] || "",
                         joiningDate:
                           resp?.data?.data?.joiningDate?.split?.("T")[0] || "",
+                        anniversaryDate:
+                          resp?.data?.data?.anniversaryDate?.split?.("T")[0] ||
+                          "",
                       });
                     }
                   };
@@ -211,7 +222,7 @@ const ManageUser = () => {
                     disabled={!!user_id || loading}
                   />
 
-                  {(!isAdmin || !!user_id) && (
+                  {!!user_id && (
                     <Input
                       id="bloodGroup"
                       label="Blood Group"
@@ -228,7 +239,7 @@ const ManageUser = () => {
                     disabled={!!user_id || loading}
                   />
 
-                  {(!isAdmin || !!user_id) && (
+                  {!!user_id && (
                     <Input
                       id="birthday"
                       label="Birthday"
@@ -236,6 +247,19 @@ const ManageUser = () => {
                       min={minDate}
                       max={maxDate}
                       disabled={isAdmin || userInfo?.birthday || loading}
+                    />
+                  )}
+
+                  {!!user_id && (
+                    <Input
+                      id="anniversaryDate"
+                      label="Anniversary (Optional)"
+                      type="date"
+                      min={minDate}
+                      max={maxDate}
+                      disabled={
+                        !isMyProfile || userInfo?.anniversaryDate || loading
+                      }
                     />
                   )}
 
@@ -257,7 +281,7 @@ const ManageUser = () => {
                     disabled={!!user_id || loading}
                   />
 
-                  {(!isAdmin || !!user_id) && (
+                  {!!user_id && (
                     <Input
                       id="alternateEmail"
                       label="Alternate Email (Optional)"
@@ -267,7 +291,7 @@ const ManageUser = () => {
                     />
                   )}
 
-                  {(!isAdmin || !!user_id) && (
+                  {!!user_id && (
                     <Input
                       id="contactNumber"
                       label="Contact Number"
@@ -277,7 +301,7 @@ const ManageUser = () => {
                     />
                   )}
 
-                  {(!isAdmin || !!user_id) && (
+                  {!!user_id && (
                     <Input
                       id="alternateContactNumber"
                       label="Alternate Contact Number (Optional)"
