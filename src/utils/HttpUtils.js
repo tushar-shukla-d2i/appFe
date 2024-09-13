@@ -152,6 +152,14 @@ httpClient.interceptors.response.use(
           success: false,
           code: 404,
         });
+      case 400:
+        return Promise.resolve({
+          success: false,
+          errors: {
+            global: errorResponse?.data?.message || "Validation error",
+          },
+          code: 422,
+        });
       case 500:
         return Promise.reject({
           success: false,
