@@ -1,7 +1,7 @@
 const Config = {
   DEV: {
     BE_BASE_URL:
-      "https://d2i.devlocal.in/",
+      "https://d2i.devlocal.in/api/v1",
     IMAGE_BASE_URL:
       "https://d2i.devlocal.in/api/uploads/",
   },
