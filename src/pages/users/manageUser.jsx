@@ -13,6 +13,7 @@ import { BLOOD_GROUPS, USER_DATA, USER_ROLES } from "../../constants";
 import { LocalStorageHelper } from "../../utils/HttpUtils";
 import {
   Button,
+  ErrorComponent,
   Input,
   ScreenHeader,
   ScreenWrapper,
@@ -34,6 +35,7 @@ const ManageUser = () => {
   const [loading, setLoading] = useState(false);
   const [toastMsg, setToastMsg] = useState("");
   const [userInfo, setUserInfo] = useState(null);
+  const [apiError, setApiError] = useState("");
   const [usersList, setUsersList] = useState([{ value: "", label: "Select" }]);
   const userData = JSON.parse(LocalStorageHelper.get(USER_DATA)) || {};
   const isAdmin = userData?.role === USER_ROLES.ADMIN;
@@ -98,6 +100,7 @@ const ManageUser = () => {
   });
 
   const handleSubmit = async (values) => {
+    setApiError("");
     setLoading(true);
     let payload = { ...values };
 
@@ -160,6 +163,8 @@ const ManageUser = () => {
           user_id ? "updated" : "added"
         } successfully!`
       );
+    } else if (resp?.errors) {
+      setApiError(resp?.errors?.global);
     }
   };
 
@@ -174,6 +179,8 @@ const ManageUser = () => {
         />
 
         <div className="w-[85%] mx-auto mt-10">
+          {!!apiError && <ErrorComponent error={apiError} />}
+
           <div className="p-6 space-y-4 rounded-lg shadow-lg border border-gray-300">
             <Formik
               enableReinitialize
