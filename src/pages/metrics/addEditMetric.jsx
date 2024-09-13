@@ -9,7 +9,13 @@ import * as Yup from "yup";
 
 import { metricsApis } from "../../apis";
 import { MAX_METRIC_POINTS } from "../../constants";
-import { Button, Input, ScreenHeader, Toast } from "../../components";
+import {
+  Button,
+  Input,
+  ScreenHeader,
+  ScreenWrapper,
+  Toast,
+} from "../../components";
 
 const AddEditMetric = () => {
   const { parent_id, metric_id } = useParams();
@@ -60,54 +66,56 @@ const AddEditMetric = () => {
   };
 
   return (
-    <div className="bg-white">
-      <ScreenHeader
-        title={
-          metric_id
-            ? "Edit Metric"
-            : parent_id
-            ? parentMetricData?.label
-            : "Add Metric"
-        }
-        toastMsg={toastMsg}
-      />
+    <ScreenWrapper>
+      <div className="bg-white">
+        <ScreenHeader
+          title={
+            metric_id
+              ? "Edit Metric"
+              : parent_id
+              ? parentMetricData?.label
+              : "Add Metric"
+          }
+          toastMsg={toastMsg}
+        />
 
-      <div className="w-[80%] mx-auto mt-16">
-        <div className="space-y-8 p-6 mt-8 bg-white rounded-lg shadow-lg border border-gray-300">
-          <Formik
-            enableReinitialize
-            initialValues={{
-              label: initialMetric?.label || "",
-              is_active: initialMetric?.is_active ?? true,
-            }}
-            validationSchema={validationSchema}
-            onSubmit={handleSubmit}
-          >
-            {({ isSubmitting }) => (
-              <Form className="space-y-8">
-                <Input
-                  id="label"
-                  label="Metric Name"
-                  placeholder="Enter the metric name"
-                  type="text"
-                  disabled={loading}
-                />
+        <div className="w-[80%] mx-auto mt-16">
+          <div className="space-y-8 p-6 mt-8 bg-white rounded-lg shadow-lg border border-gray-300">
+            <Formik
+              enableReinitialize
+              initialValues={{
+                label: initialMetric?.label || "",
+                is_active: initialMetric?.is_active ?? true,
+              }}
+              validationSchema={validationSchema}
+              onSubmit={handleSubmit}
+            >
+              {({ isSubmitting }) => (
+                <Form className="space-y-8">
+                  <Input
+                    id="label"
+                    label="Metric Name"
+                    placeholder="Enter the metric name"
+                    type="text"
+                    disabled={loading}
+                  />
 
-                <Input
-                  id="is_active"
-                  type="checkbox"
-                  placeholder="Active"
-                  disabled={loading}
-                />
+                  <Input
+                    id="is_active"
+                    type="checkbox"
+                    placeholder="Active"
+                    disabled={loading}
+                  />
 
-                <Button loading={loading || isSubmitting} title="Submit" />
-              </Form>
-            )}
-          </Formik>
+                  <Button loading={loading || isSubmitting} title="Submit" />
+                </Form>
+              )}
+            </Formik>
+          </div>
         </div>
+        <Toast message={toastMsg} />
       </div>
-      <Toast message={toastMsg} />
-    </div>
+    </ScreenWrapper>
   );
 };
 

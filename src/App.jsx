@@ -40,22 +40,10 @@ const App = () => {
               cancelButtonText: "NAHHH",
               categories: {
                 tags: [
-                  {
-                    tag: "react",
-                    label: "ReactJS",
-                  },
-                  {
-                    tag: "angular",
-                    label: "Angular",
-                  },
-                  {
-                    tag: "vue",
-                    label: "VueJS",
-                  },
-                  {
-                    tag: "js",
-                    label: "JavaScript",
-                  },
+                  { tag: "react", label: "ReactJS" },
+                  { tag: "angular", label: "Angular" },
+                  { tag: "vue", label: "VueJS" },
+                  { tag: "js", label: "JavaScript" },
                 ],
               },
             },

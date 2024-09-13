@@ -8,7 +8,12 @@ import { useParams } from "react-router";
 
 import { metricsApis } from "../../apis";
 import { AppRoutes } from "../../constants";
-import { Loader, MetricCard, ScreenHeader } from "../../components";
+import {
+  Loader,
+  MetricCard,
+  ScreenHeader,
+  ScreenWrapper,
+} from "../../components";
 
 const SubMetrics = () => {
   const navigate = useNavigate();
@@ -34,21 +39,23 @@ const SubMetrics = () => {
   };
 
   return (
-    <div className="bg-white min-h-screen flex flex-col">
-      <ScreenHeader
-        title={parentMetricData?.label}
-        handleAddClick={handleAddClick}
-      />
-
-      {loading ? (
-        <Loader />
-      ) : (
-        <MetricCard
-          data={parentMetricData?.sub_metrics}
-          route={AppRoutes.SUBORDINATES}
+    <ScreenWrapper>
+      <div className="bg-white min-h-screen flex flex-col">
+        <ScreenHeader
+          title={parentMetricData?.label}
+          handleAddClick={handleAddClick}
         />
-      )}
-    </div>
+
+        {loading ? (
+          <Loader />
+        ) : (
+          <MetricCard
+            data={parentMetricData?.sub_metrics}
+            route={AppRoutes.SUBORDINATES}
+          />
+        )}
+      </div>
+    </ScreenWrapper>
   );
 };
 

@@ -11,7 +11,13 @@ import { commonApis, userApis } from "../../apis";
 import { UtilFunctions } from "../../utils/CommonUtils";
 import { BLOOD_GROUPS, USER_DATA, USER_ROLES } from "../../constants";
 import { LocalStorageHelper } from "../../utils/HttpUtils";
-import { Button, Input, ScreenHeader, Toast } from "../../components";
+import {
+  Button,
+  Input,
+  ScreenHeader,
+  ScreenWrapper,
+  Toast,
+} from "../../components";
 
 // Helper function to calculate date range
 const getDateFromYearsAgo = (years) => {
@@ -158,176 +164,182 @@ const ManageUser = () => {
   };
 
   return (
-    <div className="bg-white">
-      <ScreenHeader
-        title={`${user_id ? "Edit" : "Add New"} ${
-          isMyProfile ? "Profile" : "User"
-        }`}
-        toastMsg={toastMsg}
-      />
+    <ScreenWrapper>
+      <div className="bg-white">
+        <ScreenHeader
+          title={`${user_id ? "Edit" : "Add New"} ${
+            isMyProfile ? "Profile" : "User"
+          }`}
+          toastMsg={toastMsg}
+        />
 
-      <div className="w-[85%] mx-auto mt-10">
-        <div className="p-6 space-y-4 rounded-lg shadow-lg border border-gray-300">
-          <Formik
-            enableReinitialize
-            initialValues={{
-              firstName: "",
-              lastName: "",
-              bloodGroup: "",
-              officialEmail: "",
-              alternateEmail: "",
-              contactNumber: "",
-              alternateContactNumber: "",
-              birthday: "",
-              parent_id: "",
-              joiningDate: "",
-              anniversaryDate: "",
-            }}
-            validationSchema={validationSchema}
-            onSubmit={handleSubmit}
-          >
-            {({ isSubmitting, setValues }) => {
-              useEffect(() => {
-                if (user_id) {
-                  const getUserData = async () => {
-                    const resp = await userApis.getUserById({ user_id });
-                    if (resp?.data?.data) {
-                      setUserInfo(resp?.data?.data);
-                      setValues({
-                        ...resp?.data?.data,
-                        birthday:
-                          resp?.data?.data?.birthday?.split?.("T")[0] || "",
-                        joiningDate:
-                          resp?.data?.data?.joiningDate?.split?.("T")[0] || "",
-                        anniversaryDate:
-                          resp?.data?.data?.anniversaryDate?.split?.("T")[0] ||
-                          "",
-                      });
-                    }
-                  };
-                  getUserData();
-                }
-              }, [user_id, setValues]);
-
-              return (
-                <Form className="space-y-5">
-                  <Input
-                    id="firstName"
-                    label="First Name"
-                    placeholder="Enter first name"
-                    disabled={!!user_id || loading}
-                  />
-
-                  <Input
-                    id="lastName"
-                    label="Last Name"
-                    placeholder="Enter last name"
-                    disabled={!!user_id || loading}
-                  />
-
-                  {!!user_id && (
-                    <Input
-                      id="bloodGroup"
-                      label="Blood Group"
-                      type="select"
-                      options={BLOOD_GROUPS}
-                      disabled={!isMyProfile || userInfo?.bloodGroup || loading}
-                    />
-                  )}
-
-                  <Input
-                    id="joiningDate"
-                    label="Joining Date"
-                    type="date"
-                    disabled={!!user_id || loading}
-                  />
-
-                  {!!user_id && (
-                    <Input
-                      id="birthday"
-                      label="Birthday"
-                      type="date"
-                      min={minDate}
-                      max={maxDate}
-                      disabled={!isMyProfile || userInfo?.birthday || loading}
-                    />
-                  )}
-
-                  {!!user_id && (
-                    <Input
-                      id="anniversaryDate"
-                      label="Anniversary (Optional)"
-                      type="date"
-                      disabled={
-                        !isMyProfile || userInfo?.anniversaryDate || loading
+        <div className="w-[85%] mx-auto mt-10">
+          <div className="p-6 space-y-4 rounded-lg shadow-lg border border-gray-300">
+            <Formik
+              enableReinitialize
+              initialValues={{
+                firstName: "",
+                lastName: "",
+                bloodGroup: "",
+                officialEmail: "",
+                alternateEmail: "",
+                contactNumber: "",
+                alternateContactNumber: "",
+                birthday: "",
+                parent_id: "",
+                joiningDate: "",
+                anniversaryDate: "",
+              }}
+              validationSchema={validationSchema}
+              onSubmit={handleSubmit}
+            >
+              {({ isSubmitting, setValues }) => {
+                useEffect(() => {
+                  if (user_id) {
+                    const getUserData = async () => {
+                      const resp = await userApis.getUserById({ user_id });
+                      if (resp?.data?.data) {
+                        setUserInfo(resp?.data?.data);
+                        setValues({
+                          ...resp?.data?.data,
+                          birthday:
+                            resp?.data?.data?.birthday?.split?.("T")[0] || "",
+                          joiningDate:
+                            resp?.data?.data?.joiningDate?.split?.("T")[0] ||
+                            "",
+                          anniversaryDate:
+                            resp?.data?.data?.anniversaryDate?.split?.(
+                              "T"
+                            )[0] || "",
+                        });
                       }
-                    />
-                  )}
+                    };
+                    getUserData();
+                  }
+                }, [user_id, setValues]);
 
-                  {!isMyProfile && (
+                return (
+                  <Form className="space-y-5">
                     <Input
-                      id="parent_id"
-                      label="Assign To"
-                      type="select"
-                      options={usersList}
-                      disabled={loading}
+                      id="firstName"
+                      label="First Name"
+                      placeholder="Enter first name"
+                      disabled={!!user_id || loading}
                     />
-                  )}
 
-                  <Input
-                    id="officialEmail"
-                    label="Official Email"
-                    placeholder="Enter official email"
-                    type="email"
-                    disabled={!!user_id || loading}
-                  />
-
-                  {!!user_id && (
                     <Input
-                      id="alternateEmail"
-                      label="Alternate Email (Optional)"
-                      placeholder="Enter alternate email"
+                      id="lastName"
+                      label="Last Name"
+                      placeholder="Enter last name"
+                      disabled={!!user_id || loading}
+                    />
+
+                    {!!user_id && (
+                      <Input
+                        id="bloodGroup"
+                        label="Blood Group"
+                        type="select"
+                        options={BLOOD_GROUPS}
+                        disabled={
+                          !isMyProfile || userInfo?.bloodGroup || loading
+                        }
+                      />
+                    )}
+
+                    <Input
+                      id="joiningDate"
+                      label="Joining Date"
+                      type="date"
+                      disabled={!!user_id || loading}
+                    />
+
+                    {!!user_id && (
+                      <Input
+                        id="birthday"
+                        label="Birthday"
+                        type="date"
+                        min={minDate}
+                        max={maxDate}
+                        disabled={!isMyProfile || userInfo?.birthday || loading}
+                      />
+                    )}
+
+                    {!!user_id && (
+                      <Input
+                        id="anniversaryDate"
+                        label="Anniversary (Optional)"
+                        type="date"
+                        disabled={
+                          !isMyProfile || userInfo?.anniversaryDate || loading
+                        }
+                      />
+                    )}
+
+                    {!isMyProfile && (
+                      <Input
+                        id="parent_id"
+                        label="Assign To"
+                        type="select"
+                        options={usersList}
+                        disabled={loading}
+                      />
+                    )}
+
+                    <Input
+                      id="officialEmail"
+                      label="Official Email"
+                      placeholder="Enter official email"
                       type="email"
-                      disabled={!isMyProfile || loading}
+                      disabled={!!user_id || loading}
                     />
-                  )}
 
-                  {!!user_id && (
-                    <Input
-                      id="contactNumber"
-                      label="Contact Number"
-                      placeholder="Enter contact number"
-                      type="tel"
-                      disabled={
-                        !isMyProfile || userInfo?.contactNumber || loading
-                      }
+                    {!!user_id && (
+                      <Input
+                        id="alternateEmail"
+                        label="Alternate Email (Optional)"
+                        placeholder="Enter alternate email"
+                        type="email"
+                        disabled={!isMyProfile || loading}
+                      />
+                    )}
+
+                    {!!user_id && (
+                      <Input
+                        id="contactNumber"
+                        label="Contact Number"
+                        placeholder="Enter contact number"
+                        type="tel"
+                        disabled={
+                          !isMyProfile || userInfo?.contactNumber || loading
+                        }
+                      />
+                    )}
+
+                    {!!user_id && (
+                      <Input
+                        id="alternateContactNumber"
+                        label="Alternate Contact Number (Optional)"
+                        placeholder="Enter alternate contact number"
+                        type="tel"
+                        disabled={!isMyProfile || loading}
+                      />
+                    )}
+
+                    <Button
+                      loading={loading || isSubmitting}
+                      title={`${user_id ? "Update" : "Add"} ${
+                        isMyProfile ? "Profile" : "User"
+                      }`}
                     />
-                  )}
-
-                  {!!user_id && (
-                    <Input
-                      id="alternateContactNumber"
-                      label="Alternate Contact Number (Optional)"
-                      placeholder="Enter alternate contact number"
-                      type="tel"
-                      disabled={!isMyProfile || loading}
-                    />
-                  )}
-
-                  <Button
-                    loading={loading || isSubmitting}
-                    title={`${user_id ? "Update" : "Add"} ${
-                      isMyProfile ? "Profile" : "User"
-                    }`}
-                  />
-                </Form>
-              );
-            }}
-          </Formik>
+                  </Form>
+                );
+              }}
+            </Formik>
+          </div>
         </div>
+        <Toast message={toastMsg} />
       </div>
-      <Toast message={toastMsg} />
-    </div>
+    </ScreenWrapper>
   );
 };
 

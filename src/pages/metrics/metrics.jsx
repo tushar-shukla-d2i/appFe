@@ -7,7 +7,12 @@ import { useNavigate } from "react-router-dom";
 
 import { metricsApis } from "../../apis";
 import { AppRoutes } from "../../constants";
-import { Loader, MetricCard, ScreenHeader } from "../../components";
+import {
+  Loader,
+  MetricCard,
+  ScreenHeader,
+  ScreenWrapper,
+} from "../../components";
 
 const Metrics = () => {
   const navigate = useNavigate();
@@ -32,15 +37,17 @@ const Metrics = () => {
   };
 
   return (
-    <div className="bg-white min-h-screen flex flex-col">
-      <ScreenHeader title="Metrics" handleAddClick={handleAddClick} />
+    <ScreenWrapper>
+      <div className="bg-white min-h-screen flex flex-col">
+        <ScreenHeader title="Metrics" handleAddClick={handleAddClick} />
 
-      {loading ? (
-        <Loader />
-      ) : (
-        <MetricCard data={metricsList} route={AppRoutes.METRICS} />
-      )}
-    </div>
+        {loading ? (
+          <Loader />
+        ) : (
+          <MetricCard data={metricsList} route={AppRoutes.METRICS} />
+        )}
+      </div>
+    </ScreenWrapper>
   );
 };
 

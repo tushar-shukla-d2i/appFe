@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { FiCamera, FiEdit, FiLogOut } from "react-icons/fi";
 
 import { Config } from "../../utils/config";
+import { ScreenWrapper } from "../../components";
 import placeholderImg from "../../assets/react.svg";
 import { LocalStorageHelper } from "../../utils/HttpUtils";
 import { authApis, commonApis, rewardsApis } from "../../apis";
@@ -80,100 +81,102 @@ const Dashboard = () => {
   };
 
   return (
-    <div>
-      <div className="flex h-48 items-center w-full px-8 pt-6 pb-20 bg-[#72abbc] rounded-b-[3.5rem]">
-        <div className="relative h-16 w-16 rounded-full mr-6">
-          <img
-            alt="user_img"
-            src={userImage || placeholderImg}
-            className="h-full w-full rounded-full hover:cursor-pointer"
-          />
-          <label className="absolute bottom-2 -right-2 flex items-center justify-center cursor-pointer">
-            {userImage ? (
-              <FiEdit className="text-white text-xl" />
-            ) : (
-              <FiCamera className="text-white text-xl" />
-            )}
-            <input
-              type="file"
-              id="image"
-              accept="image/*"
-              onChange={handleImageUpload}
-              className="hidden"
+    <ScreenWrapper>
+      <div>
+        <div className="flex h-48 items-center w-full px-8 pt-6 pb-20 bg-[#72abbc] rounded-b-[3.5rem]">
+          <div className="relative h-16 w-16 rounded-full mr-6">
+            <img
+              alt="user_img"
+              src={userImage || placeholderImg}
+              className="h-full w-full rounded-full hover:cursor-pointer"
             />
-          </label>
+            <label className="absolute bottom-2 -right-2 flex items-center justify-center cursor-pointer">
+              {userImage ? (
+                <FiEdit className="text-white text-xl" />
+              ) : (
+                <FiCamera className="text-white text-xl" />
+              )}
+              <input
+                type="file"
+                id="image"
+                accept="image/*"
+                onChange={handleImageUpload}
+                className="hidden"
+              />
+            </label>
+          </div>
+          <div className="flex-1">
+            <h1 className="text-white font-bold text-sm uppercase tracking-wider mb-2">{`${firstName} ${lastName}`}</h1>
+            <h2 className="text-white font-medium sm:text-base md:text-lg lg:text-xl xl:text-2xl">
+              {officialEmail}
+            </h2>
+            <p className="text-white font-bold mt-2">
+              {`Total Rewards - (${
+                rewards?.reduce?.((s, i) => s + i?.points, 0) || "0"
+              })`}
+            </p>
+          </div>
+          <button
+            onClick={handleLogout}
+            className="bg-gray-100 p-3 rounded-full hover:bg-gray-200"
+          >
+            <FiLogOut className="h-4 w-4 text-[#0375a7]" />
+          </button>
         </div>
-        <div className="flex-1">
-          <h1 className="text-white font-bold text-sm uppercase tracking-wider mb-2">{`${firstName} ${lastName}`}</h1>
-          <h2 className="text-white font-medium sm:text-base md:text-lg lg:text-xl xl:text-2xl">
-            {officialEmail}
-          </h2>
-          <p className="text-white font-bold mt-2">
-            {`Total Rewards - (${
-              rewards?.reduce?.((s, i) => s + i?.points, 0) || "0"
-            })`}
-          </p>
-        </div>
-        <button
-          onClick={handleLogout}
-          className="bg-gray-100 p-3 rounded-full hover:bg-gray-200"
-        >
-          <FiLogOut className="h-4 w-4 text-[#0375a7]" />
-        </button>
-      </div>
 
-      <div className="bg-gray-50 mx-6 mt-[-3rem] mb-10 px-4 py-6 shadow-2xl rounded-lg">
-        <h1 className="font-bold text-lg tracking-wider mb-8">Features</h1>
-        <div className="grid grid-cols-3 gap-x-4 gap-y-8">
-          {role === USER_ROLES.ADMIN && (
+        <div className="bg-gray-50 mx-6 mt-[-3rem] mb-10 px-4 py-6 shadow-2xl rounded-lg">
+          <h1 className="font-bold text-lg tracking-wider mb-8">Features</h1>
+          <div className="grid grid-cols-3 gap-x-4 gap-y-8">
+            {role === USER_ROLES.ADMIN && (
+              <IconButton
+                label="Manage Users"
+                icon="🗂️"
+                onClick={() => navigate(AppRoutes.MANAGE_USERS)}
+              />
+            )}
             <IconButton
-              label="Manage Users"
-              icon="🗂️"
-              onClick={() => navigate(AppRoutes.MANAGE_USERS)}
+              label="Profile"
+              icon="🧑‍💼"
+              onClick={() => navigate(`${AppRoutes.USER}/${_id}`)}
             />
-          )}
-          <IconButton
-            label="Profile"
-            icon="🧑‍💼"
-            onClick={() => navigate(`${AppRoutes.USER}/${_id}`)}
-          />
-          <IconButton
-            label="Change Password"
-            icon="🔒"
-            onClick={() => navigate(`${AppRoutes.CHANGE_PASSWORD}/${_id}`)}
-          />
-          <IconButton
-            label="Directory"
-            icon="👥"
-            onClick={() => navigate(AppRoutes.DIRECTORY)}
-          />
-          <IconButton
-            label="Metrics"
-            icon="🎁"
-            onClick={() => navigate(AppRoutes.METRICS)}
-          />
-          {!!rewards?.length && (
             <IconButton
-              label="Rewards"
-              icon="🎖️"
-              onClick={() => navigate(AppRoutes.REWARDS)}
+              label="Change Password"
+              icon="🔒"
+              onClick={() => navigate(`${AppRoutes.CHANGE_PASSWORD}/${_id}`)}
             />
-          )}
-          <IconButton
-            label="Attendance"
-            icon="📅"
-            onClick={() => navigate(AppRoutes.ATTENDANCE)}
-          />
-          {role === USER_ROLES.ADMIN && (
             <IconButton
-              label="Attendance Records"
-              icon="📈"
-              onClick={() => navigate(AppRoutes.ATTENDANCE_RECORDS)}
+              label="Directory"
+              icon="👥"
+              onClick={() => navigate(AppRoutes.DIRECTORY)}
             />
-          )}
+            <IconButton
+              label="Metrics"
+              icon="🎁"
+              onClick={() => navigate(AppRoutes.METRICS)}
+            />
+            {!!rewards?.length && (
+              <IconButton
+                label="Rewards"
+                icon="🎖️"
+                onClick={() => navigate(AppRoutes.REWARDS)}
+              />
+            )}
+            <IconButton
+              label="Attendance"
+              icon="📅"
+              onClick={() => navigate(AppRoutes.ATTENDANCE)}
+            />
+            {role === USER_ROLES.ADMIN && (
+              <IconButton
+                label="Attendance Records"
+                icon="📈"
+                onClick={() => navigate(AppRoutes.ATTENDANCE_RECORDS)}
+              />
+            )}
+          </div>
         </div>
       </div>
-    </div>
+    </ScreenWrapper>
   );
 };
 
