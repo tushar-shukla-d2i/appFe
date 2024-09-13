@@ -2,4 +2,5 @@
 eval "$(ssh-agent -s)"
 ssh-add /home/ubuntu/.ssh/d2iapp
 git pull
+rm -rf dist
 npm run build
