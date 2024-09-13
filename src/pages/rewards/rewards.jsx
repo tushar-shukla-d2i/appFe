@@ -9,7 +9,12 @@ import { rewardsApis } from "../../apis";
 import { formattedMDYDate } from "../../utils/CommonUtils";
 import { LocalStorageHelper } from "../../utils/HttpUtils";
 import { MAX_METRIC_POINTS, USER_DATA } from "../../constants";
-import { Loader, NoRecordsFound, ScreenHeader } from "../../components";
+import {
+  Loader,
+  NoRecordsFound,
+  ScreenHeader,
+  ScreenWrapper,
+} from "../../components";
 
 const RewardItem = ({ reward }) => {
   const {
@@ -91,40 +96,42 @@ const Rewards = () => {
   };
 
   return (
-    <div className="bg-white min-h-screen flex flex-col">
-      {/* Top Bar */}
-      <ScreenHeader title="Rewards" />
+    <ScreenWrapper>
+      <div className="bg-white min-h-screen flex flex-col">
+        {/* Top Bar */}
+        <ScreenHeader title="Rewards" />
 
-      {/* Search Input */}
-      <div className="mt-10 mb-6 mx-10 relative">
-        <input
-          type="text"
-          placeholder="Search..."
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          className="p-2 border border-gray-500 rounded w-full pr-10"
-        />
-        <div className="absolute top-3 right-2">
-          {searchQuery ? (
-            <FaTimes
-              className="cursor-pointer text-gray-500"
-              onClick={() => setSearchQuery("")}
-            />
-          ) : (
-            <FaSearch className="text-gray-500" />
-          )}
+        {/* Search Input */}
+        <div className="mt-10 mb-6 mx-10 relative">
+          <input
+            type="text"
+            placeholder="Search..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="p-2 border border-gray-500 rounded w-full pr-10"
+          />
+          <div className="absolute top-3 right-2">
+            {searchQuery ? (
+              <FaTimes
+                className="cursor-pointer text-gray-500"
+                onClick={() => setSearchQuery("")}
+              />
+            ) : (
+              <FaSearch className="text-gray-500" />
+            )}
+          </div>
         </div>
+        {loading ? (
+          <Loader />
+        ) : filteredRewards?.length ? (
+          filteredRewards?.map?.((reward, index) => (
+            <RewardItem key={index} reward={reward} />
+          ))
+        ) : (
+          <NoRecordsFound />
+        )}
       </div>
-      {loading ? (
-        <Loader />
-      ) : filteredRewards?.length ? (
-        filteredRewards?.map?.((reward, index) => (
-          <RewardItem key={index} reward={reward} />
-        ))
-      ) : (
-        <NoRecordsFound />
-      )}
-    </div>
+    </ScreenWrapper>
   );
 };
 

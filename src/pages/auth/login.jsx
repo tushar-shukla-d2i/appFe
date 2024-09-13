@@ -10,8 +10,8 @@ import * as Yup from "yup";
 import { authApis } from "../../apis";
 import { emailRegex } from "../../utils/CommonUtils";
 import { AppRoutes, USER_DATA } from "../../constants";
-import { Button, ErrorComponent } from "../../components";
 import { LocalStorageHelper } from "../../utils/HttpUtils";
+import { Button, ErrorComponent, ScreenWrapper } from "../../components";
 
 const validationSchema = {
   officialEmail: Yup.string()
@@ -52,7 +52,7 @@ const Login = () => {
   });
 
   return (
-    <>
+    <ScreenWrapper>
       <section className="bg-gray-100 h-screen flex justify-center items-center">
         <div className="w-full max-w-md bg-gray-50 rounded-lg shadow-lg border border-gray-300">
           <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
@@ -123,7 +123,7 @@ const Login = () => {
           </div>
         </div>
       </section>
-    </>
+    </ScreenWrapper>
   );
 };
 

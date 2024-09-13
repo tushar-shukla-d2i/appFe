@@ -15,6 +15,7 @@ import {
   ErrorComponent,
   Input,
   ScreenHeader,
+  ScreenWrapper,
   Toast,
 } from "../../components";
 
@@ -54,49 +55,51 @@ const ChangePassword = () => {
   };
 
   return (
-    <div className="bg-white">
-      {!inviteCode && <ScreenHeader title="Change Password" />}
+    <ScreenWrapper>
+      <div className="bg-white">
+        {!inviteCode && <ScreenHeader title="Change Password" />}
 
-      <div className="w-[80%] mx-auto mt-16">
-        <div className="space-y-8 p-6 mt-8 bg-white rounded-lg shadow-lg border border-gray-300">
-          {!!apiError && <ErrorComponent error={apiError} />}
+        <div className="w-[80%] mx-auto mt-16">
+          <div className="space-y-8 p-6 mt-8 bg-white rounded-lg shadow-lg border border-gray-300">
+            {!!apiError && <ErrorComponent error={apiError} />}
 
-          <Formik
-            enableReinitialize
-            initialValues={{ password: "", confirmPassword: "" }}
-            validationSchema={validationSchema}
-            onSubmit={handleSubmit}
-          >
-            {({ isSubmitting }) => (
-              <Form className="space-y-8">
-                <Input
-                  id="password"
-                  label="Password"
-                  placeholder="Enter your password"
-                  type="password"
-                  disabled={loading}
-                />
+            <Formik
+              enableReinitialize
+              initialValues={{ password: "", confirmPassword: "" }}
+              validationSchema={validationSchema}
+              onSubmit={handleSubmit}
+            >
+              {({ isSubmitting }) => (
+                <Form className="space-y-8">
+                  <Input
+                    id="password"
+                    label="Password"
+                    placeholder="Enter your password"
+                    type="password"
+                    disabled={loading}
+                  />
 
-                <Input
-                  id="confirmPassword"
-                  label="Confirm Password"
-                  placeholder="Confirm your password"
-                  type="password"
-                  disabled={loading}
-                />
+                  <Input
+                    id="confirmPassword"
+                    label="Confirm Password"
+                    placeholder="Confirm your password"
+                    type="password"
+                    disabled={loading}
+                  />
 
-                <Button loading={loading || isSubmitting} title="Submit" />
-              </Form>
-            )}
-          </Formik>
+                  <Button loading={loading || isSubmitting} title="Submit" />
+                </Form>
+              )}
+            </Formik>
+          </div>
         </div>
-      </div>
 
-      <Toast
-        message={toastMsg}
-        {...(inviteCode && { navigateUrl: AppRoutes.DASHBOARD })}
-      />
-    </div>
+        <Toast
+          message={toastMsg}
+          {...(inviteCode && { navigateUrl: AppRoutes.DASHBOARD })}
+        />
+      </div>
+    </ScreenWrapper>
   );
 };
 

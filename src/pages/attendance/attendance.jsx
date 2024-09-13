@@ -5,9 +5,9 @@
 import React, { useEffect, useState, useRef } from "react";
 
 import { attendanceApis } from "../../apis";
-import { Button, ScreenHeader } from "../../components";
 import { LocalStorageHelper } from "../../utils/HttpUtils";
 import { PUNCHING_ACTIONS, USER_DATA } from "../../constants";
+import { Button, ScreenHeader, ScreenWrapper } from "../../components";
 import { convertUTCtoIST, UtilFunctions } from "../../utils/CommonUtils";
 
 const { PUNCH_IN, PUNCH_OUT } = PUNCHING_ACTIONS;
@@ -116,90 +116,92 @@ const Attendance = () => {
   };
 
   return (
-    <div className="bg-white min-h-screen">
-      <ScreenHeader title="Attendance" />
+    <ScreenWrapper>
+      <div className="bg-white min-h-screen">
+        <ScreenHeader title="Attendance" />
 
-      <div className="w-[80%] mx-auto p-8 mt-8 bg-white rounded-lg shadow-lg border border-gray-300">
-        <div className="flex items-center mb-6">
-          <button
-            disabled={!isToday || !!attendance?.punchOutTime}
-            onClick={handlePunchToggle}
-            className={`w-full py-2 px-4 mr-8 mt-4 text-white rounded-md transition-all ${
-              isPunchedIn
-                ? "bg-red-500 hover:bg-red-600"
-                : "bg-green-500 hover:bg-green-600"
-            } disabled:text-white disabled:rounded-md disabled:bg-gray-400`}
-          >
-            {isPunchedIn ? "Punch Out" : "Punch In"}
-          </button>
+        <div className="w-[80%] mx-auto p-8 mt-8 bg-white rounded-lg shadow-lg border border-gray-300">
+          <div className="flex items-center mb-6">
+            <button
+              disabled={!isToday || !!attendance?.punchOutTime}
+              onClick={handlePunchToggle}
+              className={`w-full py-2 px-4 mr-8 mt-4 text-white rounded-md transition-all ${
+                isPunchedIn
+                  ? "bg-red-500 hover:bg-red-600"
+                  : "bg-green-500 hover:bg-green-600"
+              } disabled:text-white disabled:rounded-md disabled:bg-gray-400`}
+            >
+              {isPunchedIn ? "Punch Out" : "Punch In"}
+            </button>
 
-          <div className="flex flex-col items-center mt-4 ml-auto">
-            <div className="rounded-full h-16 w-16 border border-blue-500 flex items-center justify-center text-xs md:text-sm font-bold">
-              {elapsedTime ? formatElapsedTime(elapsedTime) : "00:00:00"}
+            <div className="flex flex-col items-center mt-4 ml-auto">
+              <div className="rounded-full h-16 w-16 border border-blue-500 flex items-center justify-center text-xs md:text-sm font-bold">
+                {elapsedTime ? formatElapsedTime(elapsedTime) : "00:00:00"}
+              </div>
             </div>
           </div>
-        </div>
 
-        <div className="my-6">
-          <label htmlFor="datePicker" className="block text-gray-700 mb-2">
-            Select Date:
-          </label>
-          <input
-            id="datePicker"
-            type="date"
-            value={date}
-            onChange={handleDateChange}
-            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer"
-          />
-        </div>
-
-        <div className="flex items-center text-gray-700 mt-10">
-          <span className="block font-medium mr-4">Punch in time:</span>
-          <span className="text-lg font-semibold">
-            {convertUTCtoIST(attendance?.punchInTime)}
-          </span>
-        </div>
-        <div className="flex items-center text-gray-700">
-          <span className="block font-medium mr-4">Punch out time:</span>
-          <span className="text-lg font-semibold">
-            {convertUTCtoIST(attendance?.punchOutTime)}
-          </span>
-        </div>
-      </div>
-
-      {/* Punch Out Modal */}
-      {showPunchOutModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-400 bg-opacity-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md mx-4">
-            <h2 className="text-xl font-semibold mb-4">Submit Timesheet</h2>
-            <textarea
-              value={timesheetDescription}
-              onChange={(e) =>
-                e.target.value !== " " &&
-                setTimesheetDescription(e.target.value)
-              }
-              rows="5"
-              className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="Describe today's work..."
-              maxLength={200}
+          <div className="my-6">
+            <label htmlFor="datePicker" className="block text-gray-700 mb-2">
+              Select Date:
+            </label>
+            <input
+              id="datePicker"
+              type="date"
+              value={date}
+              onChange={handleDateChange}
+              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer"
             />
-            <div className="mt-4 flex justify-center">
-              <button
-                onClick={() => setShowPunchOutModal(false)}
-                className="bg-gray-300 text-gray-800 px-4 py-2 rounded-md mr-4"
-              >
-                Cancel
-              </button>
-              <Button
-                onClick={handleSubmitTimesheet}
-                className="bg-blue-600 text-white px-4 py-2 rounded-md"
-                title="Submit"
-              />
-            </div>
+          </div>
+
+          <div className="flex items-center text-gray-700 mt-10">
+            <span className="block font-medium mr-4">Punch in time:</span>
+            <span className="text-lg font-semibold">
+              {convertUTCtoIST(attendance?.punchInTime)}
+            </span>
+          </div>
+          <div className="flex items-center text-gray-700">
+            <span className="block font-medium mr-4">Punch out time:</span>
+            <span className="text-lg font-semibold">
+              {convertUTCtoIST(attendance?.punchOutTime)}
+            </span>
           </div>
         </div>
-      )}
-    </div>
+
+        {/* Punch Out Modal */}
+        {showPunchOutModal && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-400 bg-opacity-50">
+            <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md mx-4">
+              <h2 className="text-xl font-semibold mb-4">Submit Timesheet</h2>
+              <textarea
+                value={timesheetDescription}
+                onChange={(e) =>
+                  e.target.value !== " " &&
+                  setTimesheetDescription(e.target.value)
+                }
+                rows="5"
+                className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="Describe today's work..."
+                maxLength={200}
+              />
+              <div className="mt-4 flex justify-center">
+                <button
+                  onClick={() => setShowPunchOutModal(false)}
+                  className="bg-gray-300 text-gray-800 px-4 py-2 rounded-md mr-4"
+                >
+                  Cancel
+                </button>
+                <Button
+                  onClick={handleSubmitTimesheet}
+                  className="bg-blue-600 text-white px-4 py-2 rounded-md"
+                  title="Submit"
+                />
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    </ScreenWrapper>
   );
 };
 

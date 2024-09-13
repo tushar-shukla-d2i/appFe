@@ -10,6 +10,7 @@ import {
   Loader,
   NoRecordsFound,
   ScreenHeader,
+  ScreenWrapper,
   UserCard,
 } from "../../components";
 
@@ -60,44 +61,46 @@ const Directory = () => {
   };
 
   return (
-    <div className="bg-white min-h-screen flex flex-col">
-      {/* Top Bar */}
-      <ScreenHeader title="Directory" />
+    <ScreenWrapper>
+      <div className="bg-white min-h-screen flex flex-col">
+        {/* Top Bar */}
+        <ScreenHeader title="Directory" />
 
-      {/* Search Input */}
-      <div className="mt-10 mb-6 mx-10 relative">
-        <input
-          type="text"
-          placeholder="Search..."
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          className="p-2 border border-gray-500 rounded w-full pr-10"
-        />
-        <div className="absolute top-3 right-2">
-          {searchQuery ? (
-            <FaTimes
-              className="cursor-pointer text-gray-500"
-              onClick={() => setSearchQuery("")}
-            />
-          ) : (
-            <FaSearch className="text-gray-500" />
-          )}
+        {/* Search Input */}
+        <div className="mt-10 mb-6 mx-10 relative">
+          <input
+            type="text"
+            placeholder="Search..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="p-2 border border-gray-500 rounded w-full pr-10"
+          />
+          <div className="absolute top-3 right-2">
+            {searchQuery ? (
+              <FaTimes
+                className="cursor-pointer text-gray-500"
+                onClick={() => setSearchQuery("")}
+              />
+            ) : (
+              <FaSearch className="text-gray-500" />
+            )}
+          </div>
         </div>
+
+        {/* Team Members List */}
+        {loading ? (
+          <Loader />
+        ) : filteredUsers?.length ? (
+          <div className="mb-14 grid grid-cols-1 md:grid-cols-2">
+            {filteredUsers.map((user) => (
+              <UserCard key={user._id} userData={user} />
+            ))}
+          </div>
+        ) : (
+          <NoRecordsFound />
+        )}
       </div>
-
-      {/* Team Members List */}
-      {loading ? (
-        <Loader />
-      ) : filteredUsers?.length ? (
-        <div className="mb-14 grid grid-cols-1 md:grid-cols-2">
-          {filteredUsers.map((user) => (
-            <UserCard key={user._id} userData={user} />
-          ))}
-        </div>
-      ) : (
-        <NoRecordsFound />
-      )}
-    </div>
+    </ScreenWrapper>
   );
 };
 
