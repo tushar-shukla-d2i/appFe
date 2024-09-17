@@ -6,13 +6,13 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import NoInternetImg from "../assets/no-internet.jpeg";
 
-import { AppRoutes, TOKEN } from "../constants";
+import { AppRoutes, USER_TOKEN } from "../constants";
 import { LocalStorageHelper } from "../utils/HttpUtils";
 
 const ScreenWrapper = ({ children }) => {
   const navigate = useNavigate();
   const [isConnected, setConnected] = useState(navigator.onLine);
-  const userToken = LocalStorageHelper.get(TOKEN);
+  const userToken = LocalStorageHelper.get(USER_TOKEN);
 
   useEffect(() => {
     if (!userToken) {

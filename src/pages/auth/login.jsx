@@ -9,7 +9,7 @@ import * as Yup from "yup";
 
 import { authApis } from "../../apis";
 import { emailRegex } from "../../utils/CommonUtils";
-import { AppRoutes, TOKEN } from "../../constants";
+import { AppRoutes, USER_TOKEN } from "../../constants";
 import { LocalStorageHelper } from "../../utils/HttpUtils";
 import { Button, ErrorComponent, ScreenWrapper } from "../../components";
 
@@ -24,7 +24,7 @@ const validationSchema = {
 
 const Login = () => {
   const navigate = useNavigate();
-  const userToken = LocalStorageHelper.get(TOKEN);
+  const userToken = LocalStorageHelper.get(USER_TOKEN);
   const [apiError, setApiError] = useState("");
   const [loading, setLoading] = useState(false);
 
