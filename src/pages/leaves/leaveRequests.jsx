@@ -4,76 +4,196 @@
 
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { Formik, Form } from "formik";
-import * as Yup from "yup";
 
-import { metricsApis } from "../../apis";
-import { MAX_METRIC_POINTS } from "../../constants";
+import { leaveApis } from "../../apis";
+import { LEAVE_STATUS, LEAVE_TYPES } from "../../constants";
 import {
   Button,
-  Input,
+  Loader,
+  NoRecordsFound,
   ScreenHeader,
   ScreenWrapper,
   Toast,
 } from "../../components";
 
+const { approved, pending, rejected } = LEAVE_STATUS;
+
+const formatDate = (date) => {
+  const options = { year: "numeric", month: "short", day: "numeric" };
+  return new Date(date).toLocaleDateString(undefined, options);
+};
+
 const LeaveRequests = () => {
-  const { parent_id, metric_id } = useParams();
-  const [loading, setLoading] = useState(false);
-  const [initialMetric, setInitialMetric] = useState({});
-  const [parentMetricData, setParentMetricData] = useState([]);
+  const { user_id } = useParams();
+  const [screenLoading, setScreenLoading] = useState(false);
+  const [loading, setLoading] = useState({});
+  const [leaveRequests, setLeaveRequests] = useState([]);
   const [toastMsg, setToastMsg] = useState("");
 
   useEffect(() => {
-    !!metric_id && fetchMetricDetails(metric_id);
-    !metric_id && !!parent_id && getSubMetricsList();
-  }, [metric_id, parent_id]);
-
-  const fetchMetricDetails = async (id) => {
-    setLoading(true);
-    const resp = await metricsApis.getMetricById({ metric_id });
-    if (resp?.success) {
-      setInitialMetric(resp?.data?.data);
+    if (user_id) {
+      getSubordinatesLeaves();
     }
-    setLoading(false);
-  };
+  }, [user_id]);
 
-  const getSubMetricsList = async () => {
-    const resp = await metricsApis.getMetricById({ metric_id: parent_id });
+  // Fetch leave requests from subordinates
+  const getSubordinatesLeaves = async () => {
+    setScreenLoading(true);
+    const resp = await leaveApis.getLeavesById({ user_id });
+    setTimeout(() => {
+      setScreenLoading(false);
+    }, 200);
     if (resp?.success) {
-      setParentMetricData(resp?.data?.data);
+      setLeaveRequests(resp?.data?.data || []);
     }
   };
 
-  const validationSchema = Yup.object().shape({
-    label: Yup.string().required("Metric name is required"),
-  });
-
-  const handleSubmit = async (values) => {
-    setLoading(true);
-    let payload = values;
-    payload = { ...payload, maximum_points: MAX_METRIC_POINTS };
-    if (!metric_id && parent_id) {
-      payload = { ...payload, parent_id };
-    }
-    const resp = metric_id
-      ? await metricsApis.updateMetric({ metric_id, payload })
-      : await metricsApis.createMetric(payload);
-    setLoading(false);
+  const handleSubmit = async (leave_id, status, action) => {
+    setLoading((prev) => ({
+      ...prev,
+      [leave_id]: { ...prev[leave_id], [action]: true },
+    }));
+    const resp = await leaveApis.updateLeave({
+      leave_id,
+      payload: { status },
+    });
+    setLoading((prev) => ({
+      ...prev,
+      [leave_id]: { ...prev[leave_id], [action]: false },
+    }));
     if (resp?.success) {
-      setToastMsg(`Metric ${metric_id ? "updated" : "created"} successfully!`);
+      setToastMsg(`Leave ${status} successfully!`);
+      getSubordinatesLeaves();
     }
   };
 
   return (
     <ScreenWrapper>
       <div className="bg-white">
-        <ScreenHeader title="Leave Requests" toastMsg={toastMsg} />
+        <ScreenHeader title="Leave Requests" />
 
-        <div className="w-[80%] mx-auto mt-16">
-          <div className="space-y-8 p-6 mt-8 bg-white rounded-lg shadow-lg border border-gray-300"></div>
-        </div>
-        <Toast message={toastMsg} />
+        {screenLoading ? (
+          <Loader />
+        ) : (
+          <div className="w-[85%] mx-auto mt-12">
+            {!leaveRequests?.length ? (
+              <NoRecordsFound />
+            ) : (
+              leaveRequests.map((leave) => {
+                const {
+                  _id,
+                  userName,
+                  leaveStart,
+                  leaveEnd,
+                  leaveType,
+                  dayType,
+                  reason,
+                  status,
+                } = leave ?? {};
+                return (
+                  <div
+                    key={_id}
+                    className="p-6 mt-6 bg-gray-50 rounded-lg shadow-md border border-gray-200"
+                  >
+                    {/* User Name */}
+                    <p className="text-sm text-center mb-4 font-bold text-gray-900">
+                      {userName || ""}
+                    </p>
+
+                    <div className="grid grid-cols-2 gap-6 mb-4 xs:grid-cols-1">
+                      {/* Start Date */}
+                      <div>
+                        <p className="text-sm text-gray-700">Start Date</p>
+                        <p className="text-sm font-medium text-gray-900">
+                          {formatDate(leaveStart)}
+                        </p>
+                      </div>
+                      {/* End Date */}
+                      <div>
+                        <p className="text-sm text-gray-700">End Date</p>
+                        <p className="text-sm font-medium text-gray-900">
+                          {formatDate(leaveEnd)}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-6 mb-4 xs:grid-cols-1">
+                      {/* Leave Type */}
+                      <div>
+                        <p className="text-sm text-gray-700">Leave Type</p>
+                        <p className="text-sm font-medium text-gray-900">
+                          {
+                            LEAVE_TYPES.filter(
+                              (l) => l.value === leaveType
+                            )?.[0]?.label
+                          }
+                        </p>
+                      </div>
+                      {/* Day Type */}
+                      <div>
+                        <p className="text-sm text-gray-700">Day Type</p>
+                        <p className="text-sm font-medium text-gray-900">
+                          {dayType === 1 ? "Full Day" : "Half Day"}
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Reason */}
+                    <div className="mb-4">
+                      <p className="text-sm text-gray-700">Reason</p>
+                      <p className="text-sm text-gray-900">{reason}</p>
+                    </div>
+
+                    {/* Approve/Decline Buttons */}
+                    <div className="flex flex-wrap justify-center">
+                      {status === pending ? (
+                        <>
+                          <Button
+                            title="Approve"
+                            loading={loading[_id]?.approve}
+                            onClick={() =>
+                              handleSubmit(_id, approved, "approve")
+                            }
+                            disabled={
+                              loading[_id]?.approve || loading[_id]?.decline
+                            }
+                            className={`bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-md text-sm w-fit m-2 ${
+                              loading[_id]?.approve || loading[_id]?.decline
+                                ? "opacity-50 cursor-not-allowed"
+                                : ""
+                            }`}
+                          />
+                          <Button
+                            title="Decline"
+                            loading={loading[_id]?.decline}
+                            onClick={() =>
+                              handleSubmit(_id, rejected, "decline")
+                            }
+                            disabled={
+                              loading[_id]?.approve || loading[_id]?.decline
+                            }
+                            className={`bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-md text-sm w-fit m-2 ${
+                              loading[_id]?.approve || loading[_id]?.decline
+                                ? "opacity-50 cursor-not-allowed"
+                                : ""
+                            }`}
+                          />
+                        </>
+                      ) : (
+                        <Button
+                          title={status === approved ? "Approved" : "Declined"}
+                          disabled
+                          className="text-white py-2 px-4 rounded-md text-sm w-fit m-2 disabled:bg-gray-400"
+                        />
+                      )}
+                    </div>
+                  </div>
+                );
+              })
+            )}
+          </div>
+        )}
+        <Toast message={toastMsg} navigateUrl={null} />
       </div>
     </ScreenWrapper>
   );
