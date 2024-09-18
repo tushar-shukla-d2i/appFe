@@ -96,7 +96,7 @@ const LeaveRequests = () => {
                     className="p-6 mt-6 bg-gray-50 rounded-lg shadow-md border border-gray-200"
                   >
                     {/* User Name */}
-                    <p className="text-sm text-center mb-4 font-bold text-gray-900">
+                    <p className="text-center mb-4 font-bold text-gray-900">
                       {userName || ""}
                     </p>
 
