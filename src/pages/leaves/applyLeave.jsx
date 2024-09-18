@@ -43,6 +43,7 @@ const CalendarInput = ({
   fieldName,
   minDate,
   maxDate,
+  disabled,
 }) => {
   const [calendarOpen, setCalendarOpen] = useState(false);
 
@@ -54,7 +55,9 @@ const CalendarInput = ({
   };
 
   const handleOpenCalendar = () => {
-    setCalendarOpen(!calendarOpen);
+    if (!disabled) {
+      setCalendarOpen(!calendarOpen);
+    }
   };
 
   return (
@@ -66,9 +69,14 @@ const CalendarInput = ({
           value={value ? value.toDateString() : ""}
           placeholder={`Select ${label.toLowerCase()}`}
           readOnly
-          className="border border-gray-300 text-sm p-2 pl-10 rounded-lg w-full cursor-pointer"
+          className="border border-gray-300 text-sm p-2 pl-10 rounded-lg w-full cursor-pointer disabled:cursor-not-allowed"
+          disabled={disabled}
         />
-        <FaCalendarAlt className="absolute left-2 top-3 text-gray-500 hover:cursor-pointer" />
+        <FaCalendarAlt
+          className={`absolute left-2 top-3 text-gray-500 ${
+            disabled ? "cursor-not-allowed" : "hover:cursor-pointer"
+          }`}
+        />
       </div>
       {calendarOpen && (
         <div className="absolute bg-white border border-gray-300 z-10">
@@ -150,6 +158,7 @@ const ApplyLeave = () => {
                       maxDate={
                         values?.leaveEnd ? new Date(values?.leaveEnd) : null
                       }
+                      disabled={loading}
                     />
 
                     {/* End Date Input */}
@@ -159,6 +168,7 @@ const ApplyLeave = () => {
                       setFieldValue={setFieldValue}
                       fieldName="leaveEnd"
                       minDate={values?.leaveStart || new Date(getTodayDate())}
+                      disabled={loading}
                     />
                   </div>
 
@@ -172,6 +182,7 @@ const ApplyLeave = () => {
                         type="select"
                         options={LEAVE_TYPES}
                         placeholder="Select leave type"
+                        disabled={loading}
                       />
                     </div>
 
@@ -183,6 +194,7 @@ const ApplyLeave = () => {
                         type="select"
                         options={DAY_TYPES}
                         placeholder="Select day type"
+                        disabled={loading}
                       />
                     </div>
                   </div>
@@ -196,8 +208,9 @@ const ApplyLeave = () => {
                       as="textarea"
                       name="reason"
                       rows="3"
-                      className="border border-gray-300 w-full p-2 text-sm rounded-lg"
+                      className="border border-gray-300 w-full p-2 text-sm rounded-lg disabled:cursor-not-allowed"
                       placeholder="Provide a reason for your leave"
+                      disabled={loading}
                       onChange={(e) =>
                         e.target.value !== " " && handleChange(e)
                       }
@@ -210,7 +223,6 @@ const ApplyLeave = () => {
                     <Button
                       type="submit"
                       loading={loading}
-                      disabled={loading}
                       title="Submit"
                       width="auto"
                     />
