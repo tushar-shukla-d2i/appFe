@@ -2,7 +2,7 @@
  * Apply Leave Screen
  */
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaCalendarAlt } from "react-icons/fa";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
@@ -11,7 +11,12 @@ import "react-calendar/dist/Calendar.css";
 
 import { leaveApis } from "../../apis";
 import { UtilFunctions } from "../../utils/CommonUtils";
-import { DAY_TYPES, LEAVE_TYPES } from "../../constants";
+import {
+  DAY_TYPES,
+  getLeaveType,
+  LEAVE_STATUS,
+  LEAVE_TYPES,
+} from "../../constants";
 import {
   Button,
   ErrorMsg,
@@ -19,7 +24,18 @@ import {
   ScreenHeader,
   ScreenWrapper,
   Toast,
+  Loader,
 } from "../../components";
+
+const { approved, rejected } = LEAVE_STATUS;
+
+const validationSchema = Yup.object().shape({
+  leaveStart: Yup.date().required("Start date is required."),
+  leaveEnd: Yup.date().required("End date is required."),
+  leaveType: Yup.string().required("Leave type is required."),
+  dayType: Yup.number().required("Day type is required."),
+  reason: Yup.string().required("Please provide a reason for your leave."),
+});
 
 const isDisabled = (date) => {
   const day = date?.getDay();
@@ -66,16 +82,16 @@ const CalendarInput = ({
       <div className="relative" onClick={handleOpenCalendar}>
         <input
           type="text"
-          value={value ? value.toDateString() : ""}
-          placeholder={`Select ${label.toLowerCase()}`}
+          value={value ? value?.toDateString() : ""}
+          placeholder={`Select ${label?.toLowerCase()}`}
           readOnly
           className="border border-gray-300 text-sm p-2 pl-10 rounded-lg w-full cursor-pointer disabled:cursor-not-allowed"
           disabled={disabled}
         />
         <FaCalendarAlt
-          className={`absolute left-2 top-3 text-gray-500 ${
-            disabled ? "cursor-not-allowed" : "hover:cursor-pointer"
-          }`}
+          className={`absolute left-2 top-3 text-gray-${
+            disabled ? "300" : "500"
+          } ${disabled ? "cursor-not-allowed" : "hover:cursor-pointer"}`}
         />
       </div>
       {calendarOpen && (
@@ -103,16 +119,85 @@ const getTodayDate = () => {
 const ApplyLeave = () => {
   const [loading, setLoading] = useState(false);
   const [toastMsg, setToastMsg] = useState("");
+  const [leaves, setLeaves] = useState([]);
+  const [leavesLoading, setLeavesLoading] = useState(false);
 
-  const validationSchema = Yup.object().shape({
-    leaveStart: Yup.date().required("Start date is required."),
-    leaveEnd: Yup.date().required("End date is required."),
-    leaveType: Yup.string().required("Leave type is required."),
-    dayType: Yup.number().required("Day type is required."),
-    reason: Yup.string().required("Please provide a reason for your leave."),
-  });
+  useEffect(() => {
+    fetchMyLeaves();
+  }, []);
 
-  const handleSubmit = async (values) => {
+  const fetchMyLeaves = async () => {
+    setLeavesLoading(true);
+    const resp = await leaveApis.getMyLeaves();
+    if (resp?.success) {
+      setLeaves(resp.data?.data || []);
+    }
+    setLeavesLoading(false);
+  };
+
+  const TableHead = () => (
+    <thead>
+      <tr className="bg-gray-200">
+        {[
+          "Start Date",
+          "End Date",
+          "Leave Type",
+          "Day Type",
+          "Reason",
+          "Status",
+        ].map((header) => (
+          <th key={header} className="p-2 text-left text-sm font-semibold">
+            {header}
+          </th>
+        ))}
+      </tr>
+    </thead>
+  );
+
+  const TableCell = ({ children }) => (
+    <td className="p-2 text-sm capitalize">{children}</td>
+  );
+
+  const TableBody = ({ leaves }) => (
+    <tbody>
+      {leaves?.map?.((leave) => {
+        const {
+          _id,
+          leaveStart,
+          leaveEnd,
+          leaveType,
+          status,
+          dayType,
+          reason,
+        } = leave ?? {};
+
+        return (
+          <tr key={_id} className="border-b border-gray-200">
+            <TableCell>{new Date(leaveStart)?.toDateString()}</TableCell>
+            <TableCell>{new Date(leaveEnd)?.toDateString()}</TableCell>
+            <TableCell>{getLeaveType(leaveType)}</TableCell>
+            <TableCell>{dayType}</TableCell>
+            <TableCell>{reason}</TableCell>
+            <td className="p-2 text-xs text-white font-medium capitalize">
+              <div
+                className={`${
+                  status === approved
+                    ? "bg-green-500"
+                    : status === rejected
+                    ? "bg-red-500"
+                    : "bg-yellow-500"
+                } rounded-full p-[6px] text-center`}
+              >
+                {status}
+              </div>
+            </td>
+          </tr>
+        );
+      })}
+    </tbody>
+  );
+
+  const handleSubmit = async (values, { resetForm }) => {
     setLoading(true);
     let payload = values;
     payload = UtilFunctions.convertToDayjsYMDFormat(payload, [
@@ -124,6 +209,8 @@ const ApplyLeave = () => {
     setLoading(false);
     if (resp?.success) {
       setToastMsg("Leave applied successfully!");
+      fetchMyLeaves();
+      resetForm();
     }
   };
 
@@ -230,9 +317,26 @@ const ApplyLeave = () => {
                 </Form>
               )}
             </Formik>
+
+            {/* Display User Leaves */}
+            {!!leaves?.length && (
+              <div className="mt-8">
+                <h3 className="text-lg font-semibold mb-4">My Leaves</h3>
+                {leavesLoading ? (
+                  <Loader />
+                ) : (
+                  <div className="overflow-auto sm:overflow-visible">
+                    <table className="min-w-full border border-gray-300">
+                      <TableHead />
+                      <TableBody leaves={leaves} />
+                    </table>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         </div>
-        <Toast message={toastMsg} />
+        <Toast message={toastMsg} navigateUrl={null} />
       </div>
     </ScreenWrapper>
   );

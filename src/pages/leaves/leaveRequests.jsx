@@ -6,7 +6,7 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 
 import { leaveApis } from "../../apis";
-import { LEAVE_STATUS, LEAVE_TYPES } from "../../constants";
+import { getLeaveType, LEAVE_STATUS } from "../../constants";
 import {
   Button,
   Loader,
@@ -17,11 +17,6 @@ import {
 } from "../../components";
 
 const { approved, pending, rejected } = LEAVE_STATUS;
-
-const formatDate = (date) => {
-  const options = { year: "numeric", month: "short", day: "numeric" };
-  return new Date(date).toLocaleDateString(undefined, options);
-};
 
 const LeaveRequests = () => {
   const { user_id } = useParams();
@@ -105,14 +100,14 @@ const LeaveRequests = () => {
                       <div>
                         <p className="text-sm text-gray-700">Start Date</p>
                         <p className="text-sm font-medium text-gray-900">
-                          {formatDate(leaveStart)}
+                          {new Date(leaveStart)?.toDateString()}
                         </p>
                       </div>
                       {/* End Date */}
                       <div>
                         <p className="text-sm text-gray-700">End Date</p>
                         <p className="text-sm font-medium text-gray-900">
-                          {formatDate(leaveEnd)}
+                          {new Date(leaveEnd)?.toDateString()}
                         </p>
                       </div>
                     </div>
@@ -122,11 +117,7 @@ const LeaveRequests = () => {
                       <div>
                         <p className="text-sm text-gray-700">Leave Type</p>
                         <p className="text-sm font-medium text-gray-900">
-                          {
-                            LEAVE_TYPES.filter(
-                              (l) => l.value === leaveType
-                            )?.[0]?.label
-                          }
+                          {getLeaveType(leaveType)}
                         </p>
                       </div>
                       {/* Day Type */}

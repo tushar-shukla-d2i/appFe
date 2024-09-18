@@ -57,7 +57,12 @@ const Input = ({
           {...rest}
         >
           {options?.map?.((option) => (
-            <option key={option.value} value={option.value}>
+            <option
+              key={option.value}
+              value={option.value}
+              disabled={!option.value}
+              style={{ color: option?.value === "" ? "gray" : "black" }}
+            >
               {option.label}
             </option>
           ))}
