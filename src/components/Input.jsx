@@ -3,7 +3,9 @@
  */
 
 import React from "react";
-import { ErrorMessage, Field } from "formik";
+import { Field } from "formik";
+
+import { ErrorMsg } from "./ErrorMsg";
 
 const checkboxStyle = "mr-2 text-gray-700 h-4 w-4";
 
@@ -84,11 +86,7 @@ const Input = ({
           {...rest}
         />
       )}
-      <ErrorMessage
-        name={id}
-        component="div"
-        className="text-red-600 text-sm mt-2"
-      />
+      <ErrorMsg id={id} />
     </div>
   );
 };

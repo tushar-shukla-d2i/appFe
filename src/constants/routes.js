@@ -16,6 +16,8 @@ const AppRoutes = {
   REWARDS: "/rewards",
   ATTENDANCE: "/attendance",
   ATTENDANCE_RECORDS: "/attendance-records",
+  APPLY_LEAVE: "/leave",
+  LEAVE_REQUESTS: "/leaves",
 };
 
 export { AppRoutes };

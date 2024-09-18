@@ -25,3 +25,17 @@ export const PUNCHING_ACTIONS = {
 };
 
 export const MAX_METRIC_POINTS = 10;
+
+export const LEAVE_TYPES = [
+  { value: "", label: "Select" },
+  { value: "casual", label: "Casual" },
+  { value: "earned", label: "Earned" },
+  { value: "maternity", label: "Maternity" },
+  { value: "parent", label: "Parent" },
+];
+
+export const DAY_TYPES = [
+  { value: "", label: "Select" },
+  { value: 1, label: "Full Day" },
+  { value: 0.5, label: "Half Day" },
+];

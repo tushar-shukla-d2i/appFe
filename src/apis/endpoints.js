@@ -14,6 +14,7 @@ const endpoints = {
   ME: "me",
   SUBORDINATES: "subordinates",
   RESET_PASSWORD: "resetpassword",
+  LEAVE: "leave",
 };
 
 export { endpoints };

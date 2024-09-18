@@ -7,11 +7,13 @@ import { AppRoutes } from "./constants";
 import { AppHeader } from "./components";
 import {
   AddEditMetric,
+  ApplyLeave,
   Attendance,
   AttendanceRecords,
   ChangePassword,
   Dashboard,
   Directory,
+  LeaveRequests,
   Login,
   ManageUser,
   ManageUsers,
@@ -97,6 +99,8 @@ const App = () => {
             path={AppRoutes.ATTENDANCE_RECORDS}
             element={<AttendanceRecords />}
           />
+          <Route path={AppRoutes.APPLY_LEAVE} element={<ApplyLeave />} />
+          <Route path={AppRoutes.LEAVE_REQUESTS} element={<LeaveRequests />} />
         </Routes>
       </main>
     </div>

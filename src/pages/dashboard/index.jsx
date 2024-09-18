@@ -173,6 +173,18 @@ const Dashboard = () => {
                 onClick={() => navigate(AppRoutes.ATTENDANCE_RECORDS)}
               />
             )}
+            {role !== USER_ROLES.ADMIN && (
+              <IconButton
+                label="Leave"
+                icon="🏖️"
+                onClick={() => navigate(AppRoutes.APPLY_LEAVE)}
+              />
+            )}
+            <IconButton
+              label="Requests"
+              icon="📋"
+              onClick={() => navigate(AppRoutes.LEAVE_REQUESTS)}
+            />
           </div>
         </div>
       </div>
