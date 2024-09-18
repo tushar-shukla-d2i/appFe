@@ -39,3 +39,9 @@ export const DAY_TYPES = [
   { value: 1, label: "Full Day" },
   { value: 0.5, label: "Half Day" },
 ];
+
+export const LEAVE_STATUS = {
+  approved: "approved",
+  pending: "pending",
+  rejected: "rejected",
+};

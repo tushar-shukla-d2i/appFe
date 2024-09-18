@@ -99,8 +99,11 @@ const App = () => {
             path={AppRoutes.ATTENDANCE_RECORDS}
             element={<AttendanceRecords />}
           />
-          <Route path={AppRoutes.APPLY_LEAVE} element={<ApplyLeave />} />
-          <Route path={AppRoutes.LEAVE_REQUESTS} element={<LeaveRequests />} />
+          <Route path={AppRoutes.LEAVE} element={<ApplyLeave />} />
+          <Route
+            path={`${AppRoutes.LEAVE}/:user_id`}
+            element={<LeaveRequests />}
+          />
         </Routes>
       </main>
     </div>

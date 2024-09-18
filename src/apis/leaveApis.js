@@ -15,9 +15,9 @@ export const leaveApis = {
     }
   },
 
-  getLeavesById: async ({ leave_id }) => {
+  getLeavesById: async ({ user_id }) => {
     try {
-      const response = await httpClient.get(`${endpoints.LEAVE}/${leave_id}`);
+      const response = await httpClient.get(`${endpoints.LEAVE}/${user_id}`);
       return response;
     } catch (error) {
       console.log("getLeavesById:", error);

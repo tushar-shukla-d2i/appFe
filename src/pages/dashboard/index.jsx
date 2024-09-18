@@ -127,40 +127,6 @@ const Dashboard = () => {
         <div className="bg-gray-50 mx-6 mt-[-3rem] mb-10 px-4 py-6 shadow-2xl rounded-lg">
           <h1 className="font-bold text-lg tracking-wider mb-8">Features</h1>
           <div className="grid grid-cols-3 gap-x-4 gap-y-8">
-            {role === USER_ROLES.ADMIN && (
-              <IconButton
-                label="Manage Users"
-                icon="🗂️"
-                onClick={() => navigate(AppRoutes.MANAGE_USERS)}
-              />
-            )}
-            <IconButton
-              label="Profile"
-              icon="🧑‍💼"
-              onClick={() => navigate(`${AppRoutes.USER}/${_id}`)}
-            />
-            <IconButton
-              label="Change Password"
-              icon="🔒"
-              onClick={() => navigate(`${AppRoutes.CHANGE_PASSWORD}/${_id}`)}
-            />
-            <IconButton
-              label="Directory"
-              icon="👥"
-              onClick={() => navigate(AppRoutes.DIRECTORY)}
-            />
-            <IconButton
-              label="Metrics"
-              icon="🎁"
-              onClick={() => navigate(AppRoutes.METRICS)}
-            />
-            {!!rewards?.length && (
-              <IconButton
-                label="Rewards"
-                icon="🎖️"
-                onClick={() => navigate(AppRoutes.REWARDS)}
-              />
-            )}
             <IconButton
               label="Attendance"
               icon="📅"
@@ -173,18 +139,52 @@ const Dashboard = () => {
                 onClick={() => navigate(AppRoutes.ATTENDANCE_RECORDS)}
               />
             )}
+            <IconButton
+              label="Change Password"
+              icon="🔒"
+              onClick={() => navigate(`${AppRoutes.CHANGE_PASSWORD}/${_id}`)}
+            />
+            <IconButton
+              label="Directory"
+              icon="👥"
+              onClick={() => navigate(AppRoutes.DIRECTORY)}
+            />
             {role !== USER_ROLES.ADMIN && (
               <IconButton
                 label="Leave"
                 icon="🏖️"
-                onClick={() => navigate(AppRoutes.APPLY_LEAVE)}
+                onClick={() => navigate(AppRoutes.LEAVE)}
+              />
+            )}
+            {role === USER_ROLES.ADMIN && (
+              <IconButton
+                label="Manage Users"
+                icon="🗂️"
+                onClick={() => navigate(AppRoutes.MANAGE_USERS)}
               />
             )}
             <IconButton
+              label="Metrics"
+              icon="🎁"
+              onClick={() => navigate(AppRoutes.METRICS)}
+            />
+            <IconButton
+              label="Profile"
+              icon="🧑‍💼"
+              onClick={() => navigate(`${AppRoutes.USER}/${_id}`)}
+            />
+            <IconButton
               label="Requests"
               icon="📋"
-              onClick={() => navigate(AppRoutes.LEAVE_REQUESTS)}
+              onClick={() => navigate(`${AppRoutes.LEAVE}/${_id}`)}
             />
+            {!!rewards?.length && (
+              <IconButton
+                label="Rewards"
+                icon="🎖️"
+                onClick={() => navigate(AppRoutes.REWARDS)}
+              />
+            )}
           </div>
         </div>
       </div>

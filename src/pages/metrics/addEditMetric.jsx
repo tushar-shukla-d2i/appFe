@@ -25,11 +25,11 @@ const AddEditMetric = () => {
   const [toastMsg, setToastMsg] = useState("");
 
   useEffect(() => {
-    !!metric_id && fetchMetricDetails(metric_id);
+    !!metric_id && fetchMetricDetails();
     !metric_id && !!parent_id && getSubMetricsList();
   }, [metric_id, parent_id]);
 
-  const fetchMetricDetails = async (id) => {
+  const fetchMetricDetails = async () => {
     setLoading(true);
     const resp = await metricsApis.getMetricById({ metric_id });
     if (resp?.success) {

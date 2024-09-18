@@ -122,7 +122,7 @@ const ApplyLeave = () => {
   return (
     <ScreenWrapper>
       <div className="bg-white">
-        <ScreenHeader title="Apply Leave" toastMsg={toastMsg} />
+        <ScreenHeader title="Apply Leave" />
         <div className="w-[85%] mx-auto mt-16 mb-6">
           <div className="p-6 mt-8 bg-white rounded-lg shadow-lg border border-gray-300">
             <Formik
