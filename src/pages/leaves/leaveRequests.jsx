@@ -107,110 +107,50 @@ const LeaveRequests = () => {
     getSubordinatesLeaves(selectedStatus, page);
   };
 
-  const renderPaginationButtons = () => {
-    const buttons = [];
+  const RenderPaginationButtons = () => {
+    return (
+      <div className="flex items-center space-x-3">
+        <button
+          key="prev"
+          onClick={() => handlePageChange(Math.max(1, currentPage - 1))}
+          disabled={currentPage === 1}
+          className={`p-1 rounded-md border-2 ${
+            currentPage === 1
+              ? "text-gray-400 border-gray-300 cursor-not-allowed"
+              : "bg-white text-black border-gray-500"
+          }`}
+        >
+          <FaChevronLeft
+            className={`${
+              currentPage === 1 ? "text-gray-400" : "text-gray-600"
+            } text-xs`}
+          />
+        </button>
 
-    // Prev button
-    buttons.push(
-      <button
-        key="prev"
-        onClick={() => handlePageChange(Math.max(1, currentPage - 1))}
-        disabled={currentPage === 1}
-        className={`p-2 rounded-md border-2 ${
-          currentPage === 1
-            ? "text-gray-400 border-gray-300 cursor-not-allowed"
-            : "bg-white text-black border-gray-500"
-        }`}
-      >
-        <FaChevronLeft
-          className={`${
-            currentPage === 1 ? "text-gray-400" : "text-gray-600"
-          } text-sm`}
-        />
-      </button>
+        <div className="text-sm">{currentPage}</div>
+        <div className="text-sm text-gray-600">of</div>
+        <div className="text-sm">{totalPages}</div>
+
+        <button
+          key="next"
+          onClick={() =>
+            handlePageChange(Math.min(totalPages, currentPage + 1))
+          }
+          disabled={currentPage === totalPages}
+          className={`p-1 rounded-md border-2 ${
+            currentPage === totalPages
+              ? "text-gray-400 border-gray-300 cursor-not-allowed"
+              : "bg-white text-black border-gray-500"
+          }`}
+        >
+          <FaChevronRight
+            className={`${
+              currentPage === totalPages ? "text-gray-400" : "text-gray-600"
+            } text-xs`}
+          />
+        </button>
+      </div>
     );
-
-    // First page box
-    buttons.push(
-      <button
-        key="page1"
-        disabled={currentPage === 1}
-        onClick={() =>
-          handlePageChange(currentPage === 1 ? 1 : currentPage - 1)
-        }
-        className={`px-3 py-1 rounded-md border-2 ${
-          currentPage === 1
-            ? "border-gray-300 text-gray-400 cursor-not-allowed"
-            : "border-gray-500"
-        }`}
-      >
-        {currentPage === 1 ? 1 : currentPage - 1}
-      </button>
-    );
-
-    // Second page box
-    buttons.push(
-      <button
-        key="page2"
-        disabled={totalPages === 1 || currentPage === totalPages}
-        onClick={() => handlePageChange(currentPage === 1 ? 2 : currentPage)}
-        className={`px-3 py-1 rounded-md border-2 ${
-          totalPages === 1 || currentPage === totalPages
-            ? "border-gray-300 text-gray-400 cursor-not-allowed"
-            : "border-gray-500"
-        }`}
-      >
-        {currentPage === 1 ? 2 : currentPage}
-      </button>
-    );
-
-    // Ellipsis
-    buttons.push(
-      <span key="ellipsis" className="pr-2">
-        ...
-      </span>
-    );
-
-    // Last page box
-    {
-      totalPages > 1 &&
-        buttons.push(
-          <button
-            key="lastPage"
-            onClick={() => handlePageChange(totalPages)}
-            disabled={currentPage === totalPages}
-            className={`px-3 py-1 rounded-md border-2 ${
-              currentPage === totalPages
-                ? "border-gray-300 text-gray-400 cursor-not-allowed"
-                : "border-gray-500"
-            }`}
-          >
-            {totalPages}
-          </button>
-        );
-    }
-
-    // Next button
-    buttons.push(
-      <button
-        key="next"
-        onClick={() => handlePageChange(Math.min(totalPages, currentPage + 1))}
-        disabled={currentPage === totalPages}
-        className={`p-2 rounded-md border-2 ${
-          currentPage === totalPages
-            ? "text-gray-400 border-gray-300 cursor-not-allowed"
-            : "bg-white text-black border-gray-500"
-        }`}
-      >
-        <FaChevronRight
-          className={`${
-            currentPage === totalPages ? "text-gray-400" : "text-gray-600"
-          } text-sm`}
-        />
-      </button>
-    );
-
-    return buttons;
   };
 
   return (
@@ -219,11 +159,11 @@ const LeaveRequests = () => {
         <ScreenHeader title="Leave Requests" />
 
         {/* Filter Dropdown */}
-        <div className="w-[85%] mx-auto mt-6">
+        <div className="w-[85%] flex justify-between mx-auto mt-6">
           <select
             value={selectedStatus}
             onChange={(e) => handleFilterChange(e.target.value)}
-            className="border text-sm border-gray-300 px-2 py-1 rounded-md"
+            className="border text-sm border-gray-300 px-2 py-[6px] rounded-md"
           >
             {LEAVE_STATUS_ARRAY.map((l) => (
               <option key={l.value} value={l.value}>
@@ -231,6 +171,8 @@ const LeaveRequests = () => {
               </option>
             ))}
           </select>
+
+          <RenderPaginationButtons />
         </div>
 
         {screenLoading ? (
@@ -350,11 +292,6 @@ const LeaveRequests = () => {
                 );
               })
             )}
-
-            {/* Pagination */}
-            <div className="flex justify-center items-center space-x-2 mt-6 mb-8">
-              {renderPaginationButtons()}
-            </div>
           </div>
         )}
         <Toast message={toastMsg} navigateUrl={null} />
