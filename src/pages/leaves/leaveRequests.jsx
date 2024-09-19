@@ -109,7 +109,7 @@ const LeaveRequests = () => {
 
   const RenderPaginationButtons = () => {
     return (
-      <div className="flex items-center space-x-3">
+      <div className="flex items-center space-x-2">
         <button
           key="prev"
           onClick={() => handlePageChange(Math.max(1, currentPage - 1))}
