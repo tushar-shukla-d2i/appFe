@@ -40,9 +40,15 @@ const LeaveRequests = () => {
   useEffect(() => {
     const queryParams = new URLSearchParams(location.search);
     const status = queryParams.get("status") || "";
+    const page = queryParams.get("page")
+      ? parseInt(queryParams.get("page"), 10)
+      : 1;
+
     setSelectedStatus(status);
+    setCurrentPage(page);
+
     if (user_id) {
-      getSubordinatesLeaves(status, 1);
+      getSubordinatesLeaves(status, page);
     }
   }, [user_id, location.search]);
 
@@ -51,6 +57,7 @@ const LeaveRequests = () => {
     setCurrentPage(1);
     const queryParams = new URLSearchParams(location.search);
     queryParams.set("status", status);
+    queryParams.set("page", 1);
     navigate({ search: queryParams?.toString() });
     getSubordinatesLeaves(status, 1);
   };
@@ -94,6 +101,9 @@ const LeaveRequests = () => {
   };
 
   const handlePageChange = (page) => {
+    const queryParams = new URLSearchParams(location.search);
+    queryParams.set("page", page);
+    navigate({ search: queryParams.toString() });
     getSubordinatesLeaves(selectedStatus, page);
   };
 
