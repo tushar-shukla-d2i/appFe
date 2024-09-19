@@ -75,7 +75,7 @@ const LeaveRequests = () => {
             {!leaveRequests?.length ? (
               <NoRecordsFound />
             ) : (
-              leaveRequests.map((leave) => {
+              leaveRequests?.map?.((leave) => {
                 const {
                   _id,
                   userName,
@@ -89,14 +89,14 @@ const LeaveRequests = () => {
                 return (
                   <div
                     key={_id}
-                    className="p-6 mt-6 bg-gray-50 rounded-lg shadow-md border border-gray-200 mb-6"
+                    className="px-6 py-4 mt-6 bg-gray-50 rounded-lg shadow-md border border-gray-200 mb-6"
                   >
                     {/* User Name */}
                     <p className="text-center mb-4 font-bold text-gray-900">
                       {userName || ""}
                     </p>
 
-                    <div className="grid grid-cols-2 gap-6 mb-4 xs:grid-cols-1">
+                    <div className="grid grid-cols-2 gap-6 mb-2 xs:grid-cols-1">
                       {/* Start Date */}
                       <div>
                         <p className="text-sm text-gray-700">Start Date</p>
@@ -113,7 +113,7 @@ const LeaveRequests = () => {
                       </div>
                     </div>
 
-                    <div className="grid grid-cols-2 gap-6 mb-4 xs:grid-cols-1">
+                    <div className="grid grid-cols-2 gap-6 mb-2 xs:grid-cols-1">
                       {/* Leave Type */}
                       <div>
                         <p className="text-sm text-gray-700">Leave Type</p>
@@ -131,9 +131,9 @@ const LeaveRequests = () => {
                     </div>
 
                     {/* Reason */}
-                    <div className="mb-4">
+                    <div>
                       <p className="text-sm text-gray-700">Reason</p>
-                      <p className="text-sm text-gray-900">{reason}</p>
+                      <p className="text-sm font-medium text-gray-900">{reason}</p>
                     </div>
 
                     {/* Approve/Reject Buttons */}
