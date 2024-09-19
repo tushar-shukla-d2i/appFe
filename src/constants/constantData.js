@@ -25,3 +25,32 @@ export const PUNCHING_ACTIONS = {
 };
 
 export const MAX_METRIC_POINTS = 10;
+
+export const LEAVE_TYPES = [
+  { value: "", label: "Select" },
+  { value: "casual", label: "Casual" },
+  { value: "earned", label: "Earned" },
+  { value: "maternity", label: "Maternity" },
+  { value: "parent", label: "Parent" },
+];
+
+export const DAY_TYPES = [
+  { value: "", label: "Select" },
+  { value: 1, label: "Full Day" },
+  { value: 0.5, label: "Half Day" },
+];
+
+export const LEAVE_STATUS = {
+  approved: "approved",
+  pending: "pending",
+  rejected: "rejected",
+};
+
+export const LEAVE_STATUS_ARRAY = [
+  { label: "All", value: "" },
+  { label: "Approved", value: LEAVE_STATUS.approved },
+  { label: "Pending", value: LEAVE_STATUS.pending },
+  { label: "Rejected", value: LEAVE_STATUS.rejected },
+];
+
+export const RECORDS_PER_PAGE = 10;

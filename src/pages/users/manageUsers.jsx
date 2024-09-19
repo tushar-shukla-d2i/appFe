@@ -8,8 +8,9 @@ import { MdEditNote } from "react-icons/md";
 import { FaSearch, FaTimes } from "react-icons/fa";
 
 import { userApis } from "../../apis";
+import { Config } from "../../utils/config";
 import { AppRoutes } from "../../constants";
-import d2iLogo from "../../assets/d2i_logo.jpg";
+import placeholderImg from "../../assets/placeholder.png";
 import {
   Loader,
   NoRecordsFound,
@@ -90,7 +91,8 @@ const ManageUsers = () => {
           ) : filteredUsers?.length ? (
             <ul className="mx-7 sm:mx-10 my-4 space-y-2">
               {filteredUsers.map((user) => {
-                const { _id, firstName, lastName, officialEmail } = user ?? {};
+                const { _id, firstName, lastName, officialEmail, userProfile } =
+                  user ?? {};
                 return (
                   <li
                     key={_id}
@@ -99,7 +101,11 @@ const ManageUsers = () => {
                     <div className="flex items-center space-x-4 w-full">
                       <img
                         className="w-12 h-12 sm:w-16 sm:h-16 rounded-full"
-                        src={d2iLogo}
+                        src={
+                          userProfile
+                            ? `${Config.DEV.IMAGE_BASE_URL}${userProfile}`
+                            : placeholderImg
+                        }
                         alt={`${firstName || "user"} image`}
                       />
                       <div className="flex-1 min-w-0">

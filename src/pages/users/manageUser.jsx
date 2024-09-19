@@ -204,7 +204,9 @@ const ManageUser = () => {
                 useEffect(() => {
                   if (user_id) {
                     const getUserData = async () => {
-                      const resp = await userApis.getUserById({ user_id });
+                      const resp = isMyProfile
+                        ? await commonApis.getMyData()
+                        : await userApis.getUserById({ user_id });
                       if (resp?.data?.data) {
                         setUserInfo(resp?.data?.data);
                         setValues({

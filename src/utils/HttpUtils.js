@@ -2,7 +2,7 @@ import axios from "axios";
 // import { triggerGlobalNotification } from "../components/GlobalNotification";
 import { Config } from "./config";
 import { navigate } from "./CommonUtils";
-import { TOKEN } from "../constants";
+import { USER_TOKEN } from "../constants";
 
 const LocalStorageHelper = {
   storeUserToken: (user) => {
@@ -10,15 +10,15 @@ const LocalStorageHelper = {
     if (token) {
       LocalStorageHelper.store("_auth", token);
     }
-    LocalStorageHelper.store(TOKEN, user);
+    LocalStorageHelper.store(USER_TOKEN, user);
   },
   getUserToken: (fullInfo = false) => {
-    const user = LocalStorageHelper.get(TOKEN);
+    const user = LocalStorageHelper.get(USER_TOKEN);
     const token = LocalStorageHelper.get("_auth");
     return fullInfo ? user : token;
   },
   deleteUserToken: () => {
-    LocalStorageHelper.delete(TOKEN);
+    LocalStorageHelper.delete(USER_TOKEN);
     LocalStorageHelper.delete("_auth");
   },
   store: (key, value) => {
@@ -57,7 +57,7 @@ const httpClient = axios.create({
 httpClient.interceptors.request.use((config) => {
   const contentType = Object.entries(config.headers)?.[1]?.[1];
   // Do something before request is sent
-  const token = LocalStorageHelper.getUserToken(TOKEN);
+  const token = LocalStorageHelper.getUserToken(USER_TOKEN);
   config.headers["Content-type"] = contentType || `application/json`;
   config.headers["ngrok-skip-browser-warning"] = true;
   config.headers["Authorization"] = `Bearer ${token}`;
@@ -65,7 +65,7 @@ httpClient.interceptors.request.use((config) => {
 });
 
 const handle401 = () => {
-  const token = LocalStorageHelper.getUserToken(TOKEN);
+  const token = LocalStorageHelper.getUserToken(USER_TOKEN);
   if (token) {
     // triggerGlobalNotification({
     //     message: "You've been logged out.",

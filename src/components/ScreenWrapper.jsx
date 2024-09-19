@@ -3,23 +3,26 @@
  */
 
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import NoInternetImg from "../assets/no-internet.jpeg";
 
+import { AppRoutes, USER_TOKEN } from "../constants";
+import { LocalStorageHelper } from "../utils/HttpUtils";
+
 const ScreenWrapper = ({ children }) => {
+  const navigate = useNavigate();
   const [isConnected, setConnected] = useState(navigator.onLine);
+  const userToken = LocalStorageHelper.get(USER_TOKEN);
 
   useEffect(() => {
-    const handleOffline = () => {
-      setConnected(false);
-    };
+    if (!userToken) {
+      navigate(AppRoutes.LOGIN);
+    }
 
-    const handleOnline = () => {
-      setConnected(true);
-    };
-
+    const handleOffline = () => setConnected(false);
+    const handleOnline = () => setConnected(true);
     window.addEventListener("offline", handleOffline);
     window.addEventListener("online", handleOnline);
-
     return () => {
       window.removeEventListener("offline", handleOffline);
       window.removeEventListener("online", handleOnline);
