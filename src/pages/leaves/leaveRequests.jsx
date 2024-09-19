@@ -3,13 +3,18 @@
  */
 
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate, useLocation } from "react-router-dom"; // Use useNavigate and useLocation
 
 import { leaveApis } from "../../apis";
 import { formattedMDYDate } from "../../utils/CommonUtils";
-import { getLeaveType, LEAVE_STATUS } from "../../constants";
+import {
+  getLeaveType,
+  LEAVE_STATUS,
+  LEAVE_STATUS_ARRAY,
+} from "../../constants";
 import {
   Button,
+  Input,
   Loader,
   NoRecordsFound,
   ScreenHeader,
@@ -21,21 +26,34 @@ const { approved, pending, rejected } = LEAVE_STATUS;
 
 const LeaveRequests = () => {
   const { user_id } = useParams();
+  const navigate = useNavigate();
+  const location = useLocation();
   const [screenLoading, setScreenLoading] = useState(false);
   const [loading, setLoading] = useState({});
   const [leaveRequests, setLeaveRequests] = useState([]);
   const [toastMsg, setToastMsg] = useState("");
+  const [selectedStatus, setSelectedStatus] = useState("");
 
   useEffect(() => {
+    const queryParams = new URLSearchParams(location.search);
+    const status = queryParams.get("status") || "";
+    setSelectedStatus(status);
     if (user_id) {
-      getSubordinatesLeaves();
+      getSubordinatesLeaves(status);
     }
-  }, [user_id]);
+  }, [user_id, location.search]);
+
+  const handleFilterChange = (status) => {
+    setSelectedStatus(status);
+    const queryParams = new URLSearchParams(location.search);
+    queryParams.set("status", status);
+    navigate({ search: queryParams?.toString() });
+  };
 
   // Fetch leave requests from subordinates
-  const getSubordinatesLeaves = async () => {
+  const getSubordinatesLeaves = async (status) => {
     setScreenLoading(true);
-    const resp = await leaveApis.getLeavesById({ user_id });
+    const resp = await leaveApis.getLeavesById({ user_id, status });
     setTimeout(() => {
       setScreenLoading(false);
     }, 200);
@@ -59,7 +77,7 @@ const LeaveRequests = () => {
     }));
     if (resp?.success) {
       setToastMsg(`Leave ${status} successfully!`);
-      getSubordinatesLeaves();
+      getSubordinatesLeaves(selectedStatus);
     }
   };
 
@@ -68,10 +86,23 @@ const LeaveRequests = () => {
       <div className="bg-white">
         <ScreenHeader title="Leave Requests" />
 
+        {/* Filter Dropdown */}
+        <div className="w-[85%] mx-auto mt-6">
+          <select
+            value={selectedStatus}
+            onChange={(e) => handleFilterChange(e.target.value)}
+            className="border text-sm border-gray-300 px-2 py-1 rounded-md"
+          >
+            {LEAVE_STATUS_ARRAY.map((l) => (
+              <option value={l.value}>{l.label}</option>
+            ))}
+          </select>
+        </div>
+
         {screenLoading ? (
           <Loader />
         ) : (
-          <div className="w-[85%] mx-auto mt-12">
+          <div className="w-[85%] mx-auto mt-6">
             {!leaveRequests?.length ? (
               <NoRecordsFound />
             ) : (
@@ -133,7 +164,9 @@ const LeaveRequests = () => {
                     {/* Reason */}
                     <div>
                       <p className="text-sm text-gray-700">Reason</p>
-                      <p className="text-sm font-medium text-gray-900">{reason}</p>
+                      <p className="text-sm font-medium text-gray-900">
+                        {reason}
+                      </p>
                     </div>
 
                     {/* Approve/Reject Buttons */}

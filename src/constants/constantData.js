@@ -45,3 +45,10 @@ export const LEAVE_STATUS = {
   pending: "pending",
   rejected: "rejected",
 };
+
+export const LEAVE_STATUS_ARRAY = [
+  { label: "All", value: "" },
+  { label: "Approved", value: LEAVE_STATUS.approved },
+  { label: "Pending", value: LEAVE_STATUS.pending },
+  { label: "Rejected", value: LEAVE_STATUS.rejected },
+];
