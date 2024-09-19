@@ -10,7 +10,7 @@ import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 
 import { leaveApis } from "../../apis";
-import { UtilFunctions } from "../../utils/CommonUtils";
+import { formattedMDYDate, UtilFunctions } from "../../utils/CommonUtils";
 import {
   DAY_TYPES,
   getLeaveType,
@@ -82,7 +82,7 @@ const CalendarInput = ({
       <div className="relative" onClick={handleOpenCalendar}>
         <input
           type="text"
-          value={value ? value?.toDateString() : ""}
+          value={value ? formattedMDYDate(value) : ""}
           placeholder={`Select ${label?.toLowerCase()}`}
           readOnly
           className="border border-gray-300 text-sm p-2 pl-10 rounded-lg w-full cursor-pointer disabled:cursor-not-allowed"
@@ -173,8 +173,8 @@ const ApplyLeave = () => {
 
         return (
           <tr key={_id} className="border-b border-gray-200">
-            <TableCell>{new Date(leaveStart)?.toDateString()}</TableCell>
-            <TableCell>{new Date(leaveEnd)?.toDateString()}</TableCell>
+            <TableCell>{formattedMDYDate(leaveStart)}</TableCell>
+            <TableCell>{formattedMDYDate(leaveEnd)}</TableCell>
             <TableCell>{getLeaveType(leaveType)}</TableCell>
             <TableCell>{dayType}</TableCell>
             <TableCell>{reason}</TableCell>

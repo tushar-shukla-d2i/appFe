@@ -6,6 +6,7 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 
 import { leaveApis } from "../../apis";
+import { formattedMDYDate } from "../../utils/CommonUtils";
 import { getLeaveType, LEAVE_STATUS } from "../../constants";
 import {
   Button,
@@ -88,7 +89,7 @@ const LeaveRequests = () => {
                 return (
                   <div
                     key={_id}
-                    className="p-6 mt-6 bg-gray-50 rounded-lg shadow-md border border-gray-200"
+                    className="p-6 mt-6 bg-gray-50 rounded-lg shadow-md border border-gray-200 mb-6"
                   >
                     {/* User Name */}
                     <p className="text-center mb-4 font-bold text-gray-900">
@@ -100,14 +101,14 @@ const LeaveRequests = () => {
                       <div>
                         <p className="text-sm text-gray-700">Start Date</p>
                         <p className="text-sm font-medium text-gray-900">
-                          {new Date(leaveStart)?.toDateString()}
+                          {formattedMDYDate(leaveStart)}
                         </p>
                       </div>
                       {/* End Date */}
                       <div>
                         <p className="text-sm text-gray-700">End Date</p>
                         <p className="text-sm font-medium text-gray-900">
-                          {new Date(leaveEnd)?.toDateString()}
+                          {formattedMDYDate(leaveEnd)}
                         </p>
                       </div>
                     </div>
@@ -135,7 +136,7 @@ const LeaveRequests = () => {
                       <p className="text-sm text-gray-900">{reason}</p>
                     </div>
 
-                    {/* Approve/Decline Buttons */}
+                    {/* Approve/Reject Buttons */}
                     <div className="flex flex-wrap justify-center">
                       {status === pending ? (
                         <>
@@ -146,25 +147,25 @@ const LeaveRequests = () => {
                               handleSubmit(_id, approved, "approve")
                             }
                             disabled={
-                              loading[_id]?.approve || loading[_id]?.decline
+                              loading[_id]?.approve || loading[_id]?.rejected
                             }
                             className={`bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-md text-sm w-fit m-2 ${
-                              loading[_id]?.approve || loading[_id]?.decline
+                              loading[_id]?.approve || loading[_id]?.rejected
                                 ? "opacity-50 cursor-not-allowed"
                                 : ""
                             }`}
                           />
                           <Button
-                            title="Decline"
-                            loading={loading[_id]?.decline}
+                            title="Reject"
+                            loading={loading[_id]?.rejected}
                             onClick={() =>
-                              handleSubmit(_id, rejected, "decline")
+                              handleSubmit(_id, rejected, "rejected")
                             }
                             disabled={
-                              loading[_id]?.approve || loading[_id]?.decline
+                              loading[_id]?.approve || loading[_id]?.rejected
                             }
                             className={`bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-md text-sm w-fit m-2 ${
-                              loading[_id]?.approve || loading[_id]?.decline
+                              loading[_id]?.approve || loading[_id]?.rejected
                                 ? "opacity-50 cursor-not-allowed"
                                 : ""
                             }`}
@@ -172,9 +173,9 @@ const LeaveRequests = () => {
                         </>
                       ) : (
                         <Button
-                          title={status === approved ? "Approved" : "Declined"}
+                          title={status}
                           disabled
-                          className="text-white py-2 px-4 rounded-md text-sm w-fit m-2 disabled:bg-gray-400"
+                          className="text-white capitalize py-2 px-4 rounded-md text-sm w-fit m-2 disabled:bg-gray-400"
                         />
                       )}
                     </div>
