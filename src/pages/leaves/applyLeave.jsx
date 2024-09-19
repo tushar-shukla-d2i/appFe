@@ -19,6 +19,7 @@ import {
 } from "../../constants";
 import {
   Button,
+  ErrorComponent,
   ErrorMsg,
   Input,
   ScreenHeader,
@@ -60,10 +61,13 @@ const CalendarInput = ({
   minDate,
   maxDate,
   disabled,
+  apiError,
+  setApiError,
 }) => {
   const [calendarOpen, setCalendarOpen] = useState(false);
 
   const handleDateChange = (date) => {
+    !!apiError && setApiError("");
     if (!isDisabled(date)) {
       setFieldValue(fieldName, date);
     }
@@ -121,6 +125,7 @@ const ApplyLeave = () => {
   const [toastMsg, setToastMsg] = useState("");
   const [leaves, setLeaves] = useState([]);
   const [leavesLoading, setLeavesLoading] = useState(false);
+  const [apiError, setApiError] = useState("");
 
   useEffect(() => {
     fetchMyLeaves();
@@ -211,6 +216,8 @@ const ApplyLeave = () => {
       setToastMsg("Leave applied successfully!");
       fetchMyLeaves();
       resetForm();
+    } else {
+      setApiError(resp?.errors?.global);
     }
   };
 
@@ -220,6 +227,8 @@ const ApplyLeave = () => {
         <ScreenHeader title="Apply Leave" />
         <div className="w-[85%] mx-auto mt-16 mb-6">
           <div className="p-6 mt-8 bg-white rounded-lg shadow-lg border border-gray-300">
+            {!!apiError && <ErrorComponent error={apiError} />}
+
             <Formik
               initialValues={{
                 reason: "",
@@ -246,6 +255,8 @@ const ApplyLeave = () => {
                         values?.leaveEnd ? new Date(values?.leaveEnd) : null
                       }
                       disabled={loading}
+                      apiError={apiError}
+                      setApiError={setApiError}
                     />
 
                     {/* End Date Input */}
@@ -256,6 +267,8 @@ const ApplyLeave = () => {
                       fieldName="leaveEnd"
                       minDate={values?.leaveStart || new Date(getTodayDate())}
                       disabled={loading}
+                      apiError={apiError}
+                      setApiError={setApiError}
                     />
                   </div>
 
