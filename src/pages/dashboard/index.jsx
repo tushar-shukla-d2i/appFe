@@ -7,8 +7,8 @@ import { useNavigate } from "react-router-dom";
 import { FiCamera, FiEdit, FiLogOut } from "react-icons/fi";
 
 import { Config } from "../../utils/config";
-import { ScreenWrapper } from "../../components";
-import placeholderImg from "../../assets/react.svg";
+import { Loader, ScreenWrapper } from "../../components";
+import placeholderImg from "../../assets/placeholder.png";
 import { LocalStorageHelper } from "../../utils/HttpUtils";
 import { authApis, commonApis, rewardsApis } from "../../apis";
 import { AppRoutes, USER_DATA, USER_ROLES } from "../../constants";
@@ -31,6 +31,7 @@ const Dashboard = () => {
   const { _id, firstName, lastName, officialEmail, role } = userData ?? {};
   const [rewards, setRewards] = useState(false);
   const [userImage, setUserImage] = useState("");
+  const [isUploading, setIsUploading] = useState(false);
 
   useEffect(() => {
     getUserData();
@@ -60,7 +61,17 @@ const Dashboard = () => {
   const uploadProfilePicture = async (file) => {
     const formData = new FormData();
     formData.append("userProfile", file);
-    await commonApis.me({ user_id: _id, payload: formData });
+    try {
+      setIsUploading(true);
+      const resp = await commonApis.me({ user_id: _id, payload: formData });
+      if (resp?.success) {
+        getUserData();
+      }
+    } catch (error) {
+      console.error("Failed to upload image:", error);
+    } finally {
+      setIsUploading(false);
+    }
   };
 
   const handleImageUpload = (e) => {
@@ -85,11 +96,17 @@ const Dashboard = () => {
       <div>
         <div className="flex h-48 items-center w-full px-8 pt-6 pb-20 bg-[#72abbc] rounded-b-[3.5rem]">
           <div className="relative h-16 w-16 rounded-full mr-6">
-            <img
-              alt="user_img"
-              src={userImage || placeholderImg}
-              className="h-full w-full rounded-full hover:cursor-pointer"
-            />
+            {isUploading ? (
+              <div className="h-full w-full flex items-center justify-center">
+                <Loader />
+              </div>
+            ) : (
+              <img
+                alt="user_img"
+                src={userImage || placeholderImg}
+                className="h-full w-full rounded-full hover:cursor-pointer"
+              />
+            )}
             <label className="absolute bottom-2 -right-2 flex items-center justify-center cursor-pointer">
               {userImage ? (
                 <FiEdit className="text-white text-xl" />
