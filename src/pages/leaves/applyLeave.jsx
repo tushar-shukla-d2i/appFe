@@ -146,7 +146,7 @@ const ApplyLeave = () => {
           "Reason",
           "Status",
         ].map((header) => (
-          <th key={header} className="p-2 text-left text-sm font-semibold">
+          <th key={header} className="p-2 text-center text-sm font-semibold">
             {header}
           </th>
         ))}
@@ -155,7 +155,7 @@ const ApplyLeave = () => {
   );
 
   const TableCell = ({ children }) => (
-    <td className="p-2 text-sm capitalize">{children}</td>
+    <td className="p-2 text-center text-sm capitalize">{children}</td>
   );
 
   const TableBody = ({ leaves }) => (
@@ -178,7 +178,7 @@ const ApplyLeave = () => {
             <TableCell>{getLeaveType(leaveType)}</TableCell>
             <TableCell>{dayType}</TableCell>
             <TableCell>{reason}</TableCell>
-            <td className="p-2 text-xs text-white font-medium capitalize">
+            <td className="p-2 text-center text-xs text-white font-medium capitalize">
               <div
                 className={`${
                   status === approved
