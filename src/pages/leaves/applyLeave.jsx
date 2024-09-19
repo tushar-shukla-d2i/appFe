@@ -130,7 +130,7 @@ const ApplyLeave = () => {
     setLeavesLoading(true);
     const resp = await leaveApis.getMyLeaves();
     if (resp?.success) {
-      setLeaves(resp.data?.data || []);
+      setLeaves(resp.data?.data?.leaves || []);
     }
     setLeavesLoading(false);
   };
