@@ -52,3 +52,5 @@ export const LEAVE_STATUS_ARRAY = [
   { label: "Pending", value: LEAVE_STATUS.pending },
   { label: "Rejected", value: LEAVE_STATUS.rejected },
 ];
+
+export const RECORDS_PER_PAGE = 10;

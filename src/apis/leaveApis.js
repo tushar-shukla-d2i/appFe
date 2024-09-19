@@ -15,10 +15,10 @@ export const leaveApis = {
     }
   },
 
-  getLeavesById: async ({ user_id, status }) => {
+  getLeavesById: async ({ user_id, status, page, limit }) => {
     try {
       const response = await httpClient.get(`${endpoints.LEAVE}/${user_id}`, {
-        params: { status },
+        params: { status, page, limit },
       });
       return response;
     } catch (error) {

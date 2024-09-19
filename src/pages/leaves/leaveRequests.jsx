@@ -3,7 +3,8 @@
  */
 
 import React, { useState, useEffect } from "react";
-import { useParams, useNavigate, useLocation } from "react-router-dom"; // Use useNavigate and useLocation
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa6";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 
 import { leaveApis } from "../../apis";
 import { formattedMDYDate } from "../../utils/CommonUtils";
@@ -11,10 +12,10 @@ import {
   getLeaveType,
   LEAVE_STATUS,
   LEAVE_STATUS_ARRAY,
+  RECORDS_PER_PAGE,
 } from "../../constants";
 import {
   Button,
-  Input,
   Loader,
   NoRecordsFound,
   ScreenHeader,
@@ -33,32 +34,43 @@ const LeaveRequests = () => {
   const [leaveRequests, setLeaveRequests] = useState([]);
   const [toastMsg, setToastMsg] = useState("");
   const [selectedStatus, setSelectedStatus] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
   useEffect(() => {
     const queryParams = new URLSearchParams(location.search);
     const status = queryParams.get("status") || "";
     setSelectedStatus(status);
     if (user_id) {
-      getSubordinatesLeaves(status);
+      getSubordinatesLeaves(status, 1);
     }
   }, [user_id, location.search]);
 
   const handleFilterChange = (status) => {
     setSelectedStatus(status);
+    setCurrentPage(1);
     const queryParams = new URLSearchParams(location.search);
     queryParams.set("status", status);
     navigate({ search: queryParams?.toString() });
+    getSubordinatesLeaves(status, 1);
   };
 
   // Fetch leave requests from subordinates
-  const getSubordinatesLeaves = async (status) => {
+  const getSubordinatesLeaves = async (status, page) => {
     setScreenLoading(true);
-    const resp = await leaveApis.getLeavesById({ user_id, status });
+    const resp = await leaveApis.getLeavesById({
+      user_id,
+      status,
+      page,
+      limit: RECORDS_PER_PAGE,
+    });
     setTimeout(() => {
       setScreenLoading(false);
     }, 200);
     if (resp?.success) {
-      setLeaveRequests(resp?.data?.data || []);
+      setLeaveRequests(resp?.data?.data?.leaves || []);
+      setTotalPages(resp?.data?.data?.totalPages || 1);
+      setCurrentPage(page);
     }
   };
 
@@ -77,8 +89,118 @@ const LeaveRequests = () => {
     }));
     if (resp?.success) {
       setToastMsg(`Leave ${status} successfully!`);
-      getSubordinatesLeaves(selectedStatus);
+      getSubordinatesLeaves(selectedStatus, currentPage);
     }
+  };
+
+  const handlePageChange = (page) => {
+    getSubordinatesLeaves(selectedStatus, page);
+  };
+
+  const renderPaginationButtons = () => {
+    const buttons = [];
+
+    // Prev button
+    buttons.push(
+      <button
+        key="prev"
+        onClick={() => handlePageChange(Math.max(1, currentPage - 1))}
+        disabled={currentPage === 1}
+        className={`p-2 rounded-md border-2 ${
+          currentPage === 1
+            ? "text-gray-400 border-gray-300 cursor-not-allowed"
+            : "bg-white text-black border-gray-500"
+        }`}
+      >
+        <FaChevronLeft
+          className={`${
+            currentPage === 1 ? "text-gray-400" : "text-gray-600"
+          } text-sm`}
+        />
+      </button>
+    );
+
+    // First page box
+    buttons.push(
+      <button
+        key="page1"
+        disabled={currentPage === 1}
+        onClick={() =>
+          handlePageChange(currentPage === 1 ? 1 : currentPage - 1)
+        }
+        className={`px-3 py-1 rounded-md border-2 ${
+          currentPage === 1
+            ? "border-gray-300 text-gray-400 cursor-not-allowed"
+            : "border-gray-500"
+        }`}
+      >
+        {currentPage === 1 ? 1 : currentPage - 1}
+      </button>
+    );
+
+    // Second page box
+    buttons.push(
+      <button
+        key="page2"
+        disabled={totalPages === 1 || currentPage === totalPages}
+        onClick={() => handlePageChange(currentPage === 1 ? 2 : currentPage)}
+        className={`px-3 py-1 rounded-md border-2 ${
+          totalPages === 1 || currentPage === totalPages
+            ? "border-gray-300 text-gray-400 cursor-not-allowed"
+            : "border-gray-500"
+        }`}
+      >
+        {currentPage === 1 ? 2 : currentPage}
+      </button>
+    );
+
+    // Ellipsis
+    buttons.push(
+      <span key="ellipsis" className="pr-2">
+        ...
+      </span>
+    );
+
+    // Last page box
+    {
+      totalPages > 1 &&
+        buttons.push(
+          <button
+            key="lastPage"
+            onClick={() => handlePageChange(totalPages)}
+            disabled={currentPage === totalPages}
+            className={`px-3 py-1 rounded-md border-2 ${
+              currentPage === totalPages
+                ? "border-gray-300 text-gray-400 cursor-not-allowed"
+                : "border-gray-500"
+            }`}
+          >
+            {totalPages}
+          </button>
+        );
+    }
+
+    // Next button
+    buttons.push(
+      <button
+        key="next"
+        onClick={() => handlePageChange(Math.min(totalPages, currentPage + 1))}
+        disabled={currentPage === totalPages}
+        className={`p-2 rounded-md border-2 ${
+          currentPage === totalPages
+            ? "text-gray-400 border-gray-300 cursor-not-allowed"
+            : "bg-white text-black border-gray-500"
+        }`}
+      >
+        <FaChevronRight
+          className={`${
+            currentPage === totalPages ? "text-gray-400" : "text-gray-600"
+          } text-sm`}
+        />
+      </button>
+    );
+
+    return buttons;
   };
 
   return (
@@ -94,7 +216,9 @@ const LeaveRequests = () => {
             className="border text-sm border-gray-300 px-2 py-1 rounded-md"
           >
             {LEAVE_STATUS_ARRAY.map((l) => (
-              <option value={l.value}>{l.label}</option>
+              <option key={l.value} value={l.value}>
+                {l.label}
+              </option>
             ))}
           </select>
         </div>
@@ -216,6 +340,11 @@ const LeaveRequests = () => {
                 );
               })
             )}
+
+            {/* Pagination */}
+            <div className="flex justify-center items-center space-x-2 mt-6 mb-8">
+              {renderPaginationButtons()}
+            </div>
           </div>
         )}
         <Toast message={toastMsg} navigateUrl={null} />
