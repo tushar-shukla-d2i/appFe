@@ -43,7 +43,9 @@ const isDisabled = (date) => {
   const isSunday = day === 0;
   const isSaturday = day === 6;
   const isFirstSaturday = date?.getDate() <= 7 && isSaturday;
-  const isPastDate = date < new Date();
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const isPastDate = date < today;
   const holidays = [new Date(2024, 0, 1), new Date(2024, 11, 25)];
   const isHoliday = holidays.some(
     (holiday) => date?.toDateString() === holiday?.toDateString()
