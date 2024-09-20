@@ -5,18 +5,25 @@
 import { endpoints } from "./endpoints";
 import { httpClient } from "../utils/HttpUtils";
 import { sortList } from "../utils/CommonUtils";
+import { RECORDS_PER_PAGE } from "../constants";
 
 export const userApis = {
-  getAllUsers: async ({ includeSelf } = {}) => {
+  getAllUsers: async ({
+    includeSelf,
+    page,
+    limit = RECORDS_PER_PAGE,
+    q,
+  } = {}) => {
     try {
-      let url = endpoints.USERS;
-      if (includeSelf) {
-        url += `?includeSelf=true`;
-      }
-      const resp = await httpClient.get(url);
-      return resp?.data?.data
-        ? sortList(resp?.data?.data, "firstName", "lastName")
-        : [];
+      const resp = await httpClient.get(endpoints.USERS, {
+        params: { includeSelf, page, limit, q },
+      });
+      return resp?.data?.data?.users
+        ? {
+            users: sortList(resp?.data?.data?.users, "firstName", "lastName"),
+            data: resp?.data?.data,
+          }
+        : {};
     } catch (error) {
       console.log("getAllUsers:", error);
     }

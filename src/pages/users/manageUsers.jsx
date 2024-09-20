@@ -3,55 +3,70 @@
  */
 
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { MdEditNote } from "react-icons/md";
 import { FaSearch, FaTimes } from "react-icons/fa";
 
 import { userApis } from "../../apis";
-import { Config } from "../../utils/config";
+import { useDebounce } from "../../utils";
 import { AppRoutes } from "../../constants";
+import { Config } from "../../utils/config";
 import placeholderImg from "../../assets/placeholder.png";
 import {
   Loader,
   NoRecordsFound,
+  Pagination,
   ScreenHeader,
   ScreenWrapper,
 } from "../../components";
 
 const ManageUsers = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [loading, setLoading] = useState(true);
   const [usersList, setUsersList] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
-  const [filteredUsers, setFilteredUsers] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
   useEffect(() => {
-    getUsersList();
-  }, []);
+    const queryParams = new URLSearchParams(location.search);
+    const page = queryParams.get("page")
+      ? parseInt(queryParams.get("page"), 10)
+      : 1;
+    const query = queryParams.get("q") || "";
+    setCurrentPage(page);
+    setSearchQuery(query);
+    getUsersList(page, query);
+  }, [location.search]);
 
-  useEffect(() => {
-    filterUsers();
-  }, [usersList, searchQuery]);
-
-  const getUsersList = async () => {
+  const getUsersList = async (page, q) => {
     setLoading(true);
-    const resp = await userApis.getAllUsers();
-    setUsersList(resp);
+    const resp = await userApis.getAllUsers({ page, q });
+    setUsersList(resp?.users || []);
+    setTotalPages(resp?.data?.totalPages || 1);
     setLoading(false);
   };
 
-  const filterUsers = () => {
-    const lowercasedQuery = searchQuery?.toLowerCase();
+  // Debounced search function
+  const debouncedSearch = useDebounce((query) => {
+    const queryParams = new URLSearchParams(location.search);
+    queryParams.set("q", query);
+    queryParams.set("page", 1);
+    navigate({ search: queryParams.toString() });
+  }, 500);
 
-    const fieldsToSearch = ["_id", "firstName", "lastName", "officialEmail"];
+  const handleSearch = (e) => {
+    const query = e.target.value;
+    setSearchQuery(query);
+    debouncedSearch(query);
+  };
 
-    const filtered = usersList?.filter?.((user) =>
-      fieldsToSearch?.some?.((field) =>
-        user?.[field]?.toString()?.toLowerCase()?.includes?.(lowercasedQuery)
-      )
-    );
-
-    setFilteredUsers(filtered);
+  const handlePageChange = (page) => {
+    const queryParams = new URLSearchParams(location.search);
+    queryParams.set("page", page);
+    navigate({ search: queryParams.toString() });
+    setCurrentPage(page);
   };
 
   const handleAddClick = () => {
@@ -64,33 +79,41 @@ const ManageUsers = () => {
         {/* Top Bar */}
         <ScreenHeader title="Manage Users" handleAddClick={handleAddClick} />
 
-        <div className="relative mx-7 sm:mx-11 mt-10 mb-5">
-          <input
-            type="text"
-            placeholder="Search..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="p-2 border border-gray-500 rounded-lg w-full sm:w-3/4"
-          />
-          <div className="absolute top-3 right-2">
-            {searchQuery ? (
-              <FaTimes
-                className="cursor-pointer text-gray-500"
-                onClick={() => setSearchQuery("")}
-              />
-            ) : (
-              <FaSearch className="text-gray-500" />
-            )}
+        <div className="flex items-center justify-between mx-10 mt-10 mb-6">
+          <div className="relative mr-8">
+            <input
+              type="text"
+              placeholder="Search..."
+              value={searchQuery}
+              onChange={handleSearch}
+              className="p-2 border border-gray-500 rounded-lg w-full sm:w-3/4"
+            />
+            <div className="absolute top-3 right-2">
+              {searchQuery ? (
+                <FaTimes
+                  className="cursor-pointer text-gray-500"
+                  onClick={() => handleSearch({ target: { value: "" } })}
+                />
+              ) : (
+                <FaSearch className="text-gray-500" />
+              )}
+            </div>
           </div>
+
+          <Pagination
+            totalPages={totalPages}
+            currentPage={currentPage}
+            handlePageChange={handlePageChange}
+          />
         </div>
 
         {/* Team Members List */}
         <div className="flex-1 overflow-y-auto">
           {loading ? (
             <Loader />
-          ) : filteredUsers?.length ? (
+          ) : usersList?.length ? (
             <ul className="mx-7 sm:mx-10 my-4 space-y-2">
-              {filteredUsers.map((user) => {
+              {usersList?.map?.((user) => {
                 const { _id, firstName, lastName, officialEmail, userProfile } =
                   user ?? {};
                 return (
