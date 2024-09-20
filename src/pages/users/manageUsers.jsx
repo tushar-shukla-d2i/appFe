@@ -5,7 +5,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { MdEditNote } from "react-icons/md";
-import { FaSearch, FaTimes } from "react-icons/fa";
 
 import { userApis } from "../../apis";
 import { useDebounce } from "../../utils";
@@ -18,6 +17,7 @@ import {
   Pagination,
   ScreenHeader,
   ScreenWrapper,
+  SearchInput,
 } from "../../components";
 
 const ManageUsers = () => {
@@ -80,25 +80,7 @@ const ManageUsers = () => {
         <ScreenHeader title="Manage Users" handleAddClick={handleAddClick} />
 
         <div className="flex items-center justify-between mx-10 mt-10 mb-6">
-          <div className="relative mr-8">
-            <input
-              type="text"
-              placeholder="Search..."
-              value={searchQuery}
-              onChange={handleSearch}
-              className="p-2 border border-gray-500 rounded-lg w-full sm:w-3/4"
-            />
-            <div className="absolute top-3 right-2">
-              {searchQuery ? (
-                <FaTimes
-                  className="cursor-pointer text-gray-500"
-                  onClick={() => handleSearch({ target: { value: "" } })}
-                />
-              ) : (
-                <FaSearch className="text-gray-500" />
-              )}
-            </div>
-          </div>
+          <SearchInput searchQuery={searchQuery} handleSearch={handleSearch} />
 
           <Pagination
             totalPages={totalPages}

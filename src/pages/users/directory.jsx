@@ -3,7 +3,6 @@
  */
 
 import React, { useEffect, useState } from "react";
-import { FaSearch, FaTimes } from "react-icons/fa";
 import { useNavigate, useLocation } from "react-router-dom";
 
 import { userApis } from "../../apis";
@@ -14,6 +13,7 @@ import {
   Pagination,
   ScreenHeader,
   ScreenWrapper,
+  SearchInput,
   UserCard,
 } from "../../components";
 
@@ -74,25 +74,7 @@ const Directory = () => {
 
         {/* Search Input */}
         <div className="flex items-center justify-between mx-10 mt-10 mb-6">
-          <div className="relative mr-8">
-            <input
-              type="text"
-              placeholder="Search..."
-              value={searchQuery}
-              onChange={handleSearch}
-              className="p-2 border border-gray-500 rounded-lg w-full pr-10"
-            />
-            <div className="absolute top-3 right-2">
-              {searchQuery ? (
-                <FaTimes
-                  className="cursor-pointer text-gray-500"
-                  onClick={() => handleSearch({ target: { value: "" } })}
-                />
-              ) : (
-                <FaSearch className="text-gray-500" />
-              )}
-            </div>
-          </div>
+          <SearchInput searchQuery={searchQuery} handleSearch={handleSearch} />
 
           <Pagination
             totalPages={totalPages}
