@@ -6,6 +6,7 @@ const urlsToCache = [
   "/index.html",
   "/static/js/bundle.js",
   "/static/css/main.css",
+  "/assets/no-internet.jpeg",
 ];
 
 self.addEventListener("install", (event) => {
