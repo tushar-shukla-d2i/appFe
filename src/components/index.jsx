@@ -13,5 +13,6 @@ export { NoRecordsFound } from "./NoRecordsFound";
 export { Pagination } from "./Pagination";
 export { ScreenHeader } from "./ScreenHeader";
 export { ScreenWrapper } from "./ScreenWrapper";
+export { SearchInput } from "./SearchInput";
 export { Toast } from "./Toast";
 export { UserCard } from "./UserCard";
