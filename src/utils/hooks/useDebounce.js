@@ -1,5 +1,5 @@
 /**
- * Custom hooks
+ * use debounce hook
  */
 
 import { useEffect, useRef } from "react";
