@@ -3,56 +3,84 @@
  */
 
 import React, { useEffect, useState } from "react";
-import { FaSearch, FaTimes } from "react-icons/fa";
+import { useNavigate, useLocation } from "react-router-dom";
 
 import { attendanceApis } from "../../apis";
-import { convertUTCtoIST, UtilFunctions } from "../../utils/CommonUtils";
-import { NoRecordsFound, ScreenHeader, ScreenWrapper } from "../../components";
+import { convertUTCtoIST, useDebounce, UtilFunctions } from "../../utils";
+import {
+  NoRecordsFound,
+  ScreenHeader,
+  ScreenWrapper,
+  Loader,
+  Pagination,
+  SearchInput,
+} from "../../components";
 
 const AttendanceRecords = () => {
-  const [date, setDate] = useState(new Date().toISOString().split("T")[0]);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [loading, setLoading] = useState(true);
+  const [attendanceDate, setAttendanceDate] = useState(
+    new Date().toISOString().split("T")[0]
+  );
   const [attendanceList, setAttendanceList] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
-  const [filteredUsers, setFilteredUsers] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
   useEffect(() => {
-    getAttendanceList();
-  }, []);
+    const queryParams = new URLSearchParams(location.search);
+    const page = queryParams.get("page")
+      ? parseInt(queryParams.get("page"), 10)
+      : 1;
+    const query = queryParams.get("q") || "";
+    const date =
+      queryParams.get("date") || new Date().toISOString().split("T")[0];
+    setCurrentPage(page);
+    setSearchQuery(query);
+    setAttendanceDate(date);
+    getAttendanceList(page, query, date);
+  }, [location.search]);
 
-  useEffect(() => {
-    filterUsers();
-  }, [attendanceList, searchQuery]);
-
-  const getAttendanceList = async (attendanceDate) => {
-    let payload = { attendanceDate };
+  const getAttendanceList = async (page, q, date) => {
+    setLoading(true);
+    let payload = { page, q, attendanceDate: date };
     payload = UtilFunctions.convertToDayjsYMDFormat(payload, [
       "attendanceDate",
     ]);
     const resp = await attendanceApis.getAttendance(payload);
-    setAttendanceList(resp?.data?.data?.employees);
+    setAttendanceList(resp?.data?.data?.records?.employees || []);
+    setTotalPages(resp?.data?.data?.totalPages || 1);
+    setLoading(false);
   };
 
-  const filterUsers = () => {
-    const lowercasedQuery = searchQuery?.toLowerCase();
-    const fieldsToSearch = [
-      "_id",
-      "userName",
-      "punchInTime",
-      "punchOutTime",
-      "timesheet",
-    ];
-    const filtered = attendanceList?.filter?.((user) =>
-      fieldsToSearch?.some?.((field) =>
-        user?.[field]?.toString()?.toLowerCase()?.includes?.(lowercasedQuery)
-      )
-    );
+  const handlePageChange = (page) => {
+    const queryParams = new URLSearchParams(location.search);
+    queryParams.set("page", page);
+    navigate({ search: queryParams.toString() });
+    setCurrentPage(page);
+  };
 
-    setFilteredUsers(filtered);
+  const debouncedSearch = useDebounce((query) => {
+    const queryParams = new URLSearchParams(location.search);
+    queryParams.set("q", query);
+    queryParams.set("page", 1);
+    navigate({ search: queryParams.toString() });
+  }, 500);
+
+  const handleSearch = (e) => {
+    const query = e.target.value;
+    setSearchQuery(query);
+    debouncedSearch(query);
   };
 
   const handleDateChange = (event) => {
-    setDate(event.target.value);
-    getAttendanceList(event.target.value);
+    const newDate = event.target.value;
+    setAttendanceDate(newDate);
+    const queryParams = new URLSearchParams(location.search);
+    queryParams.set("date", newDate);
+    queryParams.set("page", 1);
+    navigate({ search: queryParams.toString() });
   };
 
   return (
@@ -68,33 +96,27 @@ const AttendanceRecords = () => {
             <input
               id="datePicker"
               type="date"
-              value={date}
+              value={attendanceDate}
               onChange={handleDateChange}
               className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer"
             />
           </div>
 
-          <div className="relative mb-6">
-            <input
-              type="text"
-              placeholder="Search..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="p-2 border border-gray-500 rounded-lg w-full"
+          <div className="flex items-center justify-between mt-10 mb-6">
+            <SearchInput
+              searchQuery={searchQuery}
+              handleSearch={handleSearch}
             />
-            <div className="absolute top-3 right-2">
-              {searchQuery ? (
-                <FaTimes
-                  className="cursor-pointer text-gray-500"
-                  onClick={() => setSearchQuery("")}
-                />
-              ) : (
-                <FaSearch className="text-gray-500" />
-              )}
-            </div>
-          </div>
 
-          {filteredUsers?.length ? (
+            <Pagination
+              totalPages={totalPages}
+              currentPage={currentPage}
+              handlePageChange={handlePageChange}
+            />
+          </div>
+          {loading ? (
+            <Loader />
+          ) : attendanceList.length ? (
             <div className="overflow-x-auto">
               <table className="min-w-full bg-white border border-gray-300">
                 <thead>
@@ -111,7 +133,7 @@ const AttendanceRecords = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {filteredUsers?.map?.((employee) => {
+                  {attendanceList?.map?.((employee) => {
                     const {
                       _id,
                       userName,
@@ -133,7 +155,7 @@ const AttendanceRecords = () => {
                           </div>
                         </td>
                         <td className="py-2 px-4">
-                          <div className="truncate max-w-xs">{timesheet}</div>
+                          <div className="max-w-xs">{timesheet}</div>
                         </td>
                       </tr>
                     );
