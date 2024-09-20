@@ -4,6 +4,7 @@
 
 import { endpoints } from "./endpoints";
 import { httpClient } from "../utils/HttpUtils";
+import { RECORDS_PER_PAGE } from "../constants";
 
 export const leaveApis = {
   getMyLeaves: async () => {
@@ -15,7 +16,12 @@ export const leaveApis = {
     }
   },
 
-  getLeavesById: async ({ user_id, status, page, limit }) => {
+  getLeavesById: async ({
+    user_id,
+    status,
+    page,
+    limit = RECORDS_PER_PAGE,
+  }) => {
     try {
       const response = await httpClient.get(`${endpoints.LEAVE}/${user_id}`, {
         params: { status, page, limit },
