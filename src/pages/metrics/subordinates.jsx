@@ -36,15 +36,15 @@ const Subordinates = () => {
   const getMetricData = async () => {
     const resp = await metricsApis.getMetricById({ metric_id });
     if (resp?.success) {
-      setMetricData(resp?.data?.data);
-      getParentMetricData(resp?.data?.data?.parent_id);
+      setMetricData(resp?.data?.data?.parentMetric);
+      getParentMetricData(resp?.data?.data?.parentMetric?.parent_id);
     }
   };
 
   const getParentMetricData = async (parent_id) => {
     const resp = await metricsApis.getMetricById({ metric_id: parent_id });
     if (resp?.success) {
-      setParentMetricData(resp?.data?.data);
+      setParentMetricData(resp?.data?.data?.parentMetric);
     }
   };
 

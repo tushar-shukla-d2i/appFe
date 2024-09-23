@@ -42,7 +42,7 @@ const SubMetrics = () => {
     <ScreenWrapper>
       <div className="bg-white min-h-screen flex flex-col">
         <ScreenHeader
-          title={parentMetricData?.label}
+          title={parentMetricData?.parentMetric?.label}
           handleAddClick={handleAddClick}
         />
 

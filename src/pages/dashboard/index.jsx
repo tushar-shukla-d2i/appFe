@@ -54,7 +54,7 @@ const Dashboard = () => {
   const getRewardsList = async () => {
     const resp = await rewardsApis.getAllRewards({ user_id: _id });
     if (resp?.success) {
-      setRewards(resp?.data?.data);
+      setRewards(resp?.data?.data?.rewards);
     }
   };
 

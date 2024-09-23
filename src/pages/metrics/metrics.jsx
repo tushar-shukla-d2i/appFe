@@ -26,8 +26,8 @@ const Metrics = () => {
   const getMetricsList = async () => {
     setLoading(true);
     const resp = await metricsApis.getAllMetrics();
-    if (resp?.success && resp?.data?.data?.length) {
-      setMetricsList(resp?.data?.data);
+    if (resp?.success && resp?.data?.data?.metrics?.length) {
+      setMetricsList(resp?.data?.data?.metrics);
     }
     setLoading(false);
   };

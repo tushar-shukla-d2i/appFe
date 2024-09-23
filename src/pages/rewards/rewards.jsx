@@ -71,7 +71,7 @@ const Rewards = () => {
     const resp = await rewardsApis.getAllRewards({ user_id: userData?._id });
     setLoading(false);
     if (resp?.success) {
-      setRewardsList(resp?.data?.data);
+      setRewardsList(resp?.data?.data?.rewards);
     }
   };
 
