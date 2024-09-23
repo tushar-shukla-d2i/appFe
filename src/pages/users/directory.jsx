@@ -7,6 +7,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 
 import { userApis } from "../../apis";
 import { useDebounce } from "../../utils";
+import { DEBOUNCE_DELAY } from "../../constants";
 import {
   Loader,
   NoRecordsFound,
@@ -58,7 +59,7 @@ const Directory = () => {
     queryParams.set("q", query);
     queryParams.set("page", 1);
     navigate({ search: queryParams.toString() });
-  }, 500);
+  }, DEBOUNCE_DELAY);
 
   const handleSearch = (e) => {
     const query = e.target.value;

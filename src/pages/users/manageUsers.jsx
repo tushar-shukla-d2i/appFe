@@ -7,9 +7,9 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { MdEditNote } from "react-icons/md";
 
 import { userApis } from "../../apis";
-import { AppRoutes } from "../../constants";
 import { envBasedImgUrl, useDebounce } from "../../utils";
 import placeholderImg from "../../assets/placeholder.png";
+import { AppRoutes, DEBOUNCE_DELAY } from "../../constants";
 import {
   Loader,
   NoRecordsFound,
@@ -53,7 +53,7 @@ const ManageUsers = () => {
     queryParams.set("q", query);
     queryParams.set("page", 1);
     navigate({ search: queryParams.toString() });
-  }, 500);
+  }, DEBOUNCE_DELAY);
 
   const handleSearch = (e) => {
     const query = e.target.value;

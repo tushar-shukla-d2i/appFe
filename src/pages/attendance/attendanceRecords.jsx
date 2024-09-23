@@ -6,6 +6,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 
 import { attendanceApis } from "../../apis";
+import { DEBOUNCE_DELAY } from "../../constants";
 import { convertUTCtoIST, useDebounce, UtilFunctions } from "../../utils";
 import {
   NoRecordsFound,
@@ -66,7 +67,7 @@ const AttendanceRecords = () => {
     queryParams.set("q", query);
     queryParams.set("page", 1);
     navigate({ search: queryParams.toString() });
-  }, 500);
+  }, DEBOUNCE_DELAY);
 
   const handleSearch = (e) => {
     const query = e.target.value;
