@@ -7,9 +7,8 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { MdEditNote } from "react-icons/md";
 
 import { userApis } from "../../apis";
-import { useDebounce } from "../../utils";
 import { AppRoutes } from "../../constants";
-import { Config } from "../../utils/config";
+import { envBasedImgUrl, useDebounce } from "../../utils";
 import placeholderImg from "../../assets/placeholder.png";
 import {
   Loader,
@@ -108,7 +107,7 @@ const ManageUsers = () => {
                         className="w-12 h-12 sm:w-16 sm:h-16 rounded-full"
                         src={
                           userProfile
-                            ? `${Config.DEV.IMAGE_BASE_URL}${userProfile}`
+                            ? `${envBasedImgUrl()}${userProfile}`
                             : placeholderImg
                         }
                         alt={`${firstName || "user"} image`}
