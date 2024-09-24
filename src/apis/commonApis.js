@@ -11,9 +11,7 @@ export const commonApis = {
     try {
       const resp = await httpClient.get(endpoints.LOOKUPS);
       return resp;
-    } catch (error) {
-      console.log("lookups:", error);
-    }
+    } catch (error) {}
   },
 
   me: async ({ user_id, payload }) => {
@@ -25,17 +23,13 @@ export const commonApis = {
         LocalStorageHelper.store(USER_DATA, JSON.stringify(resp?.data?.data));
       }
       return resp;
-    } catch (error) {
-      console.log("me:", error);
-    }
+    } catch (error) {}
   },
 
   getMyData: async () => {
     try {
       const resp = await httpClient.get(endpoints.ME);
       return resp;
-    } catch (error) {
-      console.log("getMyData:", error);
-    }
+    } catch (error) {}
   },
 };

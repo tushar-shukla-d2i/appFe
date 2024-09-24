@@ -31,18 +31,14 @@ const AddEditMetric = () => {
 
   const fetchMetricDetails = async () => {
     setLoading(true);
-    const resp = await metricsApis.getMetricById({ metric_id });
-    if (resp?.success) {
-      setInitialMetric(resp?.data?.data);
-    }
+    const resp = await metricsApis.getAllMetrics({ metric_id });
+    setInitialMetric(resp?.data?.parentMetric);
     setLoading(false);
   };
 
   const getSubMetricsList = async () => {
-    const resp = await metricsApis.getMetricById({ metric_id: parent_id });
-    if (resp?.success) {
-      setParentMetricData(resp?.data?.data);
-    }
+    const resp = await metricsApis.getAllMetrics({ metric_id: parent_id });
+    setParentMetricData(resp?.data?.parentMetric);
   };
 
   const validationSchema = Yup.object().shape({

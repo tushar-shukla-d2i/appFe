@@ -5,8 +5,10 @@
 import React from "react";
 
 import placeholderImg from "../assets/placeholder.png";
-import { formatDateToShortMonthString } from "../utils/CommonUtils";
-import { Config } from "../utils/config";
+import {
+  envBasedImgUrl,
+  formatDateToShortMonthString,
+} from "../utils/CommonUtils";
 
 const formatDate = (date) =>
   new Date(date)?.toLocaleDateString?.("en-US", {
@@ -48,9 +50,7 @@ const UserCard = ({ userData }) => {
       <div className="flex justify-center items-center p-2">
         <img
           src={
-            userProfile
-              ? `${Config.DEV.IMAGE_BASE_URL}${userProfile}`
-              : placeholderImg
+            userProfile ? `${envBasedImgUrl()}${userProfile}` : placeholderImg
           }
           alt="logo"
           className="rounded-full h-16 w-16 mr-4"

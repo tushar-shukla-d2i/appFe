@@ -3,7 +3,6 @@
  */
 
 import React, { useState, useEffect } from "react";
-import { FaChevronLeft, FaChevronRight } from "react-icons/fa6";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 
 import { leaveApis } from "../../apis";
@@ -12,12 +11,12 @@ import {
   getLeaveType,
   LEAVE_STATUS,
   LEAVE_STATUS_ARRAY,
-  RECORDS_PER_PAGE,
 } from "../../constants";
 import {
   Button,
   Loader,
   NoRecordsFound,
+  Pagination,
   ScreenHeader,
   ScreenWrapper,
   Toast,
@@ -65,12 +64,7 @@ const LeaveRequests = () => {
   // Fetch leave requests from subordinates
   const getSubordinatesLeaves = async (status, page) => {
     setScreenLoading(true);
-    const resp = await leaveApis.getLeavesById({
-      user_id,
-      status,
-      page,
-      limit: RECORDS_PER_PAGE,
-    });
+    const resp = await leaveApis.getLeavesById({ user_id, status, page });
     setTimeout(() => {
       setScreenLoading(false);
     }, 200);
@@ -107,52 +101,6 @@ const LeaveRequests = () => {
     getSubordinatesLeaves(selectedStatus, page);
   };
 
-  const RenderPaginationButtons = () => {
-    return (
-      <div className="flex items-center space-x-2">
-        <button
-          key="prev"
-          onClick={() => handlePageChange(Math.max(1, currentPage - 1))}
-          disabled={currentPage === 1}
-          className={`p-1 rounded-md border-2 ${
-            currentPage === 1
-              ? "text-gray-400 border-gray-300 cursor-not-allowed"
-              : "bg-white text-black border-gray-500"
-          }`}
-        >
-          <FaChevronLeft
-            className={`${
-              currentPage === 1 ? "text-gray-400" : "text-gray-600"
-            } text-xs`}
-          />
-        </button>
-
-        <div className="text-sm">{currentPage}</div>
-        <div className="text-sm text-gray-600">of</div>
-        <div className="text-sm">{totalPages}</div>
-
-        <button
-          key="next"
-          onClick={() =>
-            handlePageChange(Math.min(totalPages, currentPage + 1))
-          }
-          disabled={currentPage === totalPages}
-          className={`p-1 rounded-md border-2 ${
-            currentPage === totalPages
-              ? "text-gray-400 border-gray-300 cursor-not-allowed"
-              : "bg-white text-black border-gray-500"
-          }`}
-        >
-          <FaChevronRight
-            className={`${
-              currentPage === totalPages ? "text-gray-400" : "text-gray-600"
-            } text-xs`}
-          />
-        </button>
-      </div>
-    );
-  };
-
   return (
     <ScreenWrapper>
       <div className="bg-white">
@@ -172,7 +120,11 @@ const LeaveRequests = () => {
             ))}
           </select>
 
-          <RenderPaginationButtons />
+          <Pagination
+            totalPages={totalPages}
+            currentPage={currentPage}
+            handlePageChange={handlePageChange}
+          />
         </div>
 
         {screenLoading ? (

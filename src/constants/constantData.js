@@ -54,3 +54,5 @@ export const LEAVE_STATUS_ARRAY = [
 ];
 
 export const RECORDS_PER_PAGE = 10;
+
+export const DEBOUNCE_DELAY = 500;

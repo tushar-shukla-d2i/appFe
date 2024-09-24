@@ -6,7 +6,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FiCamera, FiEdit, FiLogOut } from "react-icons/fi";
 
-import { Config } from "../../utils/config";
+import { envBasedImgUrl } from "../../utils/CommonUtils";
 import { Loader, ScreenWrapper } from "../../components";
 import placeholderImg from "../../assets/placeholder.png";
 import { LocalStorageHelper } from "../../utils/HttpUtils";
@@ -41,21 +41,13 @@ const Dashboard = () => {
   const getUserData = async () => {
     const resp = await commonApis.getMyData();
     if (resp?.success && resp?.data?.data?.userProfile) {
-      setUserImage(
-        `${
-          window.location.host.includes("localhost")
-            ? `${Config.LOCAL.IMAGE_BASE_URL}`
-            : `${Config.DEV.IMAGE_BASE_URL}`
-        }${resp?.data?.data?.userProfile}`
-      );
+      setUserImage(`${envBasedImgUrl()}${resp?.data?.data?.userProfile}`);
     }
   };
 
   const getRewardsList = async () => {
     const resp = await rewardsApis.getAllRewards({ user_id: _id });
-    if (resp?.success) {
-      setRewards(resp?.data?.data);
-    }
+    setRewards(resp?.rewards);
   };
 
   const uploadProfilePicture = async (file) => {

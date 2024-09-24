@@ -43,8 +43,8 @@ const ManageUser = () => {
 
   useEffect(() => {
     const fetchUsers = async () => {
-      const resp = await userApis.getAllUsers({ includeSelf: true });
-      const fetchedUsers = resp
+      const resp = await userApis.getAllUsers({ includeSelf: true, limit: 0 });
+      const fetchedUsers = resp?.users
         ?.filter?.((u) => u?._id !== user_id)
         ?.map?.((user) => ({
           value: user?._id,

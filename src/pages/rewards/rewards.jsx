@@ -3,17 +3,19 @@
  */
 
 import React, { useEffect, useState } from "react";
-import { FaSearch, FaTimes } from "react-icons/fa";
+import { useNavigate, useLocation } from "react-router-dom";
 
 import { rewardsApis } from "../../apis";
 import { formattedMDYDate } from "../../utils/CommonUtils";
-import { LocalStorageHelper } from "../../utils/HttpUtils";
-import { MAX_METRIC_POINTS, USER_DATA } from "../../constants";
+import { LocalStorageHelper, useDebounce } from "../../utils";
+import { DEBOUNCE_DELAY, MAX_METRIC_POINTS, USER_DATA } from "../../constants";
 import {
   Loader,
   NoRecordsFound,
+  Pagination,
   ScreenHeader,
   ScreenWrapper,
+  SearchInput,
 } from "../../components";
 
 const RewardItem = ({ reward }) => {
@@ -52,47 +54,57 @@ const RewardItem = ({ reward }) => {
 };
 
 const Rewards = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
   const [loading, setLoading] = useState(false);
   const [rewardsList, setRewardsList] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
-  const [filteredRewards, setFilteredRewards] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
   const userData = JSON.parse(LocalStorageHelper.get(USER_DATA)) || {};
 
   useEffect(() => {
-    getRewardsList();
-  }, []);
+    const queryParams = new URLSearchParams(location.search);
+    const page = queryParams.get("page")
+      ? parseInt(queryParams.get("page"), 10)
+      : 1;
+    const query = queryParams.get("q") || "";
+    setCurrentPage(page);
+    setSearchQuery(query);
+    getRewardsList(page, query);
+  }, [location.search]);
 
-  useEffect(() => {
-    filterRewards();
-  }, [rewardsList, searchQuery]);
-
-  const getRewardsList = async () => {
+  const getRewardsList = async (page, q) => {
     setLoading(true);
-    const resp = await rewardsApis.getAllRewards({ user_id: userData?._id });
+    const resp = await rewardsApis.getAllRewards({
+      user_id: userData?._id,
+      page,
+      q,
+    });
     setLoading(false);
-    if (resp?.success) {
-      setRewardsList(resp?.data?.data);
-    }
+    setRewardsList(resp?.rewards);
+    setTotalPages(resp?.data?.totalPages || 1);
   };
 
-  const filterRewards = () => {
-    const lowercasedQuery = searchQuery?.toLowerCase();
+  // Debounced search function
+  const debouncedSearch = useDebounce((query) => {
+    const queryParams = new URLSearchParams(location.search);
+    queryParams.set("q", query);
+    queryParams.set("page", 1);
+    navigate({ search: queryParams.toString() });
+  }, DEBOUNCE_DELAY);
 
-    const fieldsToSearch = [
-      "_id",
-      "submittedByName",
-      "points",
-      "comment",
-      "date",
-    ];
+  const handleSearch = (e) => {
+    const query = e.target.value;
+    setSearchQuery(query);
+    debouncedSearch(query);
+  };
 
-    const filtered = rewardsList?.filter?.((reward) =>
-      fieldsToSearch?.some?.((field) =>
-        reward?.[field]?.toString()?.toLowerCase()?.includes?.(lowercasedQuery)
-      )
-    );
-
-    setFilteredRewards(filtered);
+  const handlePageChange = (page) => {
+    const queryParams = new URLSearchParams(location.search);
+    queryParams.set("page", page);
+    navigate({ search: queryParams.toString() });
+    setCurrentPage(page);
   };
 
   return (
@@ -101,31 +113,23 @@ const Rewards = () => {
         {/* Top Bar */}
         <ScreenHeader title="Rewards" />
 
-        {/* Search Input */}
-        <div className="mt-10 mb-6 mx-10 relative">
-          <input
-            type="text"
-            placeholder="Search..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="p-2 border border-gray-500 rounded w-full pr-10"
+        {/* Search and Pagination */}
+        <div className="flex items-center justify-between mx-10 mt-10 mb-6">
+          <SearchInput searchQuery={searchQuery} handleSearch={handleSearch} />
+
+          <Pagination
+            totalPages={totalPages}
+            currentPage={currentPage}
+            handlePageChange={handlePageChange}
           />
-          <div className="absolute top-3 right-2">
-            {searchQuery ? (
-              <FaTimes
-                className="cursor-pointer text-gray-500"
-                onClick={() => setSearchQuery("")}
-              />
-            ) : (
-              <FaSearch className="text-gray-500" />
-            )}
-          </div>
         </div>
+
+        {/* Rewards List */}
         {loading ? (
           <Loader />
-        ) : filteredRewards?.length ? (
-          filteredRewards?.map?.((reward, index) => (
-            <RewardItem key={index} reward={reward} />
+        ) : rewardsList?.length ? (
+          rewardsList?.map?.((reward) => (
+            <RewardItem key={reward?._id} reward={reward} />
           ))
         ) : (
           <NoRecordsFound />

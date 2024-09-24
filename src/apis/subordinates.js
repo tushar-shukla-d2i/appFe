@@ -13,8 +13,6 @@ export const subordinatesApis = {
       return resp?.data?.data
         ? sortList(resp?.data?.data, "firstName", "lastName")
         : [];
-    } catch (error) {
-      console.log("getSubordinates:", error);
-    }
+    } catch (error) {}
   },
 };
