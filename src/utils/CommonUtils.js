@@ -1,4 +1,5 @@
 import dayjs from "dayjs";
+import { Config } from "./config";
 
 export const convertArrayOfObjectToDropDownArray = ({
   list = [],
@@ -159,7 +160,6 @@ export const convertUTCtoIST = (utcDateStr) => {
   if (!utcDateStr) {
     return "-";
   }
-
   const utcTime = utcDateStr;
   const utcDate = new Date(utcTime);
   utcDate.setTime(utcDate.getTime() + utcDate.getTimezoneOffset() * 60 * 1000);
@@ -172,13 +172,18 @@ export const convertUTCtoIST = (utcDateStr) => {
   const istTime = `${padZero(istDate.getHours())} : ${padZero(
     istDate.getMinutes()
   )}`;
-
   return istTime;
 };
 
 // Helper function to pad zeros to the time components
-const padZero = (value) => {
+export const padZero = (value) => {
   return (value < 10 ? "0" : "") + value;
+};
+
+export const envBasedImgUrl = () => {
+  return window.location.host.includes("localhost")
+    ? Config.LOCAL.IMAGE_BASE_URL
+    : Config.DEV.IMAGE_BASE_URL;
 };
 
 // Format each date in the newDateRange array

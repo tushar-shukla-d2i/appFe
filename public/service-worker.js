@@ -6,6 +6,7 @@ const urlsToCache = [
   "/index.html",
   "/static/js/bundle.js",
   "/static/css/main.css",
+  "/assets/no-internet.jpeg",
 ];
 
 self.addEventListener("install", (event) => {
@@ -19,7 +20,7 @@ self.addEventListener("install", (event) => {
 self.addEventListener("fetch", (event) => {
   event.respondWith(
     caches.match(event.request).then((response) => {
-      return response || fetch(event.request);
+      return response || fetch?.(event?.request);
     })
   );
 });

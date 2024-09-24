@@ -6,9 +6,9 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FiCamera, FiEdit, FiLogOut } from "react-icons/fi";
 
-import { Config } from "../../utils/config";
-import { ScreenWrapper } from "../../components";
-import placeholderImg from "../../assets/react.svg";
+import { envBasedImgUrl } from "../../utils/CommonUtils";
+import { Loader, ScreenWrapper } from "../../components";
+import placeholderImg from "../../assets/placeholder.png";
 import { LocalStorageHelper } from "../../utils/HttpUtils";
 import { authApis, commonApis, rewardsApis } from "../../apis";
 import { AppRoutes, USER_DATA, USER_ROLES } from "../../constants";
@@ -31,6 +31,7 @@ const Dashboard = () => {
   const { _id, firstName, lastName, officialEmail, role } = userData ?? {};
   const [rewards, setRewards] = useState(false);
   const [userImage, setUserImage] = useState("");
+  const [isUploading, setIsUploading] = useState(false);
 
   useEffect(() => {
     getUserData();
@@ -40,27 +41,29 @@ const Dashboard = () => {
   const getUserData = async () => {
     const resp = await commonApis.getMyData();
     if (resp?.success && resp?.data?.data?.userProfile) {
-      setUserImage(
-        `${
-          window.location.host.includes("localhost")
-            ? `${Config.LOCAL.IMAGE_BASE_URL}`
-            : `${Config.DEV.IMAGE_BASE_URL}`
-        }${resp?.data?.data?.userProfile}`
-      );
+      setUserImage(`${envBasedImgUrl()}${resp?.data?.data?.userProfile}`);
     }
   };
 
   const getRewardsList = async () => {
     const resp = await rewardsApis.getAllRewards({ user_id: _id });
-    if (resp?.success) {
-      setRewards(resp?.data?.data);
-    }
+    setRewards(resp?.rewards);
   };
 
   const uploadProfilePicture = async (file) => {
     const formData = new FormData();
     formData.append("userProfile", file);
-    await commonApis.me({ user_id: _id, payload: formData });
+    try {
+      setIsUploading(true);
+      const resp = await commonApis.me({ user_id: _id, payload: formData });
+      if (resp?.success) {
+        getUserData();
+      }
+    } catch (error) {
+      console.error("Failed to upload image:", error);
+    } finally {
+      setIsUploading(false);
+    }
   };
 
   const handleImageUpload = (e) => {
@@ -85,11 +88,17 @@ const Dashboard = () => {
       <div>
         <div className="flex h-48 items-center w-full px-8 pt-6 pb-20 bg-[#72abbc] rounded-b-[3.5rem]">
           <div className="relative h-16 w-16 rounded-full mr-6">
-            <img
-              alt="user_img"
-              src={userImage || placeholderImg}
-              className="h-full w-full rounded-full hover:cursor-pointer"
-            />
+            {isUploading ? (
+              <div className="h-full w-full flex items-center justify-center">
+                <Loader />
+              </div>
+            ) : (
+              <img
+                alt="user_img"
+                src={userImage || placeholderImg}
+                className="h-full w-full rounded-full hover:cursor-pointer"
+              />
+            )}
             <label className="absolute bottom-2 -right-2 flex items-center justify-center cursor-pointer">
               {userImage ? (
                 <FiEdit className="text-white text-xl" />
@@ -127,40 +136,6 @@ const Dashboard = () => {
         <div className="bg-gray-50 mx-6 mt-[-3rem] mb-10 px-4 py-6 shadow-2xl rounded-lg">
           <h1 className="font-bold text-lg tracking-wider mb-8">Features</h1>
           <div className="grid grid-cols-3 gap-x-4 gap-y-8">
-            {role === USER_ROLES.ADMIN && (
-              <IconButton
-                label="Manage Users"
-                icon="🗂️"
-                onClick={() => navigate(AppRoutes.MANAGE_USERS)}
-              />
-            )}
-            <IconButton
-              label="Profile"
-              icon="🧑‍💼"
-              onClick={() => navigate(`${AppRoutes.USER}/${_id}`)}
-            />
-            <IconButton
-              label="Change Password"
-              icon="🔒"
-              onClick={() => navigate(`${AppRoutes.CHANGE_PASSWORD}/${_id}`)}
-            />
-            <IconButton
-              label="Directory"
-              icon="👥"
-              onClick={() => navigate(AppRoutes.DIRECTORY)}
-            />
-            <IconButton
-              label="Metrics"
-              icon="🎁"
-              onClick={() => navigate(AppRoutes.METRICS)}
-            />
-            {!!rewards?.length && (
-              <IconButton
-                label="Rewards"
-                icon="🎖️"
-                onClick={() => navigate(AppRoutes.REWARDS)}
-              />
-            )}
             <IconButton
               label="Attendance"
               icon="📅"
@@ -171,6 +146,52 @@ const Dashboard = () => {
                 label="Attendance Records"
                 icon="📈"
                 onClick={() => navigate(AppRoutes.ATTENDANCE_RECORDS)}
+              />
+            )}
+            <IconButton
+              label="Change Password"
+              icon="🔒"
+              onClick={() => navigate(`${AppRoutes.CHANGE_PASSWORD}/${_id}`)}
+            />
+            <IconButton
+              label="Directory"
+              icon="👥"
+              onClick={() => navigate(AppRoutes.DIRECTORY)}
+            />
+            {role !== USER_ROLES.ADMIN && (
+              <IconButton
+                label="Leave"
+                icon="🏖️"
+                onClick={() => navigate(AppRoutes.LEAVE)}
+              />
+            )}
+            {role === USER_ROLES.ADMIN && (
+              <IconButton
+                label="Manage Users"
+                icon="🗂️"
+                onClick={() => navigate(AppRoutes.MANAGE_USERS)}
+              />
+            )}
+            <IconButton
+              label="Metrics"
+              icon="🎁"
+              onClick={() => navigate(AppRoutes.METRICS)}
+            />
+            <IconButton
+              label="Profile"
+              icon="🧑‍💼"
+              onClick={() => navigate(`${AppRoutes.USER}/${_id}`)}
+            />
+            <IconButton
+              label="Requests"
+              icon="📋"
+              onClick={() => navigate(`${AppRoutes.LEAVE}/${_id}`)}
+            />
+            {!!rewards?.length && (
+              <IconButton
+                label="Rewards"
+                icon="🎖️"
+                onClick={() => navigate(AppRoutes.REWARDS)}
               />
             )}
           </div>
