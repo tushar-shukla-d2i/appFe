@@ -15,17 +15,13 @@ export const rewardsApis = {
       return resp?.data?.data
         ? { rewards: resp?.data?.data?.rewards || [], data: resp?.data?.data }
         : {};
-    } catch (error) {
-      console.log("getAllRewards:", error);
-    }
+    } catch (error) {}
   },
 
   assignReward: async (payload) => {
     try {
       const response = await httpClient.post(endpoints.REWARDS, payload);
       return response;
-    } catch (error) {
-      console.log("assignReward:", error);
-    }
+    } catch (error) {}
   },
 };

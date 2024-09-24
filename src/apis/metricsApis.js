@@ -27,18 +27,14 @@ export const metricsApis = {
             },
           }
         : {};
-    } catch (error) {
-      console.log("getAllMetrics:", error);
-    }
+    } catch (error) {}
   },
 
   createMetric: async (payload) => {
     try {
       const response = await httpClient.post(endpoints.METRICS, payload);
       return response;
-    } catch (error) {
-      console.log("createMetric:", error);
-    }
+    } catch (error) {}
   },
 
   updateMetric: async ({ metric_id, payload }) => {
@@ -48,8 +44,6 @@ export const metricsApis = {
         payload
       );
       return response;
-    } catch (error) {
-      console.log("updateMetric:", error);
-    }
+    } catch (error) {}
   },
 };

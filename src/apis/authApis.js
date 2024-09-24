@@ -15,9 +15,7 @@ export const authApis = {
         LocalStorageHelper.store(USER_DATA, JSON.stringify(resp?.data?.data));
       }
       return resp;
-    } catch (error) {
-      console.log("Error signup:-", error);
-    }
+    } catch (error) {}
   },
 
   resetPassword: async (payload) => {
@@ -32,9 +30,7 @@ export const authApis = {
         LocalStorageHelper.store(USER_DATA, JSON.stringify(resp?.data?.data));
       }
       return resp;
-    } catch (error) {
-      console.log("Error resetPassword:-", error);
-    }
+    } catch (error) {}
   },
 
   login: async (payload) => {
@@ -45,9 +41,7 @@ export const authApis = {
         LocalStorageHelper.store(USER_DATA, JSON.stringify(resp?.data?.data));
       }
       return resp;
-    } catch (error) {
-      console.log("Error login:-", error);
-    }
+    } catch (error) {}
   },
 
   logout: async () => {
@@ -55,8 +49,6 @@ export const authApis = {
       LocalStorageHelper.delete(USER_TOKEN);
       LocalStorageHelper.delete(USER_DATA);
       return true;
-    } catch (error) {
-      console.log("Error logout:-", error);
-    }
+    } catch (error) {}
   },
 };

@@ -24,27 +24,21 @@ export const userApis = {
             data: resp?.data?.data,
           }
         : {};
-    } catch (error) {
-      console.log("getAllUsers:", error);
-    }
+    } catch (error) {}
   },
 
   createUser: async (payload) => {
     try {
       const resp = await httpClient.post(endpoints.USERS, payload);
       return resp;
-    } catch (error) {
-      console.log("createUser:", error);
-    }
+    } catch (error) {}
   },
 
   getUserById: async ({ user_id }) => {
     try {
       const resp = await httpClient.get(`${endpoints.USERS}/${user_id}`);
       return resp;
-    } catch (error) {
-      console.log("getUserById:", error);
-    }
+    } catch (error) {}
   },
 
   updateUserById: async ({ user_id, payload }) => {
@@ -54,8 +48,6 @@ export const userApis = {
         payload
       );
       return resp;
-    } catch (error) {
-      console.log("updateUserById:", error);
-    }
+    } catch (error) {}
   },
 };

@@ -11,9 +11,7 @@ export const leaveApis = {
     try {
       const response = await httpClient.get(endpoints.LEAVE);
       return response;
-    } catch (error) {
-      console.log("getMyLeaves:", error);
-    }
+    } catch (error) {}
   },
 
   getLeavesById: async ({
@@ -27,18 +25,14 @@ export const leaveApis = {
         params: { status, page, limit },
       });
       return response;
-    } catch (error) {
-      console.log("getLeavesById:", error);
-    }
+    } catch (error) {}
   },
 
   createLeave: async (payload) => {
     try {
       const response = await httpClient.post(endpoints.LEAVE, payload);
       return response;
-    } catch (error) {
-      console.log("createLeave:", error);
-    }
+    } catch (error) {}
   },
 
   updateLeave: async ({ leave_id, payload }) => {
@@ -48,8 +42,6 @@ export const leaveApis = {
         payload
       );
       return response;
-    } catch (error) {
-      console.log("updateLeave:", error);
-    }
+    } catch (error) {}
   },
 };

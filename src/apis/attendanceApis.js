@@ -24,17 +24,13 @@ export const attendanceApis = {
         params: { attendanceDate, page, limit, q },
       });
       return response;
-    } catch (error) {
-      console.log("getAttendance:", error);
-    }
+    } catch (error) {}
   },
 
   punchInOut: async (payload) => {
     try {
       const response = await httpClient.post(endpoints.ATTENDANCE, payload);
       return response;
-    } catch (error) {
-      console.log("punchInOut:", error);
-    }
+    } catch (error) {}
   },
 };
