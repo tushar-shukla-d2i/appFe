@@ -19,7 +19,6 @@ import {
   ManageUsers,
   Metrics,
   Rewards,
-  Signup,
   SubMetrics,
   Subordinates,
 } from "./pages";
@@ -69,7 +68,6 @@ const App = () => {
       <main>
         <Routes>
           <Route path={AppRoutes.LOGIN} element={<Login />} />
-          <Route path={AppRoutes.SIGNUP} element={<Signup />} />
           <Route path={AppRoutes.DASHBOARD} element={<Dashboard />} />
           <Route path={AppRoutes.USER} element={<ManageUser />} />
           <Route path={`${AppRoutes.USER}/:user_id`} element={<ManageUser />} />

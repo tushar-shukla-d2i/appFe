@@ -7,17 +7,6 @@ import { USER_TOKEN, USER_DATA } from "../constants";
 import { httpClient, LocalStorageHelper } from "../utils/HttpUtils";
 
 export const authApis = {
-  signup: async (payload) => {
-    try {
-      const resp = await httpClient.post(endpoints.SIGNUP, payload);
-      if (resp?.success) {
-        LocalStorageHelper.store(USER_TOKEN, resp?.data?.data?.token);
-        LocalStorageHelper.store(USER_DATA, JSON.stringify(resp?.data?.data));
-      }
-      return resp;
-    } catch (error) {}
-  },
-
   resetPassword: async (payload) => {
     const { inviteCode, ...rest } = payload || {};
     try {
