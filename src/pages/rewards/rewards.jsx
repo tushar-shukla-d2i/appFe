@@ -8,7 +8,12 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { rewardsApis } from "../../apis";
 import { formattedMDYDate } from "../../utils/CommonUtils";
 import { LocalStorageHelper, useDebounce } from "../../utils";
-import { DEBOUNCE_DELAY, MAX_METRIC_POINTS, USER_DATA } from "../../constants";
+import {
+  AppRoutes,
+  DEBOUNCE_DELAY,
+  MAX_METRIC_POINTS,
+  USER_DATA,
+} from "../../constants";
 import {
   Loader,
   NoRecordsFound,
@@ -111,7 +116,7 @@ const Rewards = () => {
     <ScreenWrapper>
       <div className="bg-white min-h-screen flex flex-col">
         {/* Top Bar */}
-        <ScreenHeader title="Rewards" />
+        <ScreenHeader title="Rewards" navigateBackURl={AppRoutes.DASHBOARD} />
 
         {/* Search and Pagination */}
         <div className="flex items-center justify-between mx-10 mt-10 mb-6">

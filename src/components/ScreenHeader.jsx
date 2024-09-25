@@ -10,13 +10,13 @@ import { FiPlusCircle } from "react-icons/fi";
 import { USER_DATA, USER_ROLES } from "../constants";
 import { LocalStorageHelper } from "../utils/HttpUtils";
 
-const ScreenHeader = ({ title, handleAddClick }) => {
+const ScreenHeader = ({ title, navigateBackURl, handleAddClick }) => {
   const navigate = useNavigate();
   const userData = JSON.parse(LocalStorageHelper.get(USER_DATA));
   const { role } = userData ?? {};
 
   const handleBackClick = () => {
-    navigate(-1);
+    navigate(navigateBackURl || -1);
   };
 
   return (

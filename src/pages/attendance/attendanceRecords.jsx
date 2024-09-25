@@ -6,7 +6,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 
 import { attendanceApis } from "../../apis";
-import { DEBOUNCE_DELAY } from "../../constants";
+import { AppRoutes, DEBOUNCE_DELAY } from "../../constants";
 import { convertUTCtoIST, useDebounce, UtilFunctions } from "../../utils";
 import {
   NoRecordsFound,
@@ -87,7 +87,10 @@ const AttendanceRecords = () => {
   return (
     <ScreenWrapper>
       <div className="bg-white">
-        <ScreenHeader title="Attendance Records" />
+        <ScreenHeader
+          title="Attendance Records"
+          navigateBackURl={AppRoutes.DASHBOARD}
+        />
 
         <div className="mx-10">
           <div className="my-6">

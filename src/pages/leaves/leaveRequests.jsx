@@ -8,6 +8,7 @@ import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { leaveApis } from "../../apis";
 import { formattedMDYDate } from "../../utils/CommonUtils";
 import {
+  AppRoutes,
   getLeaveType,
   LEAVE_STATUS,
   LEAVE_STATUS_ARRAY,
@@ -104,7 +105,10 @@ const LeaveRequests = () => {
   return (
     <ScreenWrapper>
       <div className="bg-white">
-        <ScreenHeader title="Leave Requests" />
+        <ScreenHeader
+          title="Leave Requests"
+          navigateBackURl={AppRoutes.DASHBOARD}
+        />
 
         {/* Filter Dropdown */}
         <div className="w-[85%] flex justify-between mx-auto mt-6">

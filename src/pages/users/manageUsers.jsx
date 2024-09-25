@@ -76,7 +76,11 @@ const ManageUsers = () => {
     <ScreenWrapper>
       <div className="bg-white min-h-screen flex flex-col">
         {/* Top Bar */}
-        <ScreenHeader title="Manage Users" handleAddClick={handleAddClick} />
+        <ScreenHeader
+          title="Manage Users"
+          navigateBackURl={AppRoutes.DASHBOARD}
+          handleAddClick={handleAddClick}
+        />
 
         <div className="flex items-center justify-between mx-10 mt-10 mb-6">
           <SearchInput searchQuery={searchQuery} handleSearch={handleSearch} />

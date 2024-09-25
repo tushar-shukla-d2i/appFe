@@ -4,7 +4,6 @@
 
 const AppRoutes = {
   LOGIN: "/",
-  SIGNUP: "/signup",
   DASHBOARD: "/dashboard",
   MANAGE_USERS: "/manage-users",
   USER: "/user",
