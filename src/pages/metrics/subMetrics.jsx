@@ -82,6 +82,7 @@ const SubMetrics = () => {
         <ScreenHeader
           title={parentMetricData?.parentMetric?.label}
           handleAddClick={handleAddClick}
+          navigateBackURl={AppRoutes.DASHBOARD}
         />
 
         <div className="flex items-center justify-between mx-10 mt-10 mb-6">

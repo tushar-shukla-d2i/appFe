@@ -7,7 +7,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 
 import { userApis } from "../../apis";
 import { useDebounce } from "../../utils";
-import { DEBOUNCE_DELAY } from "../../constants";
+import { AppRoutes, DEBOUNCE_DELAY } from "../../constants";
 import {
   Loader,
   NoRecordsFound,
@@ -71,7 +71,7 @@ const Directory = () => {
     <ScreenWrapper>
       <div className="bg-white min-h-screen flex flex-col">
         {/* Top Bar */}
-        <ScreenHeader title="Directory" />
+        <ScreenHeader title="Directory" navigateBackURl={AppRoutes.DASHBOARD} />
 
         {/* Search Input */}
         <div className="flex items-center justify-between mx-10 mt-10 mb-6">
