@@ -40,7 +40,7 @@ const Directory = () => {
 
   const getUsersList = async (page, q) => {
     setLoading(true);
-    const resp = await userApis.getAllUsers({ page, q });
+    const resp = await userApis.getAllUsers({ includeSelf: true, page, q });
     setUsersList(resp?.users || []);
     setTotalPages(resp?.data?.totalPages || 1);
     setLoading(false);
