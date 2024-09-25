@@ -9,7 +9,7 @@ import * as Yup from "yup";
 
 import { authApis } from "../../apis";
 import { emailRegex } from "../../utils/CommonUtils";
-import { AppRoutes, USER_DATA } from "../../constants";
+import { AppRoutes, USER_TOKEN } from "../../constants";
 import { LocalStorageHelper } from "../../utils/HttpUtils";
 import { Button, ErrorComponent, ScreenWrapper } from "../../components";
 
@@ -24,12 +24,12 @@ const validationSchema = {
 
 const Login = () => {
   const navigate = useNavigate();
-  const userData = JSON.parse(LocalStorageHelper.get(USER_DATA));
+  const userToken = LocalStorageHelper.get(USER_TOKEN);
   const [apiError, setApiError] = useState("");
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (userData?._id) {
+    if (userToken) {
       navigate(AppRoutes.DASHBOARD);
     }
   }, []);

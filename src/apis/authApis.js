@@ -3,23 +3,10 @@
  */
 
 import { endpoints } from "./endpoints";
-import { TOKEN, USER_DATA } from "../constants";
+import { USER_TOKEN, USER_DATA } from "../constants";
 import { httpClient, LocalStorageHelper } from "../utils/HttpUtils";
 
 export const authApis = {
-  signup: async (payload) => {
-    try {
-      const resp = await httpClient.post(endpoints.SIGNUP, payload);
-      if (resp?.success) {
-        LocalStorageHelper.store(TOKEN, resp?.data?.data?.token);
-        LocalStorageHelper.store(USER_DATA, JSON.stringify(resp?.data?.data));
-      }
-      return resp;
-    } catch (error) {
-      console.log("Error signup:-", error);
-    }
-  },
-
   resetPassword: async (payload) => {
     const { inviteCode, ...rest } = payload || {};
     try {
@@ -28,35 +15,29 @@ export const authApis = {
         rest
       );
       if (resp?.success) {
-        LocalStorageHelper.store(TOKEN, resp?.data?.data?.token);
+        LocalStorageHelper.store(USER_TOKEN, resp?.data?.data?.token);
         LocalStorageHelper.store(USER_DATA, JSON.stringify(resp?.data?.data));
       }
       return resp;
-    } catch (error) {
-      console.log("Error resetPassword:-", error);
-    }
+    } catch (error) {}
   },
 
   login: async (payload) => {
     try {
       const resp = await httpClient.post(endpoints.lOGIN, payload);
       if (resp?.success) {
-        LocalStorageHelper.store(TOKEN, resp?.data?.data?.token);
+        LocalStorageHelper.store(USER_TOKEN, resp?.data?.data?.token);
         LocalStorageHelper.store(USER_DATA, JSON.stringify(resp?.data?.data));
       }
       return resp;
-    } catch (error) {
-      console.log("Error login:-", error);
-    }
+    } catch (error) {}
   },
 
   logout: async () => {
     try {
-      LocalStorageHelper.delete(TOKEN);
+      LocalStorageHelper.delete(USER_TOKEN);
       LocalStorageHelper.delete(USER_DATA);
       return true;
-    } catch (error) {
-      console.log("Error logout:-", error);
-    }
+    } catch (error) {}
   },
 };

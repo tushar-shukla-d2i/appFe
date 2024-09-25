@@ -4,7 +4,6 @@
 
 const AppRoutes = {
   LOGIN: "/",
-  SIGNUP: "/signup",
   DASHBOARD: "/dashboard",
   MANAGE_USERS: "/manage-users",
   USER: "/user",
@@ -16,6 +15,7 @@ const AppRoutes = {
   REWARDS: "/rewards",
   ATTENDANCE: "/attendance",
   ATTENDANCE_RECORDS: "/attendance-records",
+  LEAVE: "/leave",
 };
 
 export { AppRoutes };

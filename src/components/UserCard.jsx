@@ -4,8 +4,11 @@
 
 import React from "react";
 
-import d2iLogo from "../assets/d2i_logo.jpg";
-import { formatDateToShortMonthString } from "../utils/CommonUtils";
+import placeholderImg from "../assets/placeholder.png";
+import {
+  envBasedImgUrl,
+  formatDateToShortMonthString,
+} from "../utils/CommonUtils";
 
 const formatDate = (date) =>
   new Date(date)?.toLocaleDateString?.("en-US", {
@@ -27,6 +30,7 @@ const UserCard = ({ userData }) => {
     alternateContactNumber,
     birthday,
     joiningDate,
+    userProfile,
   } = userData ?? {};
 
   const RenderDetails = ({ label, value, highlight }) => (
@@ -44,7 +48,13 @@ const UserCard = ({ userData }) => {
   return (
     <div key={_id} className="mx-8 my-4 bg-gray-50 shadow-lg rounded-lg">
       <div className="flex justify-center items-center p-2">
-        <img src={d2iLogo} alt="logo" className="rounded-full h-16 w-16 mr-4" />
+        <img
+          src={
+            userProfile ? `${envBasedImgUrl()}${userProfile}` : placeholderImg
+          }
+          alt="logo"
+          className="rounded-full h-16 w-16 mr-4"
+        />
         <div>
           <h2 className="text-xl font-semibold text-gray-800">{`${
             firstName || ""

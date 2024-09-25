@@ -3,96 +3,93 @@
  */
 
 import React, { useEffect, useState } from "react";
-import { FaSearch, FaTimes } from "react-icons/fa";
+import { useNavigate, useLocation } from "react-router-dom";
 
 import { userApis } from "../../apis";
+import { useDebounce } from "../../utils";
+import { AppRoutes, DEBOUNCE_DELAY } from "../../constants";
 import {
   Loader,
   NoRecordsFound,
+  Pagination,
   ScreenHeader,
   ScreenWrapper,
+  SearchInput,
   UserCard,
 } from "../../components";
 
 const Directory = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
   const [loading, setLoading] = useState(true);
   const [usersList, setUsersList] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
-  const [filteredUsers, setFilteredUsers] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
   useEffect(() => {
-    getUsersList();
-  }, []);
+    const queryParams = new URLSearchParams(location.search);
+    const page = queryParams.get("page")
+      ? parseInt(queryParams.get("page"), 10)
+      : 1;
+    const query = queryParams.get("q") || "";
+    setCurrentPage(page);
+    setSearchQuery(query);
+    getUsersList(page, query);
+  }, [location.search]);
 
-  useEffect(() => {
-    filterUsers();
-  }, [usersList, searchQuery]);
-
-  const getUsersList = async () => {
+  const getUsersList = async (page, q) => {
     setLoading(true);
-    const resp = await userApis.getAllUsers();
-    setUsersList(resp);
+    const resp = await userApis.getAllUsers({ includeSelf: true, page, q });
+    setUsersList(resp?.users || []);
+    setTotalPages(resp?.data?.totalPages || 1);
     setLoading(false);
   };
 
-  const filterUsers = () => {
-    const lowercasedQuery = searchQuery?.toLowerCase();
+  const handlePageChange = (page) => {
+    const queryParams = new URLSearchParams(location.search);
+    queryParams.set("page", page);
+    navigate({ search: queryParams.toString() });
+    setCurrentPage(page);
+  };
 
-    const fieldsToSearch = [
-      "_id",
-      "firstName",
-      "lastName",
-      "role",
-      "bloodGroup",
-      "officialEmail",
-      "alternateEmail",
-      "contactNumber",
-      "alternateContactNumber",
-      "birthday",
-    ];
+  // Debounced search function
+  const debouncedSearch = useDebounce((query) => {
+    const queryParams = new URLSearchParams(location.search);
+    queryParams.set("q", query);
+    queryParams.set("page", 1);
+    navigate({ search: queryParams.toString() });
+  }, DEBOUNCE_DELAY);
 
-    const filtered = usersList?.filter?.((user) =>
-      fieldsToSearch?.some?.((field) =>
-        user?.[field]?.toString()?.toLowerCase()?.includes?.(lowercasedQuery)
-      )
-    );
-
-    setFilteredUsers(filtered);
+  const handleSearch = (e) => {
+    const query = e.target.value;
+    setSearchQuery(query);
+    debouncedSearch(query);
   };
 
   return (
     <ScreenWrapper>
       <div className="bg-white min-h-screen flex flex-col">
         {/* Top Bar */}
-        <ScreenHeader title="Directory" />
+        <ScreenHeader title="Directory" navigateBackURl={AppRoutes.DASHBOARD} />
 
         {/* Search Input */}
-        <div className="mt-10 mb-6 mx-10 relative">
-          <input
-            type="text"
-            placeholder="Search..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="p-2 border border-gray-500 rounded w-full pr-10"
+        <div className="flex items-center justify-between mx-10 mt-10 mb-6">
+          <SearchInput searchQuery={searchQuery} handleSearch={handleSearch} />
+
+          <Pagination
+            totalPages={totalPages}
+            currentPage={currentPage}
+            handlePageChange={handlePageChange}
           />
-          <div className="absolute top-3 right-2">
-            {searchQuery ? (
-              <FaTimes
-                className="cursor-pointer text-gray-500"
-                onClick={() => setSearchQuery("")}
-              />
-            ) : (
-              <FaSearch className="text-gray-500" />
-            )}
-          </div>
         </div>
 
         {/* Team Members List */}
         {loading ? (
           <Loader />
-        ) : filteredUsers?.length ? (
+        ) : usersList?.length ? (
           <div className="mb-14 grid grid-cols-1 md:grid-cols-2">
-            {filteredUsers.map((user) => (
+            {usersList?.map?.((user) => (
               <UserCard key={user._id} userData={user} />
             ))}
           </div>

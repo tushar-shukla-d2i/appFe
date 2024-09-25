@@ -43,8 +43,8 @@ const ManageUser = () => {
 
   useEffect(() => {
     const fetchUsers = async () => {
-      const resp = await userApis.getAllUsers({ includeSelf: true });
-      const fetchedUsers = resp
+      const resp = await userApis.getAllUsers({ includeSelf: true, limit: 0 });
+      const fetchedUsers = resp?.users
         ?.filter?.((u) => u?._id !== user_id)
         ?.map?.((user) => ({
           value: user?._id,
@@ -204,7 +204,9 @@ const ManageUser = () => {
                 useEffect(() => {
                   if (user_id) {
                     const getUserData = async () => {
-                      const resp = await userApis.getUserById({ user_id });
+                      const resp = isMyProfile
+                        ? await commonApis.getMyData()
+                        : await userApis.getUserById({ user_id });
                       if (resp?.data?.data) {
                         setUserInfo(resp?.data?.data);
                         setValues({

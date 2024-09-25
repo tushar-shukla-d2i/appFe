@@ -34,18 +34,14 @@ const Subordinates = () => {
   };
 
   const getMetricData = async () => {
-    const resp = await metricsApis.getMetricById({ metric_id });
-    if (resp?.success) {
-      setMetricData(resp?.data?.data);
-      getParentMetricData(resp?.data?.data?.parent_id);
-    }
+    const resp = await metricsApis.getAllMetrics({ metric_id });
+    setMetricData(resp?.data?.parentMetric);
+    getParentMetricData(resp?.data?.parentMetric?.parent_id);
   };
 
   const getParentMetricData = async (parent_id) => {
-    const resp = await metricsApis.getMetricById({ metric_id: parent_id });
-    if (resp?.success) {
-      setParentMetricData(resp?.data?.data);
-    }
+    const resp = await metricsApis.getAllMetrics({ metric_id: parent_id });
+    setParentMetricData(resp?.data?.parentMetric);
   };
 
   const onSubmitFeedback = async () => {

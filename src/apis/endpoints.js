@@ -4,7 +4,6 @@
 
 const endpoints = {
   ATTENDANCE: "attendance",
-  SIGNUP: "signup",
   lOGIN: "login",
   USERS: "users",
   METRICS: "metrics",
@@ -14,6 +13,7 @@ const endpoints = {
   ME: "me",
   SUBORDINATES: "subordinates",
   RESET_PASSWORD: "resetpassword",
+  LEAVE: "leave",
 };
 
 export { endpoints };

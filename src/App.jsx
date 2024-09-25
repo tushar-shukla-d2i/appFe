@@ -7,17 +7,18 @@ import { AppRoutes } from "./constants";
 import { AppHeader } from "./components";
 import {
   AddEditMetric,
+  ApplyLeave,
   Attendance,
   AttendanceRecords,
   ChangePassword,
   Dashboard,
   Directory,
+  LeaveRequests,
   Login,
   ManageUser,
   ManageUsers,
   Metrics,
   Rewards,
-  Signup,
   SubMetrics,
   Subordinates,
 } from "./pages";
@@ -56,7 +57,6 @@ const App = () => {
         //Automatically subscribe to the new_app_version tag
         OneSignal.sendTag("new_app_version", "new_app_version", (tagsSent) => {
           // Callback called when tag has finished sending
-          console.log("new_app_version TAG SENT", tagsSent);
         })
       );
     });
@@ -68,7 +68,6 @@ const App = () => {
       <main>
         <Routes>
           <Route path={AppRoutes.LOGIN} element={<Login />} />
-          <Route path={AppRoutes.SIGNUP} element={<Signup />} />
           <Route path={AppRoutes.DASHBOARD} element={<Dashboard />} />
           <Route path={AppRoutes.USER} element={<ManageUser />} />
           <Route path={`${AppRoutes.USER}/:user_id`} element={<ManageUser />} />
@@ -96,6 +95,11 @@ const App = () => {
           <Route
             path={AppRoutes.ATTENDANCE_RECORDS}
             element={<AttendanceRecords />}
+          />
+          <Route path={AppRoutes.LEAVE} element={<ApplyLeave />} />
+          <Route
+            path={`${AppRoutes.LEAVE}/:user_id`}
+            element={<LeaveRequests />}
           />
         </Routes>
       </main>

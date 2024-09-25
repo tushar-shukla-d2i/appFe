@@ -44,7 +44,7 @@ const MetricCard = ({ data, route }) => {
   };
 
   return data?.length ? (
-    <div className="p-4 grid grid-cols-3 gap-4 my-8">
+    <div className="px-8 pb-4 grid grid-cols-3 gap-4 my-8">
       {data?.map?.((metric) => (
         <div
           key={metric._id}
