@@ -3,7 +3,7 @@
  */
 
 import React, { useEffect, useState } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import NoInternetImg from "../assets/no-internet.jpeg";
 
 import { AppRoutes, USER_TOKEN } from "../constants";
@@ -11,13 +11,12 @@ import { LocalStorageHelper } from "../utils/HttpUtils";
 
 const ScreenWrapper = ({ children }) => {
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
+  const location = useLocation();
   const [isConnected, setConnected] = useState(navigator.onLine);
   const userToken = LocalStorageHelper.get(USER_TOKEN);
-  const inviteCode = searchParams.get("inviteCode");
 
   useEffect(() => {
-    if (!userToken && !inviteCode) {
+    if (!userToken && location.pathname !== AppRoutes.CHANGE_PASSWORD) {
       navigate(AppRoutes.LOGIN);
     }
 
